@@ -348,3 +348,31 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# Others
+
+node_modules*
+perfanalyzer/node_modules*
+*.vsix
+package-lock.json
+.history*
+.vscode*
+perfanalyzer/.history*
+apache*
+perfanalyzer/apache*
+perfanalyzer/package-lock.json
+perfanalyzer/index.js
+perfanalyzer/src/azure-task-lib.utility.js
+perfanalyzer/src/blob-utils.js
+perfanalyzer/src/constant.js
+perfanalyzer/src/jmeter-utils.js
+perfanalyzer/src/model.js
+perfanalyzer/src/replaceToken.js
+perfanalyzer/src/utility.js
+perfanalyzer/src/telemetry-client.js
+perfanalyzer/*.js
+.taskkey
+perfanalyzer/src/appInsightsConnectionString.ts
+perfanalyzer/src/appInsightsConnectionString-ms.ts
+perfanalyzer/test.ts
+perfanalyzer/test.js

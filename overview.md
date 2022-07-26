@@ -153,102 +153,15 @@ These variables are available under the `advanced` section of the pipeline. Thes
 `Telemetry Data Collection`: This flag enables the task to send telemetry data for improving the product over time. The task does not log any personal information. The task logs runs and errors for developers to analyze and provide a better version of the task. Turning this off would not allow the task to send logs to Microsoft.
 
 
-## Run Locally
-
-Clone the project
-
-```bash
-  git clone https://github.com/microsoft/jmeter-performance-analyzer-devops-extension
-```
-
-Go to the project directory task
-
-```bash
-  cd perfanalyzer
-```
-
-Install dependencies
-
-```bash
-  npm install
-```
-
-Compile the typescript file
-
-```bash
-  tsc index.ts
-```
-
-Run and debug locally using VS Code or Compiled Java-script file.
-
-
-## Packaging
-
-Once Compiled using tsc and the dependencies are downloaded using `npm i` you can package the project to create a `vsix`
-
-Update the publisher name in vss-extension.json
-```bash
-  touch vss-extension.json
-```
-
-Package the dependecies
-
-```bash
-  npx tfx extension create --manifest-globs vss-extension.json
-```
-
-You might get an error with the following text
-
-```bash
-   Error: Part Name 'perfanalyzer/node_modules/azure-pipelines-tasks-azure-arm-rest-v2/openssl/OpenSSL License.txt'
-```
-This is because of one of the dependencies  from azure-pipelines-tasks-azure-arm-rest-v2. There is a file named OpenSSL License.txt. You need to remove
-any blank space from this. Hence rename this file to OpenSSL_License.txt and rerun the command. You should get a successful output vsix file.
-
-```bash
-  === Completed operation: create extension ===
- - VSIX: C:\R\personal_projects\PerfAnalyzer\MishraPrateek.********-****-****-****-************-*.*.**.vsix
- - Extension ID: ********-****-****-****-************-*.*.**.vsix
- - Extension Version: 0.1.33
- - Publisher: MishraPrateek
-```
-You can now publish this extension to your own organization and share it with them.
-
-Follow the link for more Update: [AZURE WEB Extension](https://docs.microsoft.com/en-us/azure/devops/extend/get-started/node?view=azure-devops)
-
-
-## Note
 
 ### Data Collection.
 
 The software may collect information about you and your use of the software and send it to Microsoft. Microsoft may use this information to provide services and improve our products and services. You may turn off the telemetry as described in the repository. There are also some features in the software that may enable you and Microsoft to collect data from users of your applications. If you use these features, you must comply with applicable law, including providing appropriate notices to users of your applications together with a copy of Microsoft’s privacy statement. Our privacy statement is located at https://go.microsoft.com/fwlink/?LinkID=824704. You can learn more about data collection and use in the help documentation and our privacy statement. Your use of the software operates as your consent to these practices.
 
 
-## Contributing
+## Support
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
-
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
-
-## Trademarks
-
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft
-trademarks or logos is subject to and must follow
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.
-
-# Support
-
-## How to file issues and get help  
+### How to file issues and get help  
 
 This project uses [GitHub Issues](https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/issues) to track bugs and feature requests. Please search the existing
 issues before filing new issues to avoid duplicates.  For new issues, file your bug or
@@ -256,7 +169,7 @@ feature request as a new Issue.
 
 For help and questions about using this project, please create a Issue [Here](https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/issues)
 
-## Microsoft Support Policy  
+### Microsoft Support Policy  
 
 Support for this **PROJECT or PRODUCT** is limited to the resources listed above.
 
