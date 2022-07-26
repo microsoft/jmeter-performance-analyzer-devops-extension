@@ -369,7 +369,7 @@ perfanalyzer/src/jmeter-utils.js
 perfanalyzer/src/model.js
 perfanalyzer/src/replaceToken.js
 perfanalyzer/src/utility.js
-perfanalyzer/src/telemetry-client.js
+perfanalyzer/src/telem*
 perfanalyzer/*.js
 .taskkey
 perfanalyzer/src/appInsightsConnectionString.ts
@@ -378,3 +378,5 @@ perfanalyzer/src/appInsightsConnectionString.js
 perfanalyzer/src/appInsightsConnectionString-ms.js
 perfanalyzer/test.ts
 perfanalyzer/test.js
+perfanalyzer/src/test.ts
+perfanalyzer/src/test.js
