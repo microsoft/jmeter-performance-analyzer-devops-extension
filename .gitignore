@@ -370,6 +370,7 @@ perfanalyzer/src/model.js
 perfanalyzer/src/replaceToken.js
 perfanalyzer/src/utility.js
 perfanalyzer/src/telem*
+perfanalyzer/src/telemetry-client.ts
 perfanalyzer/*.js
 .taskkey
 perfanalyzer/src/appInsightsConnectionString.ts
