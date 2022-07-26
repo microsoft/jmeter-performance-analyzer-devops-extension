@@ -374,5 +374,7 @@ perfanalyzer/*.js
 .taskkey
 perfanalyzer/src/appInsightsConnectionString.ts
 perfanalyzer/src/appInsightsConnectionString-ms.ts
+perfanalyzer/src/appInsightsConnectionString.js
+perfanalyzer/src/appInsightsConnectionString-ms.js
 perfanalyzer/test.ts
 perfanalyzer/test.js
