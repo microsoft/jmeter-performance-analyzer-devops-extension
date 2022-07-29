@@ -10,7 +10,7 @@
     "version": {
         "Major": 1,
         "Minor": 3,
-        "Patch": 77
+        "Patch": 80
     },
     "instanceNameFormat": "Run Perf Analyzer",
     "groups": [
@@ -245,7 +245,7 @@
                 "label": "Blob Prefix",
                 "defaultValue": "Releases/Release_$(Build.BuildNumber)",
                 "required": false,
-                "helpMarkDown": "This is the prefix inside container name where each run's report will be copied. It is essential to note that for continious integration and testing it's best to prefix it will build number. This way all continious build's result will be made available at all times as a http exposed url. If used in Build pipeline, it can be Releases/Release_$(Build.BuildNumber), if in release then it can be Releases/Release_$(Release.ReleaseId)",
+                "helpMarkDown": "This is the prefix inside container name where each run's report will be copied. It is essential to note that for continious integration and testing it's best to prefix it will build number. This way all continious build's result will be made available at all times as a http exposed url. If used in Build pipeline, it can be Releases/Release_DEV_$(Build.BuildNumber), if in release then it can be Release_DEV_$(Release.ReleaseName)_$(Release.AttemptNumber)",
                 "visibleRule": "Destination = AzureBlob && copyResultToAzureBlobStorage=true"
             },
             {
@@ -301,7 +301,7 @@
                 "required": true,
                 "groupName": "advanced",
                 "helpMarkDown": "JMeter Performance Analyzer logs runs to improve and identify any application related issues. By sending us logs we would be able to keep on updating and identifying security bugs(if any) and help mitigate the issue. NO Personal data is logged into the telemetry. By turning this off, we would not be reciving any stats on the task run."
-            },
+            }
     ],
     "dataSourceBindings": [
         {

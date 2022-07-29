@@ -4,9 +4,12 @@
 import { APPINSIGHTS_CONNECTION_MS_STRING } from "./appInsightsConnectionString-ms";
 import {InputVariables} from './constant'
 import tl = require('azure-pipelines-task-lib/task');
+import { APPINSIGHTS_CONNECTION_STRING } from "./appInsightsConnectionString";
 
-let appInsightsMS = require('applicationinsights');
-let appInsightsMSClient = appInsightsMS.defaultClient;
+let appInsights = require('applicationinsights');
+
+let appInsightsMSClient = null;
+let appInsightsClient = null;
 
 let telemetryProps:{} = null;
 let logTelemetry: boolean = true;
@@ -28,7 +31,7 @@ export function enableAppInsights() {
 
 function configureAppInsightsMS(key: string) {
     try {
-        appInsightsMS.setup(key)
+        appInsights.setup(key)
         .setAutoDependencyCorrelation(true)
         .setAutoCollectRequests(true)
         .setAutoCollectPerformance(true, true)
@@ -37,11 +40,16 @@ function configureAppInsightsMS(key: string) {
         .setAutoCollectConsole(true)
         .setUseDiskRetryCaching(true)
         .setSendLiveMetrics(true)
-        .setDistributedTracingMode(appInsightsMS.DistributedTracingModes.AI)
+        .setDistributedTracingMode(appInsights.DistributedTracingModes.AI)
         .start();
-        appInsightsMSClient = appInsightsMS.defaultClient;
+
+        appInsightsMSClient = appInsights.defaultClient;
+        appInsightsClient = new appInsights.TelemetryClient(APPINSIGHTS_CONNECTION_STRING);
+      
+
     } catch(e) {
         console.warn('MS Application insights could not be started: ' + e?.message);
+        trackException(' Application insights could not be started: ' + e?.message, e);
     }
 }
 
@@ -58,6 +66,11 @@ export function LogEvent(eventName: string) {
        console.warn('[Ignore] MS Telemetry LogEvent Error: ' + e?.message,e )
     }
 
+    try {
+      appInsightsClient.trackEvent({name: eventName, properties: GetDefaultProps()});
+  } catch(e) {
+     console.warn('[Ignore] Telemetry LogEvent Error: ' + e?.message,e )
+  }
 }
 
 export function trackTrace(message: string) {
@@ -71,19 +84,32 @@ export function trackTrace(message: string) {
     } catch(e) {
        console.warn('[Ignore] MS Telemetry trackTrace Error: ' + e?.message,e )
     }
+
+    try {
+      appInsightsClient.trackTrace({message: message, properties: GetDefaultProps()});
+    } catch(e) {
+      console.warn('[Ignore] Telemetry trackTrace Error: ' + e?.message,e )
+    }
 }
 
-export function trackException(message: string) {
+export function trackException(message: any, stack: any=null) {
     if(! logTelemetry) {
       console.info('Telemetry Logging Turned off.');
       return;
     }
 
     try {
-        const error = new MyError(message);
+        const error = new MyError(message, stack);
         appInsightsMSClient.trackException({ exception: error , properties: GetDefaultProps()});
     } catch(e) {
        console.warn('[Ignore] MS Telemetry trackTrace Error: ' + e?.message,e )
+    }
+
+    try {
+      const error = new MyError(message, stack);
+      appInsightsClient.trackException({ exception: error , properties: GetDefaultProps()});
+    } catch(e) {
+      console.warn('[Ignore] Telemetry trackTrace Error: ' + e?.message,e )
     }
 }
 
@@ -147,9 +173,11 @@ function GetDefaultProps() {
 }
 class MyError extends Error {
 
-    constructor (msg) {
+    constructor (msg, stack) {
       super(msg)
       this.name = 'MyError'
+      this.message = msg;
+      this.stack = stack;
     }
 }
 

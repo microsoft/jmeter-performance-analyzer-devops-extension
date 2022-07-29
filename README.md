@@ -12,10 +12,14 @@ The pipeline task downloads your JMX, Property File, Input files and then runs t
 You can additionally host the data on a web URL by using the Static Website hosting capacity of Azure storage account. The task publishes the results to your $web container of your storage container.
 You need to enable static hosting in the storage container in order to be able to view html results. These results are published and ready for view immediately after test result. The link of hosted website is available in the logs.
 
+## Market Place
+
+You can get the task [HERE](https://marketplace.visualstudio.com/items?itemName=id-az-pipeline.jmeter-perf-analyzer)
+
 ## Latest Updates
 
-#### V1.3.68
-- Fixed Issue for Storage Account Binding Name
+#### V1.3.80
+- Fixed Issue for Storage Account Binding Name. Updated Readme's.
 
 #### V1.2.57
 - Enabled Log analysis for JMeter. Pipeline can be marked as failed if failure count increase threshold specified.
@@ -135,7 +139,7 @@ The following variables are used in the pipeline. Some have default values which
 
 `Container Name`: This is the container name inside the storage account where your results and logs will be copied. This is defaulted to $web. Note that in case you want continuous reporting available on html webpage, keep it to $web only. Files in $web will be available to view as html files.
 
-`Blob Prefix`: This is the prefix inside container name where each run's report will be copied. It is essential to note that for continuous integration and testing it's best to prefix it will build number. This way all continuous build's result will be made available at all times as a http exposed UTL. If used in Build pipeline, it can be `Releases/Release_$(Build.BuildNumber)`, if in release then it can be `Releases/Release_$(Release.ReleaseId)`.
+`Blob Prefix`: This is the prefix inside container name where each run's report will be copied. It is essential to note that for continuous integration and testing it's best to prefix it will build number. This way all continuous build's result will be made available at all times as a http exposed UTL. If used in Build pipeline, it can be `Releases/Release_DEV_$(Build.BuildNumber)`, if in release then it can be `Release_DEV_$(Release.ReleaseName)_$(Release.AttemptNumber)`
 
 `Storage Container URI`: This is the Primary endpoint URI for your container. On Enabling static web hosting, this URL is made available. If not specified, the task will not be able to create a direct html link to the test results.
 
