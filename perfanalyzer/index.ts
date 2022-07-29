@@ -205,8 +205,8 @@ function allowCompleteReadWriteAccess(path: string) {
         trackException('fs.chmodSync failed : ' + e?.message , e);
     }
     
-    let pathValue = COMMAND_TO_SET_PERMISSION.replace(COMMAND_TO_SET_PERMISSION_PATH_HOLDER, path);
-    RunPowershellCommand(pathValue);
+    //let pathValue = COMMAND_TO_SET_PERMISSION.replace(COMMAND_TO_SET_PERMISSION_PATH_HOLDER, path);
+    //RunPowershellCommand(pathValue);
 
 }
 
