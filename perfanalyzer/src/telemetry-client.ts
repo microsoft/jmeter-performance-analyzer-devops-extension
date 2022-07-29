@@ -15,7 +15,7 @@ let appInsightsClient = null;
 let telemetryProps:{} = null;
 let logTelemetry: boolean = true;
 
-function enableAppInsights() {
+export function enableAppInsights() {
     logTelemetry = tl.getBoolInput(InputVariables.LOG_TELEMETRY, true);
     if(!logTelemetry) {
       console.info('Telemetry Logging Turned off.')
