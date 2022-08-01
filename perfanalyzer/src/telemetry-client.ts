@@ -43,6 +43,9 @@ export function enableAppInsights() {
         
         appInsightsClient = new appInsights.TelemetryClient(APPINSIGHTS_CONNECTION_STRING);
         console.log('Successfuly Initialized Telemetry.');
+
+        console.log('Running Pipeline Host: ' + getSystemProps('system.hostType'));
+        trackTrace('Running Pipeline Host: ' + getSystemProps('system.hostType'));
       
 
     } catch(e) {

@@ -44,7 +44,7 @@ export async function handleJMeterPropertyFile(JMETER_BIN_Folder: string): Promi
     } else if(jmxPropertySource== InputVariableType.SourceCode) {
         let jmxPropertyFilePath = tl.getInput(InputVariables.JMX_PROPERTY_FILE_SOURCE_PATH,true);
         if(isEmpty(jmxPropertyFilePath)) {
-            tl.setResult(tl.TaskResult.Failed, "Missing Property File Path");
+            tl.setResult(tl.TaskResult.Failed, "You have set jmxPropertySource to sourceCode, but provided no file path for the property file input (jmxPropertySourcePath). Missing Property File Path");
             return null;
         }
         let fileName=Path.parse(jmxPropertyFilePath).base;
@@ -56,7 +56,7 @@ export async function handleJMeterPropertyFile(JMETER_BIN_Folder: string): Promi
        let jmxPropertyFileURL = tl.getInput(InputVariables.JMX_PROPERTY_FILE_URL,true);
 
        if(isEmpty(jmxPropertyFileURL)) {
-            tl.setResult(tl.TaskResult.Failed, "Unable to find and download JMX Property File From External URL");
+        tl.setResult(tl.TaskResult.Failed, "You have set jmxPropertySource to url, but provided no http file path for the property file input (jmxPropertySourceURL). Missing Property File Path");
             return;
         }
         jmxPropertyFileURL= jmxPropertyFileURL.trim();
@@ -76,7 +76,7 @@ export async function handleJMeterInputFile(JMETER_BIN_Folder: string): Promise<
     } else if(jmxInputFilesSource==InputVariableType.SourceCode) {
         let jmxInputFolderSourcePath = tl.getInput(InputVariables.JMX_INPUT_FOLDER_SOURCE_PATH,true);
         if(! jmxInputFolderSourcePath || jmxInputFolderSourcePath.length == 0) {
-           tl.setResult(tl.TaskResult.Failed, "Unable to find and download JMX Input File From Source");
+            tl.setResult(tl.TaskResult.Failed, "You have set jmxInputFilesSource to sourceCode, but provided no folder path for the data input files (jmxInputFolderSourcePath). Missing Input property folder path. Either set jmxInputFilesSource to none or provide path to folder where your input files are. (jmxInputFolderSourcePath)");
            return null;
        }
         logInformation('Downloading Input File(s) from source ' + jmxInputFolderSourcePath +  ' to destination' + JMETER_BIN_Folder);
@@ -84,7 +84,7 @@ export async function handleJMeterInputFile(JMETER_BIN_Folder: string): Promise<
     } else {
         let jmxInputFolderSourceUrls= tl.getDelimitedInput(InputVariables.JMX_INPUT_FILES_URL,',',true);
         if(isEmpty(jmxInputFolderSourceUrls)) {
-            tl.setResult(tl.TaskResult.Failed, "Missing User Input External URLs");
+            tl.setResult(tl.TaskResult.Failed, "You have set jmxInputFilesSource to urls, but provided no array of comma seperated file paths to download from (jmxInputFilesUrls). Missing comma seperated http file path(s). Either set jmxInputFilesSource to none or provide path to file for download(jmxInputFilesUrls) ");
             return null;
         }
         let fileNames: string[] = [];
