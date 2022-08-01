@@ -1,4 +1,4 @@
-![Screenshot](../../screenshots/icon.png)
+![Screenshot](./../../screenshots/icon.png)
 
 ## Running the Task on your Pipeline
 

@@ -1,4 +1,4 @@
-![Screenshot](screenshots/icon.png)
+![Screenshot](./screenshots/icon.png)
 
 ## About the Project
 This is an Azure DevOps Extension to Run Performance Test using Apache JMeter and Analyze Results.
