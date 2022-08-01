@@ -1,4 +1,4 @@
-![Screenshot](./../../screenshots/icon.png)
+![../../project-screenshots/icon.png](../../project-screenshots/icon.png)
 
 ## Running the Task on your Pipeline
 
@@ -35,23 +35,23 @@ Now you can add the jmeter task in your pipeline, and provide the variable value
 
 1. Search for the extension in your pipeline task
 
-![Screenshot](screenshots/p1.png)
+![screenshots/p1.png](screenshots/p1.png)
 
 2. Provide input to variables
 
-![Screenshot](screenshots/p2.png)
-![Screenshot](screenshots/p3.png)
+![screenshots/p2.png](screenshots/p2.png)
+![screenshots/p2.png](screenshots/p3.png)
 
 #### Note that for the format shared the Token Regex will be %(\w+)% This means enclosed within %Variable_Name%
 Token Regex `%(\w+)%`
 
 3. Save the pipeline and queue the run
 
-![Screenshot](screenshots/p5.png)
+![screenshots/p5.png](screenshots/p5.png)
 
 You can see the pipeline has printed the results in the logs.
 
-![Screenshot](screenshots/p6.png)
+![screenshots/p6.png](screenshots/p6.png)
 
 ## Note 
 
@@ -67,7 +67,7 @@ Copy the Primary Endpoint URL from there
 
 This is the value you need to submit in pipeline Variable for `Storage Container URI` variable in Pipeline Task
 
-![Screenshot](screenshots/p7.png)
+![screenshots/p7.png](screenshots/p7.png)
 
 2. Under your storage account > Containers >
 
@@ -81,24 +81,24 @@ If this container exists, skip this step.
 
 `Container(anonymous read access for container and blobs)`
 
-![Screenshot](screenshots/p8.png)
+![screenshots/p8.png](screenshots/p8.png)
 
 
 ## Sample Screenshots for Pipeline Variables for Source Code Inputs
 
-![Screenshot](screenshots/p9.png)
+![screenshots/p9.png](screenshots/p9.png)
 
-![Screenshot](screenshots/p10.png)
+![screenshots/p10.png](screenshots/p10.png)
 
 
 ## Sample Screenshots for Pipeline Variables for External URL Inputs
 
-![Screenshot](screenshots/p11.png)
+![screenshots/p11.png](screenshots/p11.png)
 
 ## Sample Screenshots for Pipeline Variables where no property file is used.
 
-![Screenshot](screenshots/p12.png)
+![screenshots/p12.png](screenshots/p12.png)
 
 ## Sample Screenshots for Pipeline Variables where  Property file is used but no input files are required
 
-![Screenshot](screenshots/p13.png)
+![screenshots/p13.png](screenshots/p13.png)

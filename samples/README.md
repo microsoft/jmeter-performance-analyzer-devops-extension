@@ -1,4 +1,4 @@
-![Screenshot](./../screenshots/icon.png)
+![../project-screenshots/icon.png](../project-screenshots/icon.png)
 
 ## Running with property and input files.
 

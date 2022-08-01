@@ -1,4 +1,4 @@
-![Screenshot](screenshots/icon.png)
+![project-screenshots/icon.png](project-screenshots/icon.png)
 
 ## About the Project
 This is an Azure DevOps Extension to Run Performance Test using Apache JMeter and Analyze Results.
@@ -25,11 +25,11 @@ You need to enable static hosting in the storage container in order to be able t
 
 ## Demo
 
-![Screenshot](screenshots/Steps.gif)
+![project-screenshots/Steps.gif](project-screenshots/Steps.gif)
 
 ## Architecture
 
-![Screenshot](screenshots/archi.png)
+![project-screenshots/archi.png](project-screenshots/archi.png)
 
 
 ## Features
@@ -52,7 +52,7 @@ You need to enable static hosting in the storage container in order to be able t
 
 ## Screenshots
 
-![Screenshot](screenshots/P4.png)
+![project-screenshots/P4.png](project-screenshots/P4.png)
 
 
 ## Sample Usage
@@ -67,27 +67,27 @@ Follow this Link: [CLASSIC PIPELINE GUI BASED TASK BASED INPUT](https://github.c
 
 1. Install the extension from Market Place: [HERE](https://marketplace.visualstudio.com/items?itemName=id-az-pipeline.jmeter-perf-analyzer)
 
-![Screenshot](screenshots/P1.png)
+![project-screenshots/P1.png](project-screenshots/P1.png)
 
 2. Search for the extension in your pipeline task
 
 3. Add the task
-![Screenshot](screenshots/P4.png)
+![project-screenshots/P4.png](project-screenshots/P4.png)
 
 4. Provide input to variables
 
-![Screenshot](screenshots/P5.png)
-![Screenshot](screenshots/P6.png)
+![project-screenshots/P5.png](project-screenshots/P5.png)
+![project-screenshots/P6.png](project-screenshots/P6.png)
 
 5. Trigger the Pipeline
 
-![Screenshot](screenshots/P7.png)
+![project-screenshots/P7.png](project-screenshots/P7.png)
 
 6. Verify Pipeline artifacts results and html report. Html Reports as artifacts are supported only on Build Pipelines. For release pipeline you can host them on Azure Storage.
 
-![Screenshot](screenshots/P8.png)
+![project-screenshots/P8.png](project-screenshots/P8.png)
 
-![Screenshot](screenshots/P10.png)
+![project-screenshots/P10.png](project-screenshots/P10.png)
 
 ## Pipeline Variables
 
