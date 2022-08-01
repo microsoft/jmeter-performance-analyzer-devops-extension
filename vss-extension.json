@@ -29,14 +29,14 @@
             "addressable": true
         },
         {
-            "path": "screenshots",
+            "path": "project-screenshots",
             "addressable": true
           }
     ],
     "screenshots": [
-        { "path": "screenshots/P4.png"},
-        { "path": "screenshots/P5.png"},
-        { "path": "screenshots/P10.png"}
+        { "path": "project-screenshots/P4.png"},
+        { "path": "project-screenshots/P5.png"},
+        { "path": "project-screenshots/P10.png"}
     ],
     "content": {
         "details": {
