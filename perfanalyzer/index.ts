@@ -151,7 +151,7 @@ async function main() {
         let CurrentLogLogFile =  Path.join(jmeterLogFolder, JMETER_LOG_FILE_NAME);
 
         if(jmxPropertySource=='none') {
-            command = 'jmeter -n -t '+ jmeterJMXFileName + '  -l ' + CurrentLogJTLFile + ' -j '+ CurrentLogLogFile + ' -f -e -o ' + jmeterReportFolder;
+            command = '.\\jmeter -n -t '+ jmeterJMXFileName + '  -l ' + CurrentLogJTLFile + ' -j '+ CurrentLogLogFile + ' -f -e -o ' + jmeterReportFolder;
             logInformation('Running JMeter Without Property File: ' + command);
         } else {
             logInformation('Running Replace Tokens for file ' + jmeterPropertyFileName + ' Current Working directory: ' + process.cwd());
