@@ -38,14 +38,14 @@ steps:
   displayName: 'Run Perf Analyzer'
   inputs:
     jmxSource: url
-    jmxsourceRunFileURL: 'https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples/samplejmx.jmx'
+    jmxsourceRunFileURL: 'https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples/Simple_JMX_With_File_And_Property_Input/samplejmx.jmx'
     jmxPropertySource: url
-    jmxPropertySourceURL: 'https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples/jmx.properties'
+    jmxPropertySourceURL: 'https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples/Simple_JMX_With_File_And_Property_Input/jmx.properties'
     tokenRegex: '%(\w+)%'
     jmxInputFilesSource: urls
     jmxInputFilesUrls: |
-     https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples/sampleInputFile.csv,
-     https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples/sampleInputFile2.csv
+     https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples/Simple_JMX_With_File_And_Property_Input/sampleInputFile.csv,
+     https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples/Simple_JMX_With_File_And_Property_Input/sampleInputFile2.csv
     failPipelineIfJMeterFails: true
     publishResultsToBuildArtifact: true
     failPipelineIfJMeterFails: true
@@ -65,7 +65,7 @@ steps:
   displayName: 'Run Perf Analyzer'
   inputs:
     jmxSource: url
-    jmxsourceRunFileURL: 'https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples/samplejmx.jmx'
+    jmxsourceRunFileURL: 'https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples/Simple_JMX_With_File_And_Property_Input/samplejmx.jmx'
     jmxPropertySource: none
     failPipelineIfJMeterFails: true
     publishResultsToBuildArtifact: true
@@ -87,7 +87,7 @@ steps:
   displayName: 'Run Perf Analyzer'
   inputs:
     jmxSource: url
-    jmxsourceRunFileURL: 'https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples/samplejmx.jmx'
+    jmxsourceRunFileURL: 'https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples/Simple_JMX_With_File_And_Property_Input/samplejmx.jmx'
     jmxPropertySource: sourceCode
     jmxPropertySourcePath: '$(System.DefaultWorkingDirectory)/<YOUR_FILE_PATH_TO PROPERTIES! Expected File Path>'
     tokenRegex: '%(\w+)%'

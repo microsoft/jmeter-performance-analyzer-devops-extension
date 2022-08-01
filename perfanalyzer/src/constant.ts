@@ -40,11 +40,21 @@ export const JMETER_FILE_NAME='apache-jmeter.tgz'
 export const JMETER_BIN_Folder_NAME= 'bin'
 export const DEFAULT_JMETER_REPORT_DIR_NAME = 'CurrentReport';
 export const DEFAULT_JMETER_LOG_DIR_NAME = 'CurrentLog';
-export const AZURE_STORAGE_ACCOUNT_URI = 'https://${storageAccountName}.blob.core.windows.net';
 export const AZURE_STORAGE_ACCOUNT_NAME_PLACEHOLDER = '${storageAccountName}';
+export const AZURE_STORAGE_ACCOUNT_URI = 'https://${storageAccountName}.blob.core.windows.net';
 export const LOG_JTL_FILE_NAME = 'log.jtl';
 export const JMETER_LOG_FILE_NAME = 'jmeter.log';
 export const JMETER_REPORT_INDEX_FILE_NAME = 'index.html';
 export const URL_SEPERATOR = '/';
 export const DATE_FORMAT = 'DD-MMM-YYYY HH:mm:ss:SSS ZZ';
-export const ERROR_DEFAULT_MSG = 'Please note this extension is in beta version. We will be fixing the issues as reported and hence it is important for us to be able to analyze logs and fix the issue. If you encounter any issue please email at prateek.mishra@microsoft.com'
+export const ERROR_DEFAULT_MSG = 'Please note this extension is in beta version. We will be fixing the issues as reported and hence it is important for us to be able to analyze logs and fix the issue. If you encounter any issue please create a github issue here https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/issues'
+
+export const COMMAND_TO_SET_PERMISSION_PATH_HOLDER = '{PATH_HOLDER}';
+export const COMMAND_TO_SET_PERMISSION=`
+$mypath = "{PATH_HOLDER}"
+$myacl = Get-Acl $mypath
+$myaclentry = "username","FullControl","Allow"
+$myaccessrule = New-Object System.Security.AccessControl.FileSystemAccessRule($myaclentry)
+$myacl.SetAccessRule($myaccessrule)
+Get-ChildItem -Path "$mypath" -Recurse -Force | Set-Acl -AclObject $myacl -Verbose
+`

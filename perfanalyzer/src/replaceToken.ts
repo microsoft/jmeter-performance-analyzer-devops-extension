@@ -3,14 +3,13 @@
 
 import {logInformation } from './utility'
 import {ERROR_DEFAULT_MSG, InputVariables, InputVariableType } from './constant'
-import { LogEvent } from './telemetry-client';
+import { LogEvent, trackException } from './telemetry-client';
 const tl = require('azure-pipelines-task-lib/task');
 const fs = require('fs');
 const sh = require('shelljs');
 
 export async function replaceTokens(fileName: string | null | undefined) {
-    var errCount = 0;
-
+    
     try {
         let event2 = 'Starting Replace Tokens task for file: ' + fileName
         logInformation(event2);
@@ -34,13 +33,9 @@ export async function replaceTokens(fileName: string | null | undefined) {
 
         tl.checkPath(sourcePath, "sourcePath");
 
-        var warningsAsErrors = true;
-
         var tokenRegex = tl.getInput(InputVariables.TOKEN_REGEX, true);
 
-        const warning = warningsAsErrors ?
-            (message: string) => { tl.error(message); errCount++ } :
-            (message: string) => tl.warning(message);
+        const warning = (message: string) => tl.warning(message);
 
         logInformation(`sourcePath: [${sourcePath}]`);
         logInformation(`tokenRegex: [${tokenRegex}]`);
@@ -94,12 +89,9 @@ export async function replaceTokens(fileName: string | null | undefined) {
         if (err.message) {
             msg = err.message;
         }
+        trackException(msg, err);
         tl.setResult(tl.TaskResult.Failed, msg);
     }
 
-    if (errCount > 0) {
-        tl.setResult(tl.TaskResult.Failed, "Errors were encountered - please check logs for details.");
-    }
-
-    logInformation("Leaving Replace Tokens task");
+    logInformation("Completed Replace Token Step.");
 }

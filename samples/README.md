@@ -1,73 +1,35 @@
+![../project-screenshots/icon.png](../project-screenshots/icon.png)
 
-## Running the Task on your Pipeline
+## Running with property and input files.
 
+This sample section shows you how you can use properties file to generate test results. And then use paramerized version of these file in the load test task. The reason why parametization is important is that
 
-1. Search for the extension in your pipeline task
+1. With a single jmx you can run it in different enviornments by configuring different value for stages in azure release pipeline.
+2. You should not expose any client secret while in the process.
 
-![Screenshot](screenshots/p1.png)
+### How to use
 
-2. Provide input to variables
+1. Once your jmx is created (see examples) and you have created your parametized property file, you can commit them to your source code or host it somewhere to download from.
 
-![Screenshot](screenshots/p2.png)
-![Screenshot](screenshots/p3.png)
+2. In the pipeline, you can chose either the source code or provide a direct link to the hosted jmx.
 
-#### Note that for the format shared the Token Regex will be %(\w+)% This means enclosed within %Variable_Name%
-Token Regex `%(\w+)%`
+3. Note that the task expects 3 things
+    a. jmx file
+    b. property file which it can populate during run time.
+    c. input file(s) in case your test case has any
 
-3. Save the pipeline and queue the run
+    b and c are optional. Its a cleaner way of doing parametization and updating the value in pipeline variables. In case your use case does not require it too do, you can just submit the hardcoded jmx.
 
-![Screenshot](screenshots/p5.png)
+4. You can see the 2 samples here
 
-You can see the pipeline has printed the results in the logs.
+    a. Simple JMX : This just shows how you can create a jmx with input parameter and a test file and how you can first locally test and then schedule a pipeline test.
 
-![Screenshot](screenshots/p6.png)
+    b. Token Generation: In case your application does require some kind of authentication, your jmx must include the way of authenticating it. You can see how we can generate token.
 
-## Note 
+    Your use case can be a combination of both as well. Hope the usage clarifies, please check the samples.
 
-To Enable Static Hosting you would to enable that in the Azure Storage Container
+5. Once you do there you can see the usage in pipeline here:
+    
+    a. Classic Pipeline: [Here](https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/InputTask.md)
 
-1. Under Storage Accounts > Your Storage Account >
-
-Search for 'Static Website' from the search bar.
-
-Click on Enable
-
-Copy the Primary Endpoint URL from there
-
-This is the value you need to submit in pipeline Variable for `Storage Container URI` variable in Pipeline Task
-
-![Screenshot](screenshots/p7.png)
-
-2. Under your storage account > Containers >
-
-Create a new container named `$web`
-
-If this container exists, skip this step.
-
-3. Click on `Change Access Level`
-
-4. Select Option
-
-`Container(anonymous read access for container and blobs)`
-
-![Screenshot](screenshots/p8.png)
-
-
-## Sample Screenshots for Pipeline Variables for Source Code Inputs
-
-![Screenshot](screenshots/p9.png)
-
-![Screenshot](screenshots/p10.png)
-
-
-## Sample Screenshots for Pipeline Variables for External URL Inputs
-
-![Screenshot](screenshots/p11.png)
-
-## Sample Screenshots for Pipeline Variables where no property file is used.
-
-![Screenshot](screenshots/p12.png)
-
-## Sample Screenshots for Pipeline Variables where  Property file is used but no input files are required
-
-![Screenshot](screenshots/p13.png)
+    b. YAML Based Usage: [Here](https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/InputTaskYAML.md)

@@ -381,3 +381,4 @@ perfanalyzer/test.ts
 perfanalyzer/test.js
 perfanalyzer/src/test.ts
 perfanalyzer/src/test.js
+perfanalyzer/src/commandExecutorPowershell.js

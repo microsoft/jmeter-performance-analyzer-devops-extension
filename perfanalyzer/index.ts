@@ -1,16 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import {InputVariables, InputVariableType, JMETER_FILE_NAME, JMETER_BIN_Folder_NAME, DEFAULT_JMETER_REPORT_DIR_NAME, DEFAULT_JMETER_LOG_DIR_NAME, LOG_JTL_FILE_NAME, JMETER_LOG_FILE_NAME, ERROR_DEFAULT_MSG } from './src/constant'
+import {InputVariables, InputVariableType, JMETER_FILE_NAME, JMETER_BIN_Folder_NAME, DEFAULT_JMETER_REPORT_DIR_NAME, DEFAULT_JMETER_LOG_DIR_NAME, LOG_JTL_FILE_NAME, JMETER_LOG_FILE_NAME, ERROR_DEFAULT_MSG, COMMAND_TO_SET_PERMISSION, COMMAND_TO_SET_PERMISSION_PATH_HOLDER } from './src/constant'
 import {replaceTokens } from './src/replaceToken'
 import { publishData } from './src/azure-task-lib.utility'
 import { downloadFile, unzipBinary, logInformation, isEmpty } from './src/utility'
 import { copyResultsToAzureBlob} from './src/blob-utils'
 import { analyzeJTL, handleJMeterInputFile, handleJMeterJMXFile, handleJMeterPropertyFile, promiseFromChildProcess} from './src/jmeter-utils'
-import { enableAppInsights, LogEvent } from './src/telemetry-client'
+import { enableAppInsights, LogEvent, trackException, trackTrace } from './src/telemetry-client'
+import { trace } from 'console'
+import {RunPowershellCommand} from './src/commandExecutorPowershell'
 const tl = require('azure-pipelines-task-lib/task');
 const Path = require('path');
 var exec = require('child_process').exec;
+const fs = require('fs');
 
 async function PostResults(jmeterReportFolder: string, jmeterLogFolder: string, JMETER_ABS_BIN_Folder: string) {
     try {
@@ -24,7 +27,9 @@ async function PostResults(jmeterReportFolder: string, jmeterLogFolder: string, 
             logInformation('Completed: Copying Test Results to Azure blob storage.')
         }
     } catch (e) {
-        logInformation('Error Publishing report to blob storage: ' + e?.message)
+        logInformation('Error Publishing report to blob storage: ' + e?.message);
+        trackException('Error Publishing report to blob storage: ' + e?.message, e);
+        console.error(e);
         tl.error(e);
         logInformation(ERROR_DEFAULT_MSG);
     }
@@ -46,6 +51,7 @@ async function PostResults(jmeterReportFolder: string, jmeterLogFolder: string, 
         } catch(e: any) {
             tl.error(e);
             logInformation('Error Publishing log: ' + e?.message);
+            trackException('Error Publishing log: ' + e?.message, e);
             logInformation('Artifacts {LOG} are present at location: ' + LogABSPath);
             logInformation(ERROR_DEFAULT_MSG);
         }
@@ -59,6 +65,7 @@ async function PostResults(jmeterReportFolder: string, jmeterLogFolder: string, 
         } catch(e: any) {
             tl.error(e);
             logInformation('Error Publishing report: ' + e?.message);
+            trackException('Error Publishing report: ' + e?.message, e);
             logInformation('Artifacts {Report} are present at location: ' + ReportABSPath);
             logInformation(ERROR_DEFAULT_MSG);
         }
@@ -69,6 +76,7 @@ async function PostResults(jmeterReportFolder: string, jmeterLogFolder: string, 
 }
 
 async function main() {
+    let startTimeInSeconds = Math.round(Date.now() / 1000)
     try {
 
         let JMETER_URL = tl.getInput(InputVariables.JMX_BINARY_URI,true);
@@ -95,6 +103,7 @@ async function main() {
         await process.chdir(JMETER_ABS_BIN_Folder);
         logInformation('Change Directory to JMeter Bin Path ' + JMETER_ABS_BIN_Folder + ' completed. Current Working Directory: ' + process.cwd());
 
+        allowCompleteReadWriteAccess(process.cwd());
         logInformation('Start handleJMeterJMXFile. Current Working directory' + process.cwd());
         let jmeterJMXFileName:string|null|undefined = await handleJMeterJMXFile(JMETER_ABS_BIN_Folder);
         logInformation('Completed handleJMeterJMXFile JMXFileName: '+ jmeterJMXFileName);
@@ -178,10 +187,29 @@ async function main() {
     } catch (err: any) {
         tl.error(err);
         logInformation(err);
+        trackException(err?.message, err)
         logInformation(ERROR_DEFAULT_MSG);
         tl.setResult(tl.TaskResult.Failed, err?.message);
     }
+
+    
+    let endTimeInSeconds = Math.round(Date.now() / 1000)
+    let timeToRunInSeconds: number = endTimeInSeconds - startTimeInSeconds;
+    trackTrace(`Time to run JMeter Task in seconds = '${timeToRunInSeconds}'`);
 }
+
+function allowCompleteReadWriteAccess(path: string) {
+    try {
+        fs.chmodSync(path, '755');
+    } catch(e) {
+        trackException('fs.chmodSync failed : ' + e?.message , e);
+    }
+    
+    //let pathValue = COMMAND_TO_SET_PERMISSION.replace(COMMAND_TO_SET_PERMISSION_PATH_HOLDER, path);
+    //RunPowershellCommand(pathValue);
+
+}
+
 
 enableAppInsights();
 main();
