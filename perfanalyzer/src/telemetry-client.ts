@@ -103,7 +103,7 @@ export async function trackException(message: any, stack: any=null) {
     }
 }
 
-export function getSeverity(tracelLevel: TraceLevel): SeverityLevel {
+function getSeverity(tracelLevel: TraceLevel): SeverityLevel {
   switch( tracelLevel) {
       case TraceLevel.Verbose:
           return SeverityLevel.Verbose;
