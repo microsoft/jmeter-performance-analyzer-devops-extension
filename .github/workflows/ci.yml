@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest    
     steps:
     - uses: actions/checkout@v1
-
-    - name: npm install
-      run: |
-        npm install
+      with:
+        node-version: '14'
+    - run: npm install
