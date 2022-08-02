@@ -37,17 +37,18 @@ export function enableAppInsights() {
         .setDistributedTracingMode(appInsights.DistributedTracingModes.AI)
         .start();
 
-        appInsightsMSClient = appInsights.defaultClient;
-        console.log('Successfuly Initialized MS Telemetry.');
-        
-        appInsightsMSClassicClient = new appInsights.TelemetryClient(APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING);
-        console.log('Successfuly Initialized MS Classic Telemetry.');
-        
+        appInsightsMSClient = appInsights.defaultClient;         
+        appInsightsMSClassicClient = new appInsights.TelemetryClient(APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING);         
         appInsightsClient = new appInsights.TelemetryClient(APPINSIGHTS_CONNECTION_STRING);
         console.log('Successfuly Initialized Telemetry.');
 
         console.log('Running Pipeline Host: ' + getSystemProps('system.hostType'));
-        trackTrace('Running Pipeline Host: ' + getSystemProps('system.hostType'), TraceLevel.Verbose);
+        console.log(`Agent Id: ${getSystemProps ('Agent.Id')}`);
+        console.log(`Agent OS: ${getSystemProps ('Agent.OS')}`);
+        console.log(`Agent Name: ${getSystemProps ('Agent.Name')}`);
+        console.log(`Agent OSArchitecture: ${getSystemProps ('Agent.OSArchitecture')}`);
+        console.log(`Agent MachineName: ${getSystemProps ('Agent.MachineName')}`); 
+        logMachineInfo();
       
 
     } catch(e) {
@@ -55,7 +56,21 @@ export function enableAppInsights() {
         trackException(' Application insights could not be started: ' + e?.message, e);
     }
 }
+function logMachineInfo() {
+  console.log('Running Pipeline Host: ' + getSystemProps('system.hostType'));
+  console.log(`Agent Id: ${getSystemProps ('Agent.Id')}`);
+  console.log(`Agent OS: ${getSystemProps ('Agent.OS')}`);
+  console.log(`Agent Name: ${getSystemProps ('Agent.Name')}`);
+  console.log(`Agent OSArchitecture: ${getSystemProps ('Agent.OSArchitecture')}`);
+  console.log(`Agent MachineName: ${getSystemProps ('Agent.MachineName')}`); 
 
+  trackTrace('Running Pipeline Host: ' + getSystemProps('system.hostType'), TraceLevel.Information);
+  trackTrace(`Agent Id: ${getSystemProps ('Agent.Id')}`, TraceLevel.Information);
+  trackTrace(`Agent OS: ${getSystemProps ('Agent.OS')}`, TraceLevel.Information);
+  trackTrace(`Agent Name: ${getSystemProps ('Agent.Name')}`, TraceLevel.Information);
+  trackTrace(`Agent OSArchitecture: ${getSystemProps ('Agent.OSArchitecture')}`, TraceLevel.Information);
+  trackTrace(`Agent MachineName: ${getSystemProps ('Agent.MachineName')}`, TraceLevel.Information); 
+}
 
 export async function LogEvent(eventName: string, props: {} = null) {
     if(! logTelemetry) {
@@ -190,7 +205,6 @@ function GetDefaultProps() {
         releaseRequestedFor: getSystemProps ('Release.RequestedFor')
     }
     telemetryProps = props;
-    console.log('Created Telemetry Props Count: ' + Object.keys(props).length);
     return props;
 }
 class MyError extends Error {

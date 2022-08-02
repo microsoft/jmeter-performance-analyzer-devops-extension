@@ -169,18 +169,18 @@ async function main() {
         var child = exec(command);
         promiseFromChildProcess(child).then(function (result:any) {
             logInformation(`promise complete: ${result}`, TraceLevel.Information);
-            let closeSuccessCode: string = "0";
-            logType(result);
-            /*if(result && result.toString().trim() == closeSuccessCode) {
-                logInformation('Closing Code Status: Success', TraceLevel.Information)
+            
+            if(logType(result) =='number' && result == 0) {
+                logInformation('Closing Code Status: Success', TraceLevel.Information);
+                PostResults(jmeterReportFolder, jmeterLogFolder, JMETER_ABS_BIN_Folder);
+                logInformation('Task Completed.', TraceLevel.Information)
             } else {
                 let msg = `Closing Status was not 0. Task to execute command failed with code: ${result}`
                 logInformation(msg, TraceLevel.Error);
                 trackException(msg);
                 tl.setResult(tl.TaskResult.Failed, msg);
-            }*/
-            PostResults(jmeterReportFolder, jmeterLogFolder, JMETER_ABS_BIN_Folder);
-            logInformation('Task Completed.', TraceLevel.Information)
+            }
+            
         }, function (err) {
             tl.error(err);
             logInformation(`promise rejected: ${err}`, TraceLevel.Error);

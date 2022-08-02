@@ -118,6 +118,7 @@ export function formatString(str: string, val: string[]): string {
 export function logType(val: any) {
     try {
         console.log(typeof val);
+        return typeof val;
     } catch(e) {
         //Nothing required
     }
