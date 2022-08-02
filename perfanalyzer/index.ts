@@ -1,14 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import {InputVariables, InputVariableType, JMETER_FILE_NAME, JMETER_BIN_Folder_NAME, DEFAULT_JMETER_REPORT_DIR_NAME, DEFAULT_JMETER_LOG_DIR_NAME, LOG_JTL_FILE_NAME, JMETER_LOG_FILE_NAME, ERROR_DEFAULT_MSG, COMMAND_TO_SET_PERMISSION, COMMAND_TO_SET_PERMISSION_PATH_HOLDER, CommandTypes, TraceLevel } from './src/constant'
-import {replaceTokens } from './src/replaceToken'
 import { publishData } from './src/azure-task-lib.utility'
-import { downloadFile, unzipBinary, logInformation, isEmpty } from './src/utility'
-import { copyResultsToAzureBlob} from './src/blob-utils'
-import { analyzeJTL, handleJMeterInputFile, handleJMeterJMXFile, handleJMeterPropertyFile, promiseFromChildProcess} from './src/jmeter-utils'
+import { copyResultsToAzureBlob } from './src/blob-utils'
+import { getCommands } from './src/commands'
+import { CommandTypes, DEFAULT_JMETER_LOG_DIR_NAME, DEFAULT_JMETER_REPORT_DIR_NAME, ERROR_DEFAULT_MSG, InputVariables, InputVariableType, JMETER_BIN_Folder_NAME, JMETER_FILE_NAME, JMETER_LOG_FILE_NAME, LOG_JTL_FILE_NAME } from './src/constant'
+import { analyzeJTL, handleJMeterInputFile, handleJMeterJMXFile, handleJMeterPropertyFile, promiseFromChildProcess } from './src/jmeter-utils'
+import { replaceTokens } from './src/replaceToken'
 import { enableAppInsights, LogEvent, trackException, trackTrace } from './src/telemetry-client'
-import {getCommands} from './src/commands'
+import { TraceLevel } from './src/telemetry.constants'
+import { downloadFile, isEmpty, logInformation, unzipBinary } from './src/utility'
 const tl = require('azure-pipelines-task-lib/task');
 const Path = require('path');
 var exec = require('child_process').exec;

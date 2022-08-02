@@ -4,8 +4,9 @@
 import { BlobServiceClient, StorageSharedKeyCredential } from "@azure/storage-blob";
 import { AzureRMEndpoint } from 'azure-pipelines-tasks-azure-arm-rest-v2/azure-arm-endpoint';
 import { AzureEndpoint, StorageAccount } from 'azure-pipelines-tasks-azure-arm-rest-v2/azureModels';
-import { AZURE_STORAGE_ACCOUNT_NAME_PLACEHOLDER, AZURE_STORAGE_ACCOUNT_URI, ERROR_DEFAULT_MSG, InputVariables, JMETER_LOG_FILE_NAME, JMETER_REPORT_INDEX_FILE_NAME, LOG_JTL_FILE_NAME, TraceLevel, URL_SEPERATOR } from './constant';
+import { AZURE_STORAGE_ACCOUNT_NAME_PLACEHOLDER, AZURE_STORAGE_ACCOUNT_URI, ERROR_DEFAULT_MSG, InputVariables, JMETER_LOG_FILE_NAME, JMETER_REPORT_INDEX_FILE_NAME, LOG_JTL_FILE_NAME, URL_SEPERATOR } from './constant';
 import { LogEvent, trackException } from './telemetry-client';
+import { TraceLevel } from "./telemetry.constants";
 import { isNonEmpty, logInformation } from './utility';
 const fs = require('fs');
 const tl = require('azure-pipelines-task-lib/task');

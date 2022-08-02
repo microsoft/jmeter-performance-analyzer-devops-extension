@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { ERROR_DEFAULT_MSG, TraceLevel } from './constant';
+import { ERROR_DEFAULT_MSG } from './constant';
 import { LogEvent } from './telemetry-client';
+import { TraceLevel } from './telemetry.constants';
 import { logInformation } from './utility';
 const tl = require('azure-pipelines-task-lib/task');
 

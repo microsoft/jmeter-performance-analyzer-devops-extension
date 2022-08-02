@@ -54,31 +54,7 @@ export enum InputVariableType {
 }
 
 
-export enum TraceLevel {
-    Verbose = 0,
-    Information = 1,
-    Warning = 2,
-    Error = 3,
-    Critical = 4,
-    Off = 5,
-  }
-  
-  export enum TelemetryType {
-    Trace,
-    PageView,
-    BusinessProcess,
-    FeatureUsage,
-    Custom,
-  }
-  
-  export declare enum SeverityLevel {
-    Verbose = 0,
-    Information = 1,
-    Warning = 2,
-    Error = 3,
-    Critical = 4
-  }
-  
+
 export const JMETER_FILE_NAME='apache-jmeter.tgz'
 export const JMETER_BIN_Folder_NAME= 'bin'
 export const DEFAULT_JMETER_REPORT_DIR_NAME = 'CurrentReport';

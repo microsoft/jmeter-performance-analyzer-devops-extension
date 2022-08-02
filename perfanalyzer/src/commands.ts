@@ -1,4 +1,5 @@
-import { Commands, CommandTypes, TraceLevel } from "./constant";
+import { Commands, CommandTypes } from "./constant";
+import { TraceLevel } from "./telemetry.constants";
 import { formatString, getSystemProps, logInformation } from "./utility";
 
 export function getCommands(commandName: CommandTypes, ...props: string[]) {
@@ -12,7 +13,7 @@ export function getCommands(commandName: CommandTypes, ...props: string[]) {
                 return formatString(Commands.JMETER_RUN_WITH_PROPERTY_WINDOWS, props);
             } else if(systemHostType.indexOf('linux') > -1 || systemHostType.indexOf('ubuntu') > -1) {
                 return formatString(Commands.JMETER_RUN_WITH_PROPERTY_LINUX, props);
-            } else if(systemHostType.indexOf('mac') > -1) {
+            } else if(systemHostType.indexOf('mac') > -1 || systemHostType.indexOf('darwin') ) {
                 return formatString(Commands.JMETER_RUN_WITH_PROPERTY_MACOS, props);
             } else {
                 return formatString(Commands.JMETER_RUN_WITH_PROPERTY_LINUX, props);
@@ -23,7 +24,7 @@ export function getCommands(commandName: CommandTypes, ...props: string[]) {
                 return formatString(Commands.JMETER_RUN_WITHOUT_PROPERTY_WINDOWS, props);
             } else if(systemHostType.indexOf('linux') > -1 || systemHostType.indexOf('ubuntu') > -1) {
                 return formatString(Commands.JMETER_RUN_WITHOUT_PROPERTY_LINUX, props);
-            } else if(systemHostType.indexOf('mac') > -1) {
+            } else if(systemHostType.indexOf('mac') > -1 || systemHostType.indexOf('darwin') ) {
                 return formatString(Commands.JMETER_RUN_WITHOUT_PROPERTY_MACOS, props);
             } else {
                 return formatString(Commands.JMETER_RUN_WITHOUT_PROPERTY_LINUX, props);

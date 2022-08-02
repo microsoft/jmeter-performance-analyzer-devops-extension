@@ -1,5 +1,5 @@
-import { TraceLevel } from './constant';
 import { trackException } from './telemetry-client';
+import { TraceLevel } from './telemetry.constants';
 import { logInformation } from "./utility";
 import tr = require('azure-pipelines-task-lib/toolrunner');
 const tl = require('azure-pipelines-task-lib/task');

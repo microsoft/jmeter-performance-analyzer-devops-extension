@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { ERROR_DEFAULT_MSG, InputVariables, InputVariableType, LOG_JTL_FILE_NAME, TraceLevel } from './constant';
+import { ERROR_DEFAULT_MSG, InputVariables, InputVariableType, LOG_JTL_FILE_NAME } from './constant';
 import { trackException } from './telemetry-client';
+import { TraceLevel } from './telemetry.constants';
 import { copyDirectoryRecursiveSync, copyFileToDirectory, downloadFile, isEmpty, logInformation } from './utility';
 let csv = require('csv-parser')
 const fs = require('fs');

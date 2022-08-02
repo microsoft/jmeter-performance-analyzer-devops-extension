@@ -3,8 +3,9 @@
 
 import * as moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
-import { DATE_FORMAT, TraceLevel } from './constant';
+import { DATE_FORMAT } from './constant';
 import { LogEvent, trackTrace } from './telemetry-client';
+import { TraceLevel } from './telemetry.constants';
 const globalAny:any = global;
 
 const tl = require('azure-pipelines-task-lib/task');

@@ -3,9 +3,10 @@
 
 import { APPINSIGHTS_CONNECTION_STRING } from "./appInsightsConnectionString";
 import { APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING, APPINSIGHTS_CONNECTION_MS_STRING } from "./appInsightsConnectionString-ms";
-import { InputVariables, SeverityLevel, TraceLevel } from './constant';
-import tl = require('azure-pipelines-task-lib/task');
+import { InputVariables } from './constant';
+import { SeverityLevel, TraceLevel } from './telemetry.constants';
 import { getSystemProps } from "./utility";
+import tl = require('azure-pipelines-task-lib/task');
 const globalAny:any = global;
 let appInsights = require('applicationinsights');
 
@@ -67,7 +68,7 @@ export async function LogEvent(eventName: string) {
         appInsightsClient.trackEvent({name: eventName, properties: GetDefaultProps()});
         appInsightsMSClassicClient.trackEvent({name: eventName, properties: GetDefaultProps()});
     } catch(e) {
-       console.warn('[Ignore] MS Telemetry LogEvent Error: ' + e?.message,e )
+       console.warn('[Ignore] MS Telemetry LogEvent Error: ' + e?.message )
     }
 }
 
@@ -82,7 +83,7 @@ export async function trackTrace(message: string, traceSeverity: TraceLevel) {
         appInsightsClient.trackTrace({message: message, severityLevel: getSeverity(traceSeverity)}, props);
         appInsightsMSClassicClient.trackTrace({message: message, severityLevel: getSeverity(traceSeverity)}, props);
     } catch(e) {
-       console.warn('[Ignore] MS Telemetry trackTrace Error: ' + e?.message,e )
+       console.warn('[Ignore] MS Telemetry trackTrace Error: ' + e?.message )
     }
 }
 
@@ -93,17 +94,18 @@ export async function trackException(message: any, stack: any=null) {
     }
 
     try {
+        let msgTrack = `${message} - ${(null == stack)? '' : stack.toString() }`;
         const error = new MyError(globalAny.UNIQUE_RUN_ID, message, stack);
-        trackTrace(error.getErrorString(), TraceLevel.Error);
+        trackTrace(msgTrack, TraceLevel.Error);
         appInsightsMSClient.trackException({id: globalAny.UNIQUE_RUN_ID, error: {name: globalAny.UNIQUE_RUN_ID, message: error}, exception:stack, severityLevel: SeverityLevel.Error });
         appInsightsClient.trackException({id: globalAny.UNIQUE_RUN_ID, error: {name: globalAny.UNIQUE_RUN_ID, message: error}, exception:stack, severityLevel: SeverityLevel.Error });
         appInsightsMSClassicClient.trackException({id: globalAny.UNIQUE_RUN_ID, error: {name: globalAny.UNIQUE_RUN_ID, message: error}, exception:stack, severityLevel: SeverityLevel.Error });
     } catch(e) {
-       console.warn('[Ignore] MS Telemetry trackTrace Error: ' + e?.message,e )
+       console.warn('[Ignore] MS Telemetry trackTrace Error: ' + e?.message )
     }
 }
 
-function getSeverity(tracelLevel: TraceLevel): SeverityLevel {
+async function getSeverity(tracelLevel: TraceLevel): Promise<SeverityLevel> {
   switch( tracelLevel) {
       case TraceLevel.Verbose:
           return SeverityLevel.Verbose;
@@ -185,7 +187,7 @@ function GetDefaultProps() {
 }
 class MyError extends Error {
 
-    constructor (guid: string,msg, stack) {
+    constructor (guid: string, msg: string, stack: any) {
       super(msg)
       this.name = guid
       this.message = `${msg} - ${(null == stack)? '' : stack.toString() }`;
