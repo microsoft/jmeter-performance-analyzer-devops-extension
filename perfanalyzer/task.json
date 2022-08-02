@@ -9,8 +9,8 @@
     "author": "Microsoft",
     "version": {
         "Major": 1,
-        "Minor": 3,
-        "Patch": 83
+        "Minor": 4,
+        "Patch": 33
     },
     "instanceNameFormat": "Run Perf Analyzer",
     "groups": [

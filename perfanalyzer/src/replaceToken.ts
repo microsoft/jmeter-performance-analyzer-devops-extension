@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import {logInformation } from './utility'
-import {ERROR_DEFAULT_MSG, InputVariables, InputVariableType } from './constant'
+import { ERROR_DEFAULT_MSG, InputVariables } from './constant';
 import { LogEvent, trackException } from './telemetry-client';
+import { TelemetryEvents, TraceLevel } from './telemetry.constants';
+import { logInformation } from './utility';
 const tl = require('azure-pipelines-task-lib/task');
 const fs = require('fs');
 const sh = require('shelljs');
@@ -11,9 +12,8 @@ const sh = require('shelljs');
 export async function replaceTokens(fileName: string | null | undefined) {
     
     try {
-        let event2 = 'Starting Replace Tokens task for file: ' + fileName
-        logInformation(event2);
-        LogEvent(event2);
+        logInformation(TelemetryEvents.REPLACE_TOKEN_INVOKED, TraceLevel.Verbose);
+        LogEvent(TelemetryEvents.REPLACE_TOKEN_INVOKED);
 
         // get the task vars
         let sourcePath: string | null | undefined= fileName;
@@ -27,7 +27,7 @@ export async function replaceTokens(fileName: string | null | undefined) {
 
         // remove trailing slash
         if (sourcePath.endsWith("\\") || sourcePath.endsWith("/")) {
-            logInformation("Trimming separator off sourcePath");
+            logInformation("Trimming separator off sourcePath", TraceLevel.Verbose);
             sourcePath = sourcePath.substr(0, sourcePath.length - 1);
         }
 
@@ -37,8 +37,8 @@ export async function replaceTokens(fileName: string | null | undefined) {
 
         const warning = (message: string) => tl.warning(message);
 
-        logInformation(`sourcePath: [${sourcePath}]`);
-        logInformation(`tokenRegex: [${tokenRegex}]`);
+        logInformation(`sourcePath: [${sourcePath}]`, TraceLevel.Information);
+        logInformation(`tokenRegex: [${tokenRegex}]`, TraceLevel.Information);
 
         if (!tokenRegex || tokenRegex.length === 0){
             tokenRegex = "__(\\w+)__";
@@ -46,7 +46,7 @@ export async function replaceTokens(fileName: string | null | undefined) {
         let files = [sourcePath];
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
-            logInformation(`Starting regex replacement in [${file}]`);
+            logInformation(`Starting regex replacement in [${file}]`, TraceLevel.Verbose);
 
             var contents = fs.readFileSync(file).toString();
             var reg = new RegExp(tokenRegex, "g");
@@ -58,7 +58,7 @@ export async function replaceTokens(fileName: string | null | undefined) {
                 var vIsArray = vName.endsWith("[]");
                 if (vIsArray) {
                     vName = vName.substring(0, vName.length - 2);
-                    logInformation(`Detected that ${vName} is an array token`);
+                    logInformation(`Detected that ${vName} is an array token`, TraceLevel.Warning);
                 }
 
                 // find the variable value in the environment
@@ -72,11 +72,11 @@ export async function replaceTokens(fileName: string | null | undefined) {
                     } else {
                         newContents = newContents.replace(match[0], vValue);
                     }
-                    logInformation(`Replaced token [${vName }]`);
+                    logInformation(`Replaced token [${vName }]`, TraceLevel.Verbose);
                 }
 
             }
-            logInformation("Writing new values to file");
+            logInformation("Updating Values into new file", TraceLevel.Information);
 
             sh.chmod(666, file);
             fs.writeFileSync(file, newContents);
@@ -84,7 +84,7 @@ export async function replaceTokens(fileName: string | null | undefined) {
 
     } catch (err :any) {
         tl.error(err);
-        logInformation(ERROR_DEFAULT_MSG);
+        logInformation(ERROR_DEFAULT_MSG, TraceLevel.Error);
         let msg = err;
         if (err.message) {
             msg = err.message;
@@ -93,5 +93,5 @@ export async function replaceTokens(fileName: string | null | undefined) {
         tl.setResult(tl.TaskResult.Failed, msg);
     }
 
-    logInformation("Completed Replace Token Step.");
+    logInformation("Completed Replace Token Step.", TraceLevel.Information);
 }

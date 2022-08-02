@@ -29,6 +29,30 @@ export enum InputVariables {
     MAX_FAILURE_COUNT_FOR_JMETER = 'maxFailureCountForJMeter',
     LOG_TELEMETRY = 'telemetryDataCollection'
 }
+
+export enum CommandTypes {
+    JMETER_RUN_WITH_PROPERTY = 'JMETER_RUN_WITH_PROPERTY',
+    JMETER_RUN_WITHOUT_PROPERTY = 'JMETER_RUN_WITH_PROPERTY',
+}
+
+export enum OSTypes {
+    Windows = 'Windows',
+    MAC = 'MAC_OS',
+    LINUX = 'LINUX',
+    UNKNOWN = 'Unknown'
+}
+
+export const Commands = {
+    JMETER_RUN_WITH_PROPERTY_WINDOWS : '.\\jmeter -q {0} -n -t {1}  -l {2} -j {3} -f -e -o {4}',
+    JMETER_RUN_WITH_PROPERTY_LINUX : './jmeter.sh -q {0} -n -t {1}  -l {2} -j {3} -f -e -o {4}',
+    JMETER_RUN_WITH_PROPERTY_MACOS : './jmeter.sh -q {0} -n -t {1}  -l {2} -j {3} -f -e -o {4}',
+
+    
+    JMETER_RUN_WITHOUT_PROPERTY_WINDOWS : '.\\jmeter -n -t {0} -l {1} -j {2} -f -e -o  {3}',
+    JMETER_RUN_WITHOUT_PROPERTY_LINUX : './jmeter.sh -n -t {0} -l {1} -j {2} -f -e -o  {3}',
+    JMETER_RUN_WITHOUT_PROPERTY_MACOS : './jmeter.sh -n -t {0} -l {1} -j {2} -f -e -o  {3}'
+}
+
 export enum InputVariableType {
     SourceCode = 'sourceCode',
     Url = 'url',
