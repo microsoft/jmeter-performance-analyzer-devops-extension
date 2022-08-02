@@ -22,11 +22,11 @@ This sample section shows you how you can use properties file to generate test r
 
 4. You can see the 3 samples here
 
-    a. Simple JMX : This just shows how you can create a jmx with input parameter and a test file and how you can first locally test and then schedule a pipeline test.
+    a. [Simple JMX](https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples/Simple_JMX_With_File_And_Property_Input/README.md) : This just shows how you can create a jmx with input parameter and a test file and how you can first locally test and then schedule a pipeline test.
 
-    b. Simple JMX Without Property File and Hardcoded JMX (Not recommended): This just shows how you can create a jmx without input parameter and test a plain jmx.
+    b. [Simple JMX Without Property File and Hardcoded JMX (Not recommended)](https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples/Simple_JMX_With_HardCoded_Values/README.md): This just shows how you can create a jmx without input parameter and test a plain jmx.
 
-    c. Token Generation: In case your application does require some kind of authentication, your jmx must include the way of authenticating it. You can see how we can generate token.
+    c. [Token Generation](https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples/JMX_With_Token_generation_And_Usage/README.md) : In case your application does require some kind of authentication, your jmx must include the way of authenticating it. You can see how we can generate token.
 
     Your use case can be a combination of both as well. Hope the usage clarifies, please check the samples.
 
