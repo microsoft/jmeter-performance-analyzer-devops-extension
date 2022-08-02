@@ -1,0 +1,20 @@
+name: CICD
+on: 
+  push:
+    branches:    
+      - main
+      - RELEASES/Enable-Workflows 
+jobs:
+  build:
+    runs-on: ubuntu-latest    
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        node-version: '14'
+    - name: change directory
+      run: |
+        cd perfanalyzer
+    - name: npm install
+      run: |
+        cd perfanalyzer
+        npm install
