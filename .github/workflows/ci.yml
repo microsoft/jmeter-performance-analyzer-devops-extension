@@ -16,4 +16,5 @@ jobs:
         cd perfanalyzer
     - name: npm install
       run: |
+        cd perfanalyzer
         npm install
