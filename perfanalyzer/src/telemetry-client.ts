@@ -3,9 +3,10 @@
 
 import { APPINSIGHTS_CONNECTION_STRING } from "./appInsightsConnectionString";
 import { APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING, APPINSIGHTS_CONNECTION_MS_STRING } from "./appInsightsConnectionString-ms";
-import { InputVariables } from './constant';
+import { InputVariables, SeverityLevel, TraceLevel } from './constant';
 import tl = require('azure-pipelines-task-lib/task');
-
+import { getSystemProps } from "./utility";
+const globalAny:any = global;
 let appInsights = require('applicationinsights');
 
 let appInsightsMSClient = null;
@@ -45,7 +46,7 @@ export function enableAppInsights() {
         console.log('Successfuly Initialized Telemetry.');
 
         console.log('Running Pipeline Host: ' + getSystemProps('system.hostType'));
-        trackTrace('Running Pipeline Host: ' + getSystemProps('system.hostType'));
+        trackTrace('Running Pipeline Host: ' + getSystemProps('system.hostType'), TraceLevel.Verbose);
       
 
     } catch(e) {
@@ -70,16 +71,16 @@ export async function LogEvent(eventName: string) {
     }
 }
 
-export async function trackTrace(message: string) {
+export async function trackTrace(message: string, traceSeverity: TraceLevel) {
     if(! logTelemetry) {
       console.info('Telemetry Logging Turned off.');
       return;
     }
-
+    let props = GetDefaultProps();
     try {
-        appInsightsMSClient.trackTrace({message: message, properties: GetDefaultProps()});
-        appInsightsClient.trackTrace({message: message, properties: GetDefaultProps()});
-        appInsightsMSClassicClient.trackTrace({message: message, properties: GetDefaultProps()});
+        appInsightsMSClient.trackTrace({message: message, severityLevel: this.getSeverity(traceSeverity)}, props);
+        appInsightsClient.trackTrace({message: message, severityLevel: this.getSeverity(traceSeverity)}, props);
+        appInsightsMSClassicClient.trackTrace({message: message, severityLevel: this.getSeverity(traceSeverity)}, props);
     } catch(e) {
        console.warn('[Ignore] MS Telemetry trackTrace Error: ' + e?.message,e )
     }
@@ -92,13 +93,36 @@ export async function trackException(message: any, stack: any=null) {
     }
 
     try {
-        const error = new MyError(message, stack);
-        appInsightsMSClient.trackException({ exception: error , properties: GetDefaultProps()});
-        appInsightsClient.trackException({ exception: error , properties: GetDefaultProps()});
-        appInsightsMSClassicClient.trackException({ exception: error , properties: GetDefaultProps()});
+        const error = new MyError(globalAny.UNIQUE_RUN_ID, message, stack);
+        trackTrace(error.getErrorString(), TraceLevel.Error);
+        appInsightsMSClient.trackException({id: globalAny.UNIQUE_RUN_ID, error: {name: globalAny.UNIQUE_RUN_ID, message: error}, exception:stack, severityLevel: SeverityLevel.Error });
+        appInsightsClient.trackException({id: globalAny.UNIQUE_RUN_ID, error: {name: globalAny.UNIQUE_RUN_ID, message: error}, exception:stack, severityLevel: SeverityLevel.Error });
+        appInsightsMSClassicClient.trackException({id: globalAny.UNIQUE_RUN_ID, error: {name: globalAny.UNIQUE_RUN_ID, message: error}, exception:stack, severityLevel: SeverityLevel.Error });
     } catch(e) {
        console.warn('[Ignore] MS Telemetry trackTrace Error: ' + e?.message,e )
     }
+}
+
+export function getSeverity(tracelLevel: TraceLevel): SeverityLevel {
+  switch( tracelLevel) {
+      case TraceLevel.Verbose:
+          return SeverityLevel.Verbose;
+
+      case TraceLevel.Information:
+          return SeverityLevel.Information
+
+      case TraceLevel.Warning:
+          return SeverityLevel.Warning
+
+      case TraceLevel.Error:
+          return SeverityLevel.Error
+
+      case TraceLevel.Critical:
+          return SeverityLevel.Critical
+          
+      default:
+          return SeverityLevel.Verbose;
+  }
 }
 
 function GetDefaultProps() {
@@ -161,18 +185,16 @@ function GetDefaultProps() {
 }
 class MyError extends Error {
 
-    constructor (msg, stack) {
+    constructor (guid: string,msg, stack) {
       super(msg)
-      this.name = 'MyError'
-      this.message = msg;
+      this.name = guid
+      this.message = `${msg} - ${(null == stack)? '' : stack.toString() }`;
       this.stack = stack;
+    }
+
+    public getErrorString() {
+      return this.message;
     }
 }
 
-function getSystemProps(prop: string) {
-    try {
-        return  tl.getVariable(prop);
-    } catch (e) {
-        trackTrace('[Ignore] Telemetry System props Unable to fetch : '+ prop + ' Warning: '+ e?.message )
-    }
-}
+
