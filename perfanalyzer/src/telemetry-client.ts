@@ -5,7 +5,7 @@ import { APPINSIGHTS_CONNECTION_STRING } from "./appInsightsConnectionString";
 import { APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING, APPINSIGHTS_CONNECTION_MS_STRING } from "./appInsightsConnectionString-ms";
 import { InputVariables } from './constant';
 import { SeverityLevel, TraceLevel } from './telemetry.constants';
-import { getSystemProps } from "./utility";
+import { getSystemProps, isObjectEmpty } from "./utility";
 import tl = require('azure-pipelines-task-lib/task');
 const globalAny:any = global;
 let appInsights = require('applicationinsights');
@@ -57,16 +57,24 @@ export function enableAppInsights() {
 }
 
 
-export async function LogEvent(eventName: string) {
+export async function LogEvent(eventName: string, props: {} = null) {
     if(! logTelemetry) {
       console.info('Telemetry Logging Turned off.');
       return;
     }
 
+    let loggedProps; 
+    if(!isObjectEmpty(props)) {
+      let defaultProps = GetDefaultProps();
+      loggedProps = Object.assign(defaultProps, props)
+    } else {
+      loggedProps = props;
+    }
+
     try {
-        appInsightsMSClient.trackEvent({name: eventName, properties: GetDefaultProps()});
-        appInsightsClient.trackEvent({name: eventName, properties: GetDefaultProps()});
-        appInsightsMSClassicClient.trackEvent({name: eventName, properties: GetDefaultProps()});
+        appInsightsMSClient.trackEvent({name: eventName, properties: loggedProps});
+        appInsightsClient.trackEvent({name: eventName, properties: loggedProps});
+        appInsightsMSClassicClient.trackEvent({name: eventName, properties: loggedProps});
     } catch(e) {
        console.warn('[Ignore] MS Telemetry LogEvent Error: ' + e?.message )
     }

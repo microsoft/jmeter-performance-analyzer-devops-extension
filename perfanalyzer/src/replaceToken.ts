@@ -3,7 +3,7 @@
 
 import { ERROR_DEFAULT_MSG, InputVariables } from './constant';
 import { LogEvent, trackException } from './telemetry-client';
-import { TraceLevel } from './telemetry.constants';
+import { TelemetryEvents, TraceLevel } from './telemetry.constants';
 import { logInformation } from './utility';
 const tl = require('azure-pipelines-task-lib/task');
 const fs = require('fs');
@@ -12,9 +12,8 @@ const sh = require('shelljs');
 export async function replaceTokens(fileName: string | null | undefined) {
     
     try {
-        let event = 'Starting Replace Tokens task for file: ' + fileName
-        logInformation(event, TraceLevel.Verbose);
-        LogEvent(event);
+        logInformation(TelemetryEvents.REPLACE_TOKEN_INVOKED, TraceLevel.Verbose);
+        LogEvent(TelemetryEvents.REPLACE_TOKEN_INVOKED);
 
         // get the task vars
         let sourcePath: string | null | undefined= fileName;

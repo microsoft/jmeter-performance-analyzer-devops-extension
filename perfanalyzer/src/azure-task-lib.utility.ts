@@ -3,7 +3,7 @@
 
 import { ERROR_DEFAULT_MSG } from './constant';
 import { LogEvent } from './telemetry-client';
-import { TraceLevel } from './telemetry.constants';
+import { TelemetryEvents, TraceLevel } from './telemetry.constants';
 import { logInformation } from './utility';
 const tl = require('azure-pipelines-task-lib/task');
 
@@ -30,7 +30,6 @@ export async function publishData(pathToPublish: string, artifactName: string) {
     };
 
     tl.command("artifact.upload", data, pathToPublish);
-    let event = 'Completed Uploading Artifacts from : ' + pathToPublish + ' to location: ' + pathToPublish
-    logInformation(event, TraceLevel.Information);
-    LogEvent(event);
+    LogEvent(TelemetryEvents.ARTIFACT_UPLOAD_COMPLETE);
+    logInformation(TelemetryEvents.ARTIFACT_UPLOAD_COMPLETE, TraceLevel.Information);
 }

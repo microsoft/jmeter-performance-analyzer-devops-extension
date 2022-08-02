@@ -379,6 +379,8 @@ perfanalyzer/src/appInsightsConnectionString.js
 perfanalyzer/src/appInsightsConnectionString-ms.js
 perfanalyzer/test.ts
 perfanalyzer/test.js
+test.js
+test.ts
 perfanalyzer/src/test.ts
 perfanalyzer/src/test.js
 perfanalyzer/src/commandExecutorPowershell.js

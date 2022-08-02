@@ -6,7 +6,7 @@ import { AzureRMEndpoint } from 'azure-pipelines-tasks-azure-arm-rest-v2/azure-a
 import { AzureEndpoint, StorageAccount } from 'azure-pipelines-tasks-azure-arm-rest-v2/azureModels';
 import { AZURE_STORAGE_ACCOUNT_NAME_PLACEHOLDER, AZURE_STORAGE_ACCOUNT_URI, ERROR_DEFAULT_MSG, InputVariables, JMETER_LOG_FILE_NAME, JMETER_REPORT_INDEX_FILE_NAME, LOG_JTL_FILE_NAME, URL_SEPERATOR } from './constant';
 import { LogEvent, trackException } from './telemetry-client';
-import { TraceLevel } from "./telemetry.constants";
+import { TelemetryEvents, TraceLevel } from "./telemetry.constants";
 import { isNonEmpty, logInformation } from './utility';
 const fs = require('fs');
 const tl = require('azure-pipelines-task-lib/task');
@@ -38,12 +38,14 @@ export async function copyResultsToAzureBlob(reportFolderName: string, logFolder
     let blobPrefix = tl.getInput(InputVariables.BLOB_PREFIX);
 
     let reportFolderABSPath = Path.join(process.cwd(), reportFolderName);
-    let event1 = 'Uploading Reports to Blob Storage from path: ' + reportFolderABSPath + ' to BlobStorageAccount: ' + storageAccountName + ' and container Name: ' + destContainerName + " at path: " + Path.join(blobPrefix,reportFolderName);
-    logInformation(event1, TraceLevel.Information);
-    LogEvent(event1);
+    let msg1 = 'Uploading Reports to Blob Storage from path: ' + reportFolderABSPath + ' to BlobStorageAccount: ' + storageAccountName + ' and container Name: ' + destContainerName + " at path: " + Path.join(blobPrefix,reportFolderName);
+    logInformation(msg1, TraceLevel.Information);
+  
     try {
         await uploadBlob(reportFolderABSPath, reportFolderName, blobPrefix, destContainerClient);
+        LogEvent(TelemetryEvents.COPYING_DATA_TO_AZURE_BLOB_STORAGE_SUCCESS);
     } catch (e) {
+        LogEvent(TelemetryEvents.COPYING_DATA_TO_AZURE_BLOB_STORAGE_FAILED);
         tl.error(e);
         let msg = 'Error Publishing report to blob storage: ' + e?.message;
         logInformation(msg, TraceLevel.Error);
@@ -52,22 +54,25 @@ export async function copyResultsToAzureBlob(reportFolderName: string, logFolder
     }
 
     let logFolderABSPath = Path.join(process.cwd(), logFolderName);
-    let event2 = 'Uploading Logs to Blob Storage from path: ' + logFolderABSPath + ' to BlobStorageAccount: ' + storageAccountName + ' and container Name: ' + destContainerName + " at path: " + Path.join(blobPrefix,logFolderName);
-    logInformation(event2, TraceLevel.Information);
-    LogEvent(event2);
+    let msg2 = 'Uploading Logs to Blob Storage from path: ' + logFolderABSPath + ' to BlobStorageAccount: ' + storageAccountName + ' and container Name: ' + destContainerName + " at path: " + Path.join(blobPrefix,logFolderName);
+    logInformation(msg2, TraceLevel.Information);
+
     try {
         await uploadBlob(logFolderABSPath, logFolderName, blobPrefix, destContainerClient);
+        LogEvent(TelemetryEvents.COPYING_LOG_DATA_TO_BUILD_ARTIFACT_SUCCESS);
     } catch (e) {
         tl.error(e);
         let msg = 'Error Publishing LOGS to blob storage: ' + e?.message;;
         logInformation(msg, TraceLevel.Error);
         logInformation(ERROR_DEFAULT_MSG, TraceLevel.Error);
         trackException(msg,e)
+        LogEvent(TelemetryEvents.COPYING_LOG_DATA_TO_BUILD_ARTIFACT_FAILED);
     }
 
     let outputStorageUri = tl.getInput(InputVariables.OUTPUT_STORAGE_URI);
     if(!outputStorageUri || outputStorageUri.length == 0) {
         logInformation('No Output Storage URL Provided. Hence unable to create performance test Result.', TraceLevel.Warning)
+        LogEvent(TelemetryEvents.NO_BLOB_PRIMARY_ENDPOINT_URI);
     } else {
         if(!outputStorageUri.endsWith(URL_SEPERATOR)) {
             outputStorageUri = outputStorageUri + URL_SEPERATOR;
@@ -85,6 +90,7 @@ export async function copyResultsToAzureBlob(reportFolderName: string, logFolder
         tl.warning(' Performance Test Result Available at: ' + REPORT_URL);
         tl.warning(' JMeter JTL File Available at: ' + JTL_URL);
         tl.warning(' JMeter Log File Available at: ' + LOG_URL);
+        LogEvent(TelemetryEvents.PROVIDED_BLOB_PRIMARY_ENDPOINT_URI, {REPORT_URL: REPORT_URL, JTL_URL: JTL_URL, LOG_URL: LOG_URL});
     }
 }
 

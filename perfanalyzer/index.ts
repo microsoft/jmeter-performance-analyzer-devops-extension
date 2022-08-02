@@ -8,8 +8,8 @@ import { CommandTypes, DEFAULT_JMETER_LOG_DIR_NAME, DEFAULT_JMETER_REPORT_DIR_NA
 import { analyzeJTL, handleJMeterInputFile, handleJMeterJMXFile, handleJMeterPropertyFile, promiseFromChildProcess } from './src/jmeter-utils'
 import { replaceTokens } from './src/replaceToken'
 import { enableAppInsights, LogEvent, trackException, trackTrace } from './src/telemetry-client'
-import { TraceLevel } from './src/telemetry.constants'
-import { downloadFile, isEmpty, logInformation, unzipBinary } from './src/utility'
+import { TelemetryEvents, TraceLevel } from './src/telemetry.constants'
+import { downloadFile, isEmpty, logInformation, logType, unzipBinary } from './src/utility'
 const tl = require('azure-pipelines-task-lib/task');
 const Path = require('path');
 var exec = require('child_process').exec;
@@ -19,8 +19,7 @@ async function PostResults(jmeterReportFolder: string, jmeterLogFolder: string, 
     try {
         let copyToBlob = tl.getBoolInput(InputVariables.COPY_RESULT_TO_AZURE_BLOB_STORAGE, true);
         if(copyToBlob) {
-            let event = 'Copying Test Results to Azure blob storage.';
-            LogEvent(event);
+            LogEvent(TelemetryEvents.COPYING_DATA_TO_AZURE_BLOB_STORAGE);
 
             logInformation('Started: Copying Test Results to Azure blob storage.', TraceLevel.Verbose)
             await copyResultsToAzureBlob(jmeterReportFolder, jmeterLogFolder);
@@ -42,32 +41,33 @@ async function PostResults(jmeterReportFolder: string, jmeterLogFolder: string, 
     if(publishResultsToBuildArtifact) {
         let artifactReport = tl.getInput(InputVariables.ARTIFACT_NAME_REPORT,true);
         let artifactLOG = tl.getInput(InputVariables.ARTIFACT_NAME_LOG,true);
-        let event1 = 'Publishing data to build artifacts: Log ';
-        LogEvent(event1);
-        logInformation(event1, TraceLevel.Verbose);
+        LogEvent(TelemetryEvents.PUBLISH_DATA_TO_BUILD_ARTIFACT);
+        logInformation(TelemetryEvents.PUBLISH_DATA_TO_BUILD_ARTIFACT, TraceLevel.Verbose);
+
         try {
             await publishData(LogABSPath, artifactLOG);
             logInformation('Completed: Publishing data to build artifacts: Log ', TraceLevel.Verbose);
+            LogEvent(TelemetryEvents.PUBLISH_LOG_DATA_TO_BUILD_ARTIFACT_SUCCESS);
         } catch(e: any) {
             tl.error(e);
             logInformation('Error Publishing log: ' + e?.message, TraceLevel.Error);
             trackException('Error Publishing log: ' + e?.message, e);
             logInformation('Artifacts {LOG} are present at location: ' + LogABSPath, TraceLevel.Error);
             logInformation(ERROR_DEFAULT_MSG, TraceLevel.Error);
+            LogEvent(TelemetryEvents.PUBLISH_LOG_DATA_TO_BUILD_ARTIFACT_FAILED);
         }
-
-        let event2 = 'Publishing data to build artifacts: Report ';
-        LogEvent(event2);
-        logInformation(event2, TraceLevel.Verbose);
+ 
         try {
             await publishData(ReportABSPath, artifactReport);
             logInformation('Completed: Publishing data to build artifacts: Report ', TraceLevel.Information);
+            LogEvent(TelemetryEvents.PUBLISH_REPORT_DATA_TO_BUILD_ARTIFACT_SUCCESS);
         } catch(e: any) {
             tl.error(e);
             logInformation('Error Publishing report: ' + e?.message, TraceLevel.Error);
             trackException('Error Publishing report: ' + e?.message, e);
             logInformation('Artifacts {Report} are present at location: ' + ReportABSPath, TraceLevel.Error);
             logInformation(ERROR_DEFAULT_MSG, TraceLevel.Error);
+            LogEvent(TelemetryEvents.PUBLISH_REPORT_DATA_TO_BUILD_ARTIFACT_FAILED);
         }
         analyzeJTL(jmeterLogFolder);
     } else {
@@ -78,12 +78,12 @@ async function PostResults(jmeterReportFolder: string, jmeterLogFolder: string, 
 async function main() {
     let startTimeInSeconds = Math.round(Date.now() / 1000)
     try {
+        LogEvent(TelemetryEvents.STARTED_PERFORMANCE_TEST);
 
         let JMETER_URL = tl.getInput(InputVariables.JMX_BINARY_URI,true);
         let JMETER_FILE_Folder = tl.getInput(InputVariables.JMETER_FOLDER_NAME,true);
         let JMETER_BIN_Folder = Path.join(JMETER_FILE_Folder, JMETER_BIN_Folder_NAME);
         let JMETER_ABS_BIN_Folder = Path.join( process.cwd(),JMETER_FILE_Folder, JMETER_BIN_Folder_NAME);
-
 
         logInformation('Current Working directory: ' +  process.cwd(), TraceLevel.Verbose);
         logInformation('JMETER_URL ' + JMETER_URL, TraceLevel.Verbose);
@@ -91,11 +91,13 @@ async function main() {
         logInformation('JMETER_BIN_Folder ' + JMETER_BIN_Folder, TraceLevel.Verbose);
         logInformation('JMETER_ABS_BIN_Folder ' + JMETER_ABS_BIN_Folder, TraceLevel.Verbose);
         logInformation('Current Working directory: ' +  process.cwd(), TraceLevel.Verbose);
+        
 
         logInformation('Start Downloading JMeter Binary', TraceLevel.Verbose)
         await downloadFile(JMETER_URL, JMETER_FILE_NAME);
         logInformation('Completed Downloading JMeter Binary', TraceLevel.Information)
-
+        LogEvent(TelemetryEvents.DOWNLOADED_JMETER_BINARY);
+        
         logInformation('Start Unzipping JMeter Binary', TraceLevel.Verbose)
         await unzipBinary(JMETER_FILE_NAME);
         logInformation('Completed Unzipping JMeter Binary', TraceLevel.Information)
@@ -107,7 +109,7 @@ async function main() {
         logInformation('Start handleJMeterJMXFile. Current Working directory' + process.cwd(), TraceLevel.Verbose);
         let jmeterJMXFileName:string = await handleJMeterJMXFile(JMETER_ABS_BIN_Folder);
         logInformation('Completed handleJMeterJMXFile JMXFileName: '+ jmeterJMXFileName, TraceLevel.Information);
-
+        
         let jmxPropertySource = tl.getInput(InputVariables.JMX_PROPERTY_FILE_SOURCE,true);
         let jmxInputFilesSource = tl.getInput(InputVariables.JMX_INPUT_FILE_SOURCE,true);
         let jmeterPropertyFileName:string = '';
@@ -150,10 +152,12 @@ async function main() {
         let CurrentLogJTLFile =  Path.join(jmeterLogFolder, LOG_JTL_FILE_NAME);
         let CurrentLogLogFile =  Path.join(jmeterLogFolder, JMETER_LOG_FILE_NAME);
 
-        if(jmxPropertySource=='none') {
+        if(jmxPropertySource==InputVariableType.None) {
+            LogEvent(TelemetryEvents.JMETER_RUN_WITHOUT_PROPERTY_FILE);
             command = getCommands(CommandTypes.JMETER_RUN_WITHOUT_PROPERTY, jmeterJMXFileName, CurrentLogJTLFile, CurrentLogLogFile, jmeterReportFolder);
             logInformation('Running JMeter Without Property File: ' + command, TraceLevel.Information);
         } else {
+            LogEvent(TelemetryEvents.JMETER_RUN_WITH_PROPERTY_FILE);
             logInformation('Running Replace Tokens for file ' + jmeterPropertyFileName + ' Current Working directory: ' + process.cwd(), TraceLevel.Verbose);
             await replaceTokens(jmeterPropertyFileName)
             logInformation('Completed Replace Tokens', TraceLevel.Information);
@@ -163,8 +167,18 @@ async function main() {
         }
 
         var child = exec(command);
-        promiseFromChildProcess(child).then(function (result) {
+        promiseFromChildProcess(child).then(function (result:any) {
             logInformation(`promise complete: ${result}`, TraceLevel.Information);
+            let closeSuccessCode: string = "0";
+            logType(result);
+            /*if(result && result.toString().trim() == closeSuccessCode) {
+                logInformation('Closing Code Status: Success', TraceLevel.Information)
+            } else {
+                let msg = `Closing Status was not 0. Task to execute command failed with code: ${result}`
+                logInformation(msg, TraceLevel.Error);
+                trackException(msg);
+                tl.setResult(tl.TaskResult.Failed, msg);
+            }*/
             PostResults(jmeterReportFolder, jmeterLogFolder, JMETER_ABS_BIN_Folder);
             logInformation('Task Completed.', TraceLevel.Information)
         }, function (err) {
@@ -181,14 +195,7 @@ async function main() {
         });
         child.on('close', function (code) {
             logInformation(`closing code: ${code}`, TraceLevel.Information);
-            if(code && code.toString().trim() == '0') {
-                logInformation('Closing Code Status: Success', TraceLevel.Information)
-            } else {
-                let msg = `Closing Status was not 0. Task to execute command failed with code: ${code}`
-                logInformation(msg, TraceLevel.Error);
-                trackException(msg);
-                tl.setResult(tl.TaskResult.Failed, msg);
-            }
+            LogEvent(TelemetryEvents.CLOSE_CODE, {code: code.toString()});
         });
         const { stdout, stderr } = await child;
 
@@ -198,12 +205,13 @@ async function main() {
         trackException(err?.message, err)
         logInformation(ERROR_DEFAULT_MSG, TraceLevel.Error);
         tl.setResult(tl.TaskResult.Failed, err?.message);
+        LogEvent(TelemetryEvents.JMETER_RUN_FAILURE)
     }
-
     
     let endTimeInSeconds = Math.round(Date.now() / 1000)
     let timeToRunInSeconds: number = endTimeInSeconds - startTimeInSeconds;
     trackTrace(`Time to run JMeter Task in seconds = '${timeToRunInSeconds}'`, TraceLevel.Information);
+    LogEvent(TelemetryEvents.COMPLETED_PERFORMANCE_TEST);
 }
 
 function allowCompleteReadWriteAccess(path: string) {

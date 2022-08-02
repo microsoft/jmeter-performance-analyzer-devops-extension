@@ -4,7 +4,7 @@
 import * as moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import { DATE_FORMAT } from './constant';
-import { LogEvent, trackTrace } from './telemetry-client';
+import { trackTrace } from './telemetry-client';
 import { TraceLevel } from './telemetry.constants';
 const globalAny:any = global;
 
@@ -30,7 +30,6 @@ export function logInformation(data: any, traceLevel: TraceLevel, printDate: boo
 
 export async function downloadFile(fileSource: string, destinationFilePath: string) {
     let event = 'Downloading File: ' + fileSource + ' to location: ' + destinationFilePath ;
-    LogEvent(event);
     logInformation(event, TraceLevel.Verbose);
     return new Promise<void>((resolve, reject) => {
         https.get(fileSource, (response: { on: (arg0: string, arg1: (reason?: any) => void) => void; pipe: (arg0: any) => void; }) => {
@@ -55,9 +54,8 @@ export async function unzipBinary(fileName: string) {
 
 
 export function copyFileToDirectory(sourcefilePath: string, destinationFilePath: string) {
-    let event = 'Start Copying File to destination ' + destinationFilePath + ' from source ' + sourcefilePath
-    LogEvent(event);
-    logInformation(event, TraceLevel.Verbose);
+    let msg = 'Start Copying File to destination ' + destinationFilePath + ' from source ' + sourcefilePath;
+    logInformation(msg, TraceLevel.Verbose);
     fs.copyFileSync(sourcefilePath, destinationFilePath, (err: any) => {
         if (err) throw err;
         logInformation('Completed '+ sourcefilePath + ' was copied to ' + destinationFilePath, TraceLevel.Verbose);
@@ -91,6 +89,10 @@ export function isNonEmpty(str: string|undefined|null): boolean {
     return !isEmpty(str);
 }
 
+export function isObjectEmpty(obj : {}): boolean {
+    return (null == obj || Object.keys(obj).length === 0)
+}
+
 export function getSystemProps(prop: string) {
     try {
         return  tl.getVariable(prop);
@@ -111,4 +113,12 @@ export function formatString(str: string, val: string[]): string {
         str = str.replace(`{${index}}`, val[index]);
     }
     return str;
+}
+
+export function logType(val: any) {
+    try {
+        console.log(typeof val);
+    } catch(e) {
+        //Nothing required
+    }
 }
