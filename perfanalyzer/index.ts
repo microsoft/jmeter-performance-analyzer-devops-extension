@@ -158,7 +158,7 @@ async function main() {
             logInformation('Completed Replace Tokens', TraceLevel.Information);
 
             command = getCommands(CommandTypes.JMETER_RUN_WITH_PROPERTY, jmeterPropertyFileName, jmeterJMXFileName, CurrentLogJTLFile, CurrentLogLogFile, jmeterReportFolder);
-            logInformation('Running JMeter with property file ' + command, , TraceLevel.Information);
+            logInformation('Running JMeter with property file ' + command, TraceLevel.Information);
         }
 
         var child = exec(command);
