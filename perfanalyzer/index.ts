@@ -9,7 +9,7 @@ import { analyzeJTL, handleJMeterInputFile, handleJMeterJMXFile, handleJMeterPro
 import { replaceTokens } from './src/replaceToken'
 import { enableAppInsights, LogEvent, trackException, trackTrace } from './src/telemetry-client'
 import { TelemetryEvents, TraceLevel } from './src/telemetry.constants'
-import { downloadFile, isEmpty, logInformation, logType, unzipBinary } from './src/utility'
+import { downloadFile, isEmpty, logInformation, getType, unzipBinary } from './src/utility'
 const tl = require('azure-pipelines-task-lib/task');
 const Path = require('path');
 var exec = require('child_process').exec;
@@ -170,12 +170,12 @@ async function main() {
         promiseFromChildProcess(child).then(function (result:any) {
             logInformation(`promise complete: ${result}`, TraceLevel.Information);
             
-            if(logType(result) =='number' && result == 0) {
+            if(getType(result) =='number' && result == 0) {
                 logInformation('Closing Code Status: Success', TraceLevel.Information);
                 PostResults(jmeterReportFolder, jmeterLogFolder, JMETER_ABS_BIN_Folder);
                 logInformation('Task Completed.', TraceLevel.Information)
             } else {
-                let msg = `Closing Status was not 0. Task to execute command failed with code: ${result}`
+                let msg = `Closing Status was not Success. Task to execute command failed with code: ${result}`
                 logInformation(msg, TraceLevel.Error);
                 trackException(msg);
                 tl.setResult(tl.TaskResult.Failed, msg);

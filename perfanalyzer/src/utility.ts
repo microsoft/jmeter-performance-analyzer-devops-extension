@@ -16,11 +16,15 @@ let tar = require('tar');
 let UNIQUE_RUN_ID = uuidv4();
 globalAny.UNIQUE_RUN_ID = UNIQUE_RUN_ID;
 
+export function getFormatPrefix() {
+    let formattedDate = (moment(Date.now())).format(DATE_FORMAT);
+    return `${formattedDate}  ": " ${UNIQUE_RUN_ID} - ${process.cwd()} `;
+}
+
 export function logInformation(data: any, traceLevel: TraceLevel, printDate: boolean = true) {
     let formattedData = data;
     if(printDate) {
-        let formattedDate = (moment(Date.now())).format(DATE_FORMAT);
-        formattedData = formattedDate + ": " + UNIQUE_RUN_ID + " - " + process.cwd() + " - " + data;
+        formattedData = `${getFormatPrefix()} - ${data}`;
     }
 
     console.log(formattedData);
@@ -115,9 +119,8 @@ export function formatString(str: string, val: string[]): string {
     return str;
 }
 
-export function logType(val: any) {
+export function getType(val: any) {
     try {
-        console.log(typeof val);
         return typeof val;
     } catch(e) {
         //Nothing required

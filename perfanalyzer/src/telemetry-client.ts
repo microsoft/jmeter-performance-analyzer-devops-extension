@@ -5,7 +5,7 @@ import { APPINSIGHTS_CONNECTION_STRING } from "./appInsightsConnectionString";
 import { APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING, APPINSIGHTS_CONNECTION_MS_STRING } from "./appInsightsConnectionString-ms";
 import { InputVariables } from './constant';
 import { SeverityLevel, TraceLevel } from './telemetry.constants';
-import { getSystemProps, isObjectEmpty } from "./utility";
+import { getFormatPrefix, getSystemProps, isObjectEmpty } from "./utility";
 import tl = require('azure-pipelines-task-lib/task');
 const globalAny:any = global;
 let appInsights = require('applicationinsights');
@@ -41,28 +41,21 @@ export function enableAppInsights() {
         appInsightsMSClassicClient = new appInsights.TelemetryClient(APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING);         
         appInsightsClient = new appInsights.TelemetryClient(APPINSIGHTS_CONNECTION_STRING);
         console.log('Successfuly Initialized Telemetry.');
-
-        console.log('Running Pipeline Host: ' + getSystemProps('system.hostType'));
-        console.log(`Agent Id: ${getSystemProps ('Agent.Id')}`);
-        console.log(`Agent OS: ${getSystemProps ('Agent.OS')}`);
-        console.log(`Agent Name: ${getSystemProps ('Agent.Name')}`);
-        console.log(`Agent OSArchitecture: ${getSystemProps ('Agent.OSArchitecture')}`);
-        console.log(`Agent MachineName: ${getSystemProps ('Agent.MachineName')}`); 
         logMachineInfo();
       
 
     } catch(e) {
         console.warn('MS Application insights could not be started: ' + e?.message);
-        trackException(' Application insights could not be started: ' + e?.message, e);
     }
 }
+
 function logMachineInfo() {
-  console.log('Running Pipeline Host: ' + getSystemProps('system.hostType'));
-  console.log(`Agent Id: ${getSystemProps ('Agent.Id')}`);
-  console.log(`Agent OS: ${getSystemProps ('Agent.OS')}`);
-  console.log(`Agent Name: ${getSystemProps ('Agent.Name')}`);
-  console.log(`Agent OSArchitecture: ${getSystemProps ('Agent.OSArchitecture')}`);
-  console.log(`Agent MachineName: ${getSystemProps ('Agent.MachineName')}`); 
+  console.log(`${getFormatPrefix()} Running Pipeline Host:  ${getSystemProps('system.hostType')}`);
+  console.log(`${getFormatPrefix()} Agent Id: ${getSystemProps ('Agent.Id')}`);
+  console.log(`${getFormatPrefix()} Agent OS: ${getSystemProps ('Agent.OS')}`);
+  console.log(`${getFormatPrefix()} Agent Name: ${getSystemProps ('Agent.Name')}`);
+  console.log(`${getFormatPrefix()} Agent OSArchitecture: ${getSystemProps ('Agent.OSArchitecture')}`);
+  console.log(`${getFormatPrefix()} Agent MachineName: ${getSystemProps ('Agent.MachineName')}`); 
 
   trackTrace('Running Pipeline Host: ' + getSystemProps('system.hostType'), TraceLevel.Information);
   trackTrace(`Agent Id: ${getSystemProps ('Agent.Id')}`, TraceLevel.Information);
@@ -212,7 +205,8 @@ class MyError extends Error {
     constructor (guid: string, msg: string, stack: any) {
       super(msg)
       this.name = guid
-      this.message = `${msg} - ${(null == stack)? '' : stack.toString() }`;
+      let stackMsg = (stack)?  stack.toString() : '';
+      this.message = `${msg} - ${stackMsg}`;
       this.stack = stack;
     }
 
