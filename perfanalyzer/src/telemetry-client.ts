@@ -78,9 +78,9 @@ export async function trackTrace(message: string, traceSeverity: TraceLevel) {
     }
     let props = GetDefaultProps();
     try {
-        appInsightsMSClient.trackTrace({message: message, severityLevel: this.getSeverity(traceSeverity)}, props);
-        appInsightsClient.trackTrace({message: message, severityLevel: this.getSeverity(traceSeverity)}, props);
-        appInsightsMSClassicClient.trackTrace({message: message, severityLevel: this.getSeverity(traceSeverity)}, props);
+        appInsightsMSClient.trackTrace({message: message, severityLevel: getSeverity(traceSeverity)}, props);
+        appInsightsClient.trackTrace({message: message, severityLevel: getSeverity(traceSeverity)}, props);
+        appInsightsMSClassicClient.trackTrace({message: message, severityLevel: getSeverity(traceSeverity)}, props);
     } catch(e) {
        console.warn('[Ignore] MS Telemetry trackTrace Error: ' + e?.message,e )
     }
