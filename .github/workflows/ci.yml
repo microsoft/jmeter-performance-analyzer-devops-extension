@@ -1,0 +1,15 @@
+name: CICD
+on: 
+  push:
+    branches:    
+      - main
+      - RELEASES/Enable-Workflows 
+jobs:
+  build:
+    runs-on: ubuntu-latest    
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: npm install
+      run: |
+        npm install
