@@ -20,11 +20,13 @@ This sample section shows you how you can use properties file to generate test r
 
     b and c are optional. Its a cleaner way of doing parametization and updating the value in pipeline variables. In case your use case does not require it too do, you can just submit the hardcoded jmx.
 
-4. You can see the 2 samples here
+4. You can see the 3 samples here
 
     a. Simple JMX : This just shows how you can create a jmx with input parameter and a test file and how you can first locally test and then schedule a pipeline test.
 
-    b. Token Generation: In case your application does require some kind of authentication, your jmx must include the way of authenticating it. You can see how we can generate token.
+    b. Simple JMX Without Property File and Hardcoded JMX (Not recommended): This just shows how you can create a jmx without input parameter and test a plain jmx.
+
+    c. Token Generation: In case your application does require some kind of authentication, your jmx must include the way of authenticating it. You can see how we can generate token.
 
     Your use case can be a combination of both as well. Hope the usage clarifies, please check the samples.
 
