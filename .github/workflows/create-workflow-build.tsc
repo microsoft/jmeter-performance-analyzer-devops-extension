@@ -1,5 +1,0 @@
-\#!/bin/bash
-var tel1="export const APPINSIGHTS_CONNECTION_MS_STRING=$1; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING=$2"
-var tel3="export const APPINSIGHTS_CONNECTION_STRING=$3"
-echo $tel1 > ./appInsightsConnectionString-ms.ts
-echo $tel3 > ./appInsightsConnectionString.ts 

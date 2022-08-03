@@ -19,5 +19,4 @@ jobs:
       run: |
         cd perfanalyzer
         npm install
-        tsc index.ts
   
