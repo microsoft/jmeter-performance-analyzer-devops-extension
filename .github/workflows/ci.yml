@@ -3,14 +3,15 @@ on:
   push:
     branches:    
       - main
-      - RELEASES/Enable-Workflows 
+      - RELEASES/**
 jobs:
-  build:
+  checkout:
     runs-on: ubuntu-latest    
     steps:
     - uses: actions/checkout@v1
       with:
         node-version: '14'
+  build:
     - name: change directory
       run: |
         cd perfanalyzer
@@ -18,3 +19,5 @@ jobs:
       run: |
         cd perfanalyzer
         npm install
+        tsc index.ts
+  
