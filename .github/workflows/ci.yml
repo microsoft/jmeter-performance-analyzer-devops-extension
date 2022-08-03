@@ -5,13 +5,12 @@ on:
       - main
       - RELEASES/**
 jobs:
-  checkout:
+  build:
     runs-on: ubuntu-latest    
     steps:
     - uses: actions/checkout@v1
       with:
         node-version: '14'
-  build:
     - name: change directory
       run: |
         cd perfanalyzer
@@ -19,4 +18,5 @@ jobs:
       run: |
         cd perfanalyzer
         npm install
+        tsc index.ts
   
