@@ -83,3 +83,5 @@ json -I -f task.json -e "this.version.Minor=$MINOR_VERION"
 json -I -f task.json -e "this.version.Patch=$PATCH_VERION"
 
 git add package.json
+git add task.json
+git add ../vss-extension.json
