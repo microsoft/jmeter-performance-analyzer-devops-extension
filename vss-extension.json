@@ -1,105 +1,109 @@
 {
-    "manifestVersion": 1,
-    "id": "jmeter-perf-analyzer",
-    "name": "JMeter Performance Analyzer",
-    "version": "1.4.34",
-    "publisher": "id-az-pipeline",
-    "public": true,
-    "targets": [
-        {
-            "id": "Microsoft.VisualStudio.Services"
-        }
-    ],
-    "description": "This task enables to run Performance testing using Apache Jmeter, Analyze report and post results.",
-    "categories": [
-        "Azure Pipelines"
-    ],
-    "icons": {
-        "default": "images/extension-icon.png"
+  "manifestVersion": 1,
+  "id": "jmeter-perf-analyzer",
+  "name": "JMeter Performance Analyzer",
+  "version": "1.4.40",
+  "publisher": "id-az-pipeline",
+  "public": true,
+  "targets": [
+    {
+      "id": "Microsoft.VisualStudio.Services"
+    }
+  ],
+  "description": "This task enables to run Performance testing using Apache Jmeter, Analyze report and post results.",
+  "categories": [
+    "Azure Pipelines"
+  ],
+  "icons": {
+    "default": "images/extension-icon.png"
+  },
+  "files": [
+    {
+      "path": "perfanalyzer"
     },
-    "files": [
-
-        { "path": "perfanalyzer" },
-        {
-            "path": "overview.md",
-            "addressable": true
-        },
-        {
-            "path": "images/extension-icon.png",
-            "addressable": true
-        },
-        {
-            "path": "project-screenshots",
-            "addressable": true
-          }
-    ],
-    "screenshots": [
-        { "path": "project-screenshots/P4.png"},
-        { "path": "project-screenshots/P5.png"},
-        { "path": "project-screenshots/P10.png"}
-    ],
-    "content": {
-        "details": {
-            "path": "overview.md"
-        },
-        "sample": {
-            "path": "samples/README.md"
-        },
-        "license": {
-            "path": "LICENSE"
-        }
+    {
+      "path": "overview.md",
+      "addressable": true
     },
-    "repository": {
+    {
+      "path": "images/extension-icon.png",
+      "addressable": true
+    },
+    {
+      "path": "project-screenshots",
+      "addressable": true
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "project-screenshots/P4.png"
+    },
+    {
+      "path": "project-screenshots/P5.png"
+    },
+    {
+      "path": "project-screenshots/P10.png"
+    }
+  ],
+  "content": {
+    "details": {
+      "path": "overview.md"
+    },
+    "sample": {
+      "path": "samples/README.md"
+    },
+    "license": {
+      "path": "LICENSE"
+    }
+  },
+  "repository": {
     "type": "git",
     "uri": "https://github.com/microsoft/jmeter-performance-analyzer-devops-extension"
+  },
+  "links": {
+    "repository": {
+      "uri": "https://github.com/microsoft/jmeter-performance-analyzer-devops-extension"
     },
-    "links": {
-
-        "repository": {
-            "uri": "https://github.com/microsoft/jmeter-performance-analyzer-devops-extension"
-        },
-        "issues": {
-            "uri": "https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/issues"
-        },
-        "samples": {
-            "uri" : "https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples/README.md"
-        },
-        "readMe": {
-            "uri" : "https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/README.md"
-        }
+    "issues": {
+      "uri": "https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/issues"
     },
-
-    "branding": {
-        "color": "#FFFFFF",
-        "theme": "light"
+    "samples": {
+      "uri": "https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples/README.md"
     },
-    "tags": [
-        "performance",
-        "performance testing",
-        "perf analyzer",
-        "performanceanalyzer",
-        "coverage",
-        "publish",
-        "report",
-        "publishreport",
-        "SSDT",
-        "Apache",
-        "ApacheJMeter",
-        "ApacheJMeterPerformanceTest",
-        "coverage",
-        "tag"
-    ],
-    "contributions": [
-        {
-            "id": "custom-build-release-task",
-            "type": "ms.vss-distributed-task.task",
-            "targets": [
-                "ms.vss-distributed-task.tasks"
-            ],
-            "properties": {
-                "name": "perfanalyzer"
-            }
-        }
-    ]
-
+    "readMe": {
+      "uri": "https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/README.md"
+    }
+  },
+  "branding": {
+    "color": "#FFFFFF",
+    "theme": "light"
+  },
+  "tags": [
+    "performance",
+    "performance testing",
+    "perf analyzer",
+    "performanceanalyzer",
+    "coverage",
+    "publish",
+    "report",
+    "publishreport",
+    "SSDT",
+    "Apache",
+    "ApacheJMeter",
+    "ApacheJMeterPerformanceTest",
+    "coverage",
+    "tag"
+  ],
+  "contributions": [
+    {
+      "id": "custom-build-release-task",
+      "type": "ms.vss-distributed-task.task",
+      "targets": [
+        "ms.vss-distributed-task.tasks"
+      ],
+      "properties": {
+        "name": "perfanalyzer"
+      }
+    }
+  ]
 }

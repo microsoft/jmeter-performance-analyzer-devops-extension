@@ -1,11 +1,12 @@
 {
   "name": "microsoftperfanalyzer",
-  "version": "1.2.35",
+  "version": "1.4.40",
   "description": "This task enables to run Performance testng using Apache Jmeter, Analyze report and post results",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx ts-node index.ts"
+    "start": "npx ts-node index.ts",
+    "prepare": "cd ..  && husky install"
   },
   "author": "Prateek Mishra",
   "license": "ISC",
@@ -32,6 +33,8 @@
     "@types/node": "^18.0.1",
     "shelljs": "^0.8.5",
     "ts-node": "^10.8.2",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "json": "^11.0.0",
+    "husky": "^8.0.1"
   }
 }

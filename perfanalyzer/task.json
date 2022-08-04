@@ -1,323 +1,321 @@
 {
-    "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
-    "id": "12019396-caa3-4dbc-8b6e-15c4aabff8b0",
-    "name": "perfanalyzer",
-    "friendlyName": "JMeter Performance Analyzer",
-    "description": "Run Performance Test using Apache JMeter, Publish and Analyze Results",
-    "helpMarkDown": "This task enables to run Performance testng using Apache Jmeter, Analyze report and post results. This task uses Apache Jmeter 5.5 and expects a valid parametrized JMX File, Any input Files, and property file for JMX. The task runs the jmx files according to the configured values in JMX and publishes the result to build artifacts and $web of your storage container. Provides control to fail pipeline if JMeter test fails<br/><br/>More details at <a><u>https://marketplace.visualstudio.com/items?itemName=id-az-pipeline.jmeter-perf-analyzer</u></a> <br/><br/> Samples: <a><u>(https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples</u></a>",
-    "category": "Utility",
-    "author": "Microsoft",
-    "version": {
-        "Major": 1,
-        "Minor": 4,
-        "Patch": 34
-    },
-    "instanceNameFormat": "Run Perf Analyzer",
-    "groups": [
-        {
-          "name": "advanced",
-          "displayName": "Advanced",
-          "isExpanded": false
-        }
-    ],
-    "inputs": [
-        {
-            "name": "jmxSource",
-            "type": "radio",
-            "label": "JMX Run File Source",
-            "required": true,
-            "defaultValue": "sourceCode",
-            "helpMarkDown": "This provides you the option to provide your JMX Source. It can be either from the source code of the pipeline or it can be a direct extenal URL. This is set to default to SourceCode",
-            "options": {
-              "sourceCode": "Source Code",
-              "url": "External URL"
-            }
-          },
-          {
-            "name": "jmxsourceRunFilePath",
-            "type": "filePath",
-            "label": "JMX Run File Source Path",
-            "defaultValue": "",
-            "helpMarkDown": "This is the path of the JMX source code file. You can select the file path and update the input here. This is visible in case you select 'SourceCode' in the `JMX RUN File Source` step.",
-            "required": true,
-            "visibleRule": "jmxSource=sourceCode"
-          },
-          {
-            "name": "jmxsourceRunFileURL",
-            "type": "string",
-            "label": "JMX Run File Source URL",
-            "defaultValue": "",
-            "required": true,
-            "helpMarkDown": "Direct https Link to JMX FileThis provides you the option to provide your JMX Source File via a direct extenal URL. A https url is expected here. This file will be downloaded from the link and used as JMX file source to run the test.",
-            "visibleRule": "jmxSource=url"
-          },
-          {
-            "name": "jmxPropertySource",
-            "type": "radio",
-            "label": "JMX Property File Source",
-            "required": true,
-            "defaultValue": "none",
-            "helpMarkDown": "This provides you the option to provide your JMeter Propery File Source. It can be none (in case your jmx does not require a property file to run), source code of the pipeline or it can be a direct extenal URL. This is set to default to SourceCode",
-            "options": {
-              "none": "None",
-              "sourceCode": "Source Code",
-              "url": "External URL"
-            }
-          },
-          {
-            "name": "jmxPropertySourcePath",
-            "type": "filePath",
-            "label": "JMX Property Source Path",
-            "defaultValue": "",
-            "helpMarkDown": "This is the path of the JMeter Property source code file. You can select the file path and update the input here. This is visible in case you select 'SourceCode' in the `JMX Property File Source` step.",
-            "required": true,
-            "visibleRule": "jmxPropertySource=sourceCode"
-          },
-          {
-            "name": "jmxPropertySourceURL",
-            "type": "string",
-            "label": "JMeter Property Source URL",
-            "defaultValue": "",
-            "required": true,
-            "helpMarkDown": "This provides you the option to provide your JMeter Property File via a direct extenal URL. A https url is expected here. This file will be downloaded from the link and used as JMX Property file source to run the test.",
-            "visibleRule": "jmxPropertySource=url"
-          },
-          {
-            "name": "tokenRegex",
-            "type": "string",
-            "label": "Token Regex",
-            "defaultValue": "%(\\w+)%",
-            "helpMarkDown": "This provides you the option to specify the regex for replacing the tokens in property File to the values specified in pipeline variables. This is visible only if the JMX Property File source is not set to None.This regex must include a group match. The regex match should be return a group of 2 values, one with variable name second with variable and enclosure. Samples (Starts and ends with 1 underscore ==>  _(\\w+)_ ,Starts and ends with % ==>  %(\\w+)%)",
-            "required": true,
-            "visibleRule": "jmxPropertySource!=none"
-          },
-          {
-            "name": "jmxInputFilesSource",
-            "type": "radio",
-            "label": "JMX Input File Source(s)",
-            "required": true,
-            "defaultValue": "none",
-            "visibleRule": "jmxPropertySource!=none",
-            "helpMarkDown": "This provides you the option to provide your JMeter Input File Source. Your test might require some test data stored in csv,xls etc. This tasks enables to procure those files and makes it available to test. It can be none (in case your jmx does not require any input file to run), source code of the pipeline or it can be a direct extenal URL. This is set to default to None. This option is visible only if `JMX Property File Source` is not set to None.",
-            "options": {
-                "none": "None",
-                "sourceCode": "Source Code Folder",
-                "urls": "External URL(s)"
-                }
-            },
-            {
-                "name": "jmxInputFolderSourcePath",
-                "type": "filePath",
-                "label": "JMX Input Folder Source",
-                "defaultValue": "",
-                "helpMarkDown": "This is the path of the JMeter Input source code Folder. All files inside this folder will be made available to JMeter test. You should the file names mentioned here in the property file and use that variable in JMX. You can select the folder path and update the input here. This is visible in case you select 'SourceCode' in the `JMX Input File Source(s) Source` step.",
-                "required": true,
-                "visibleRule": "jmxInputFilesSource=sourceCode"
-            },
-            {
-                "name": "jmxInputFilesUrls",
-                "type": "multiLine",
-                "label": "JMX Input File(s) Source URL Comma Separated",
-                "defaultValue": "",
-                "required": true,
-                "helpMarkDown": "This provides you the option to provide your JMeter Input File(s) via a direct extenal URL(s). You can specify multiple urls comma separated. All files mentioned will be downloaded sequentially and made available to Jmeter for test run. One or many, comma seperated, https urls are expected here.",
-                "visibleRule": "jmxInputFilesSource=urls"
-            },
-            {
-                "name": "publishResultsToBuildArtifact",
-                "type": "boolean",
-                "label": "Publish Logs and Test Results to Pipeline Build Artifacts.",
-                "defaultValue": "true",
-                "required": true,
-                "helpMarkDown": "This would publish the output the data to build artifacts. If this task is used in release pipeline, please disable this check."
-            },
-            {
-                "name": "artifactNameReport",
-                "type": "string",
-                "label": "Artifact Name for Apache Jmeter Reports",
-                "defaultValue": "PerfAnalyzerReport",
-                "required": true,
-                "visibleRule": "publishResultsToBuildArtifact=true",
-                "helpMarkDown": "This is a boolean flag that if set to true will publish the test results and logs to pipeline artifacts. This should not be enabled if this task is used in a release pipeline. This is default set to true and will yield the result on task completion."
-            },
-            {
-                "name": "artifactNameLog",
-                "type": "string",
-                "label": "Artifact Name for Apache Jmeter Logs",
-                "defaultValue": "PerfAnalyzerLogs",
-                "required": true,
-                "visibleRule": "publishResultsToBuildArtifact=true",
-                "helpMarkDown": "This is the output artifact name for the test logs. Only visible if the `Publish Logs and Test Results to Pipeline Artifacts` is set to true."
-            },
-
-            {
-                "name": "failPipelineIfJMeterFails",
-                "type": "boolean",
-                "label": "Fail Task if JMeter test fails.",
-                "defaultValue": "false",
-                "required": true,
-                "helpMarkDown": "This would fail the pipeline task in case any test fails. This is useful if your usecase is to identify any regression failure due to new deloyment. Enabling this in CICD would help you monitor failures in jmx by failing the task itself."
-            },
-            {
-                "name": "maxFailureCountForJMeter",
-                "type": "string",
-                "label": "Fail Task if test failure count is more than",
-                "defaultValue": "100",
-                "required": true,
-                "visibleRule": "failPipelineIfJMeterFails=true",
-                "helpMarkDown": "In case your JMeter test failure count is more than the number specified, then the pipeline will fail."
-
-            },
-            {
-                "name": "copyResultToAzureBlobStorage",
-                "type": "boolean",
-                "label": "Copy Performance Test Result to Azure Blob Storage",
-                "defaultValue": "false",
-                "required": false,
-                "helpMarkDown": "This is a boolean flag that if set to true nabling this would help to copy Apache Jmeter's Performance Test Report, Log File and JTL File to be copied to Azure Blob Storage. Using Static website hosting turned on you can access any run report later as well via a direct link."
-            },
-            {
-                "name": "ConnectedServiceNameSelector",
-                "aliases": [
-                    "azureConnectionType"
-                ],
-                "type": "pickList",
-                "label": "Azure Connection Type",
-                "required": false,
-                "helpMarkDown": "This is a picklist option to specofy where to make azure connection. Currently this is set to Azure Resource Manager only.",
-                "defaultValue": "ConnectedServiceNameARM",
-                "visibleRule": "copyResultToAzureBlobStorage=true",
-                "options": {
-                    "ConnectedServiceNameARM": "Azure Resource Manager"
-                }
-            },
-            {
-                "name": "ConnectedServiceNameARM",
-                "aliases": [
-                    "azureSubscription"
-                ],
-                "type": "connectedService:AzureRM",
-                "label": "Azure Subscription",
-                "defaultValue": "",
-                "required": true,
-                "helpMarkDown": "This option lets you select the subscription in which you have created your storage container.",
-                "visibleRule": "ConnectedServiceNameSelector = ConnectedServiceNameARM && copyResultToAzureBlobStorage=true"
-            },
-            {
-                "name": "Destination",
-                "type": "pickList",
-                "label": "Destination Type",
-                "defaultValue": "AzureBlob",
-                "required": true,
-                "options": {
-                    "AzureBlob": "Azure Blob"
-                },
-                "helpMarkDown": "This is where your output result and logs would be copied to. Currently only Azure Blob Storage is supported.",
-                "visibleRule": "copyResultToAzureBlobStorage=true"
-            },
-            {
-                "name": "StorageAccountRM",
-                "aliases": [
-                    "storage"
-                ],
-                "type": "pickList",
-                "label": "RM Storage Account",
-                "defaultValue": "",
-                "required": true,
-                "helpMarkDown": "Specify a pre-existing ARM storage account. It is also used as an intermediary for copying files to Azure VMs",
-                "properties": {
-                    "EditableOptions": "True"
-                },
-                "visibleRule": "ConnectedServiceNameSelector = ConnectedServiceNameARM && copyResultToAzureBlobStorage=true"
-            },
-            {
-                "name": "ContainerName",
-                "type": "string",
-                "label": "Container Name",
-                "defaultValue": "$web",
-                "required": true,
-                "helpMarkDown": "This is the container name inside the storage account where your results and logs will be copied. This is defaulted to $web. Note that in case you want continious reporting available on html webpage, keep it to $web only. Files in $web will be available to view as html files. The container should be created previous to execution of this task.",
-                "visibleRule": "Destination = AzureBlob && copyResultToAzureBlobStorage=true"
-            },
-            {
-                "name": "BlobPrefix",
-                "type": "string",
-                "label": "Blob Prefix",
-                "defaultValue": "Releases/Release_$(Build.BuildNumber)",
-                "required": false,
-                "helpMarkDown": "This is the prefix inside container name where each run's report will be copied. It is essential to note that for continious integration and testing it's best to prefix it will build number. This way all continious build's result will be made available at all times as a http exposed url. If used in Build pipeline, it can be Releases/Release_DEV_$(Build.BuildNumber), if in release then it can be Release_DEV_$(Release.ReleaseName)_$(Release.AttemptNumber)",
-                "visibleRule": "Destination = AzureBlob && copyResultToAzureBlobStorage=true"
-            },
-            {
-                "name": "outputStorageUri",
-                "type": "string",
-                "label": "Storage Container URI",
-                "required": false,
-                "defaultValue": "",
-                "visibleRule": "Destination = AzureBlob && copyResultToAzureBlobStorage=true",
-                "helpMarkDown": "This is the Primary endpoint URI for your container. On Enabling static web hosting, this url is made available. If not specified, the task will not be able to create a direct html link to the test results. Sample on how to get this URI: <i>https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/tree/main/samples</i>"
-            },
-            {
-                "name": "jmeterURI",
-                "type": "string",
-                "label": "JMeter Download URL",
-                "required": true,
-                "defaultValue": "https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz",
-                "groupName": "advanced",
-                "helpMarkDown": "This is the https link to Jmeter binary. A tgz binary file https url is expected here. It is set to download 5.5 version of apache Jmeter by default."
-            },
-            {
-                "name": "jmeterFolderName",
-                "type": "string",
-                "label": "JMeter Folder Name",
-                "required": true,
-                "defaultValue": "apache-jmeter-5.5",
-                "groupName": "advanced",
-                "helpMarkDown": "In case you modify the JMeter Download URL, to some other version then this variable also needs to change. This is the folder name of the Jmeter binary file post extraction/unzip."
-            },
-            {
-                "name": "jmeterLogFolder",
-                "type": "string",
-                "label": "JMeter Log Folder Name",
-                "required": true,
-                "defaultValue": "CurrentLog",
-                "groupName": "advanced",
-                "helpMarkDown": "This is the name of Log folder that is created as a result of test run. This is defaulted to CurrentLog. This is one of the artifacts that is later published as well."
-            },
-            {
-                "name": "jmeterReportFolder",
-                "type": "string",
-                "label": "JMeter Report Folder Name",
-                "required": true,
-                "defaultValue": "CurrentReport",
-                "groupName": "advanced",
-                "helpMarkDown": "This is the name of Result folder that is created as a result of test run. This is defaulted to CurrentLog. This is one of the artifacts that is later published as well."
-            },
-            {
-                "name": "telemetryDataCollection",
-                "type": "boolean",
-                "label": "Telemetry Data Collection",
-                "defaultValue": "true",
-                "required": true,
-                "groupName": "advanced",
-                "helpMarkDown": "JMeter Performance Analyzer logs runs to improve and identify any application related issues. By sending us logs we would be able to keep on updating and identifying security bugs(if any) and help mitigate the issue. NO Personal data is logged into the telemetry. By turning this off, we would not be reciving any stats on the task run."
-            }
-    ],
-    "dataSourceBindings": [
-        {
-            "target": "StorageAccount",
-            "endpointId": "$(ConnectedServiceName)",
-            "dataSourceName": "AzureStorageServiceNames"
-        },
-        {
-            "target": "StorageAccountRM",
-            "endpointId": "$(ConnectedServiceNameARM)",
-            "dataSourceName": "AzureStorageAccountRM"
-        }
-    ],
-    "execution": {
-        "Node10": {
-            "target": "index.js"
-        }
+  "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+  "id": "12019396-caa3-4dbc-8b6e-15c4aabff8b0",
+  "name": "perfanalyzer",
+  "friendlyName": "JMeter Performance Analyzer",
+  "description": "Run Performance Test using Apache JMeter, Publish and Analyze Results",
+  "helpMarkDown": "This task enables to run Performance testng using Apache Jmeter, Analyze report and post results. This task uses Apache Jmeter 5.5 and expects a valid parametrized JMX File, Any input Files, and property file for JMX. The task runs the jmx files according to the configured values in JMX and publishes the result to build artifacts and $web of your storage container. Provides control to fail pipeline if JMeter test fails<br/><br/>More details at <a><u>https://marketplace.visualstudio.com/items?itemName=id-az-pipeline.jmeter-perf-analyzer</u></a> <br/><br/> Samples: <a><u>(https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples</u></a>",
+  "category": "Utility",
+  "author": "Microsoft",
+  "version": {
+    "Major": 1,
+    "Minor": 4,
+    "Patch": 40
+  },
+  "instanceNameFormat": "Run Perf Analyzer",
+  "groups": [
+    {
+      "name": "advanced",
+      "displayName": "Advanced",
+      "isExpanded": false
     }
+  ],
+  "inputs": [
+    {
+      "name": "jmxSource",
+      "type": "radio",
+      "label": "JMX Run File Source",
+      "required": true,
+      "defaultValue": "sourceCode",
+      "helpMarkDown": "This provides you the option to provide your JMX Source. It can be either from the source code of the pipeline or it can be a direct extenal URL. This is set to default to SourceCode",
+      "options": {
+        "sourceCode": "Source Code",
+        "url": "External URL"
+      }
+    },
+    {
+      "name": "jmxsourceRunFilePath",
+      "type": "filePath",
+      "label": "JMX Run File Source Path",
+      "defaultValue": "",
+      "helpMarkDown": "This is the path of the JMX source code file. You can select the file path and update the input here. This is visible in case you select 'SourceCode' in the `JMX RUN File Source` step.",
+      "required": true,
+      "visibleRule": "jmxSource=sourceCode"
+    },
+    {
+      "name": "jmxsourceRunFileURL",
+      "type": "string",
+      "label": "JMX Run File Source URL",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "Direct https Link to JMX FileThis provides you the option to provide your JMX Source File via a direct extenal URL. A https url is expected here. This file will be downloaded from the link and used as JMX file source to run the test.",
+      "visibleRule": "jmxSource=url"
+    },
+    {
+      "name": "jmxPropertySource",
+      "type": "radio",
+      "label": "JMX Property File Source",
+      "required": true,
+      "defaultValue": "none",
+      "helpMarkDown": "This provides you the option to provide your JMeter Propery File Source. It can be none (in case your jmx does not require a property file to run), source code of the pipeline or it can be a direct extenal URL. This is set to default to SourceCode",
+      "options": {
+        "none": "None",
+        "sourceCode": "Source Code",
+        "url": "External URL"
+      }
+    },
+    {
+      "name": "jmxPropertySourcePath",
+      "type": "filePath",
+      "label": "JMX Property Source Path",
+      "defaultValue": "",
+      "helpMarkDown": "This is the path of the JMeter Property source code file. You can select the file path and update the input here. This is visible in case you select 'SourceCode' in the `JMX Property File Source` step.",
+      "required": true,
+      "visibleRule": "jmxPropertySource=sourceCode"
+    },
+    {
+      "name": "jmxPropertySourceURL",
+      "type": "string",
+      "label": "JMeter Property Source URL",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "This provides you the option to provide your JMeter Property File via a direct extenal URL. A https url is expected here. This file will be downloaded from the link and used as JMX Property file source to run the test.",
+      "visibleRule": "jmxPropertySource=url"
+    },
+    {
+      "name": "tokenRegex",
+      "type": "string",
+      "label": "Token Regex",
+      "defaultValue": "%(\\w+)%",
+      "helpMarkDown": "This provides you the option to specify the regex for replacing the tokens in property File to the values specified in pipeline variables. This is visible only if the JMX Property File source is not set to None.This regex must include a group match. The regex match should be return a group of 2 values, one with variable name second with variable and enclosure. Samples (Starts and ends with 1 underscore ==>  _(\\w+)_ ,Starts and ends with % ==>  %(\\w+)%)",
+      "required": true,
+      "visibleRule": "jmxPropertySource!=none"
+    },
+    {
+      "name": "jmxInputFilesSource",
+      "type": "radio",
+      "label": "JMX Input File Source(s)",
+      "required": true,
+      "defaultValue": "none",
+      "visibleRule": "jmxPropertySource!=none",
+      "helpMarkDown": "This provides you the option to provide your JMeter Input File Source. Your test might require some test data stored in csv,xls etc. This tasks enables to procure those files and makes it available to test. It can be none (in case your jmx does not require any input file to run), source code of the pipeline or it can be a direct extenal URL. This is set to default to None. This option is visible only if `JMX Property File Source` is not set to None.",
+      "options": {
+        "none": "None",
+        "sourceCode": "Source Code Folder",
+        "urls": "External URL(s)"
+      }
+    },
+    {
+      "name": "jmxInputFolderSourcePath",
+      "type": "filePath",
+      "label": "JMX Input Folder Source",
+      "defaultValue": "",
+      "helpMarkDown": "This is the path of the JMeter Input source code Folder. All files inside this folder will be made available to JMeter test. You should the file names mentioned here in the property file and use that variable in JMX. You can select the folder path and update the input here. This is visible in case you select 'SourceCode' in the `JMX Input File Source(s) Source` step.",
+      "required": true,
+      "visibleRule": "jmxInputFilesSource=sourceCode"
+    },
+    {
+      "name": "jmxInputFilesUrls",
+      "type": "multiLine",
+      "label": "JMX Input File(s) Source URL Comma Separated",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "This provides you the option to provide your JMeter Input File(s) via a direct extenal URL(s). You can specify multiple urls comma separated. All files mentioned will be downloaded sequentially and made available to Jmeter for test run. One or many, comma seperated, https urls are expected here.",
+      "visibleRule": "jmxInputFilesSource=urls"
+    },
+    {
+      "name": "publishResultsToBuildArtifact",
+      "type": "boolean",
+      "label": "Publish Logs and Test Results to Pipeline Build Artifacts.",
+      "defaultValue": "true",
+      "required": true,
+      "helpMarkDown": "This would publish the output the data to build artifacts. If this task is used in release pipeline, please disable this check."
+    },
+    {
+      "name": "artifactNameReport",
+      "type": "string",
+      "label": "Artifact Name for Apache Jmeter Reports",
+      "defaultValue": "PerfAnalyzerReport",
+      "required": true,
+      "visibleRule": "publishResultsToBuildArtifact=true",
+      "helpMarkDown": "This is a boolean flag that if set to true will publish the test results and logs to pipeline artifacts. This should not be enabled if this task is used in a release pipeline. This is default set to true and will yield the result on task completion."
+    },
+    {
+      "name": "artifactNameLog",
+      "type": "string",
+      "label": "Artifact Name for Apache Jmeter Logs",
+      "defaultValue": "PerfAnalyzerLogs",
+      "required": true,
+      "visibleRule": "publishResultsToBuildArtifact=true",
+      "helpMarkDown": "This is the output artifact name for the test logs. Only visible if the `Publish Logs and Test Results to Pipeline Artifacts` is set to true."
+    },
+    {
+      "name": "failPipelineIfJMeterFails",
+      "type": "boolean",
+      "label": "Fail Task if JMeter test fails.",
+      "defaultValue": "false",
+      "required": true,
+      "helpMarkDown": "This would fail the pipeline task in case any test fails. This is useful if your usecase is to identify any regression failure due to new deloyment. Enabling this in CICD would help you monitor failures in jmx by failing the task itself."
+    },
+    {
+      "name": "maxFailureCountForJMeter",
+      "type": "string",
+      "label": "Fail Task if test failure count is more than",
+      "defaultValue": "100",
+      "required": true,
+      "visibleRule": "failPipelineIfJMeterFails=true",
+      "helpMarkDown": "In case your JMeter test failure count is more than the number specified, then the pipeline will fail."
+    },
+    {
+      "name": "copyResultToAzureBlobStorage",
+      "type": "boolean",
+      "label": "Copy Performance Test Result to Azure Blob Storage",
+      "defaultValue": "false",
+      "required": false,
+      "helpMarkDown": "This is a boolean flag that if set to true nabling this would help to copy Apache Jmeter's Performance Test Report, Log File and JTL File to be copied to Azure Blob Storage. Using Static website hosting turned on you can access any run report later as well via a direct link."
+    },
+    {
+      "name": "ConnectedServiceNameSelector",
+      "aliases": [
+        "azureConnectionType"
+      ],
+      "type": "pickList",
+      "label": "Azure Connection Type",
+      "required": false,
+      "helpMarkDown": "This is a picklist option to specofy where to make azure connection. Currently this is set to Azure Resource Manager only.",
+      "defaultValue": "ConnectedServiceNameARM",
+      "visibleRule": "copyResultToAzureBlobStorage=true",
+      "options": {
+        "ConnectedServiceNameARM": "Azure Resource Manager"
+      }
+    },
+    {
+      "name": "ConnectedServiceNameARM",
+      "aliases": [
+        "azureSubscription"
+      ],
+      "type": "connectedService:AzureRM",
+      "label": "Azure Subscription",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "This option lets you select the subscription in which you have created your storage container.",
+      "visibleRule": "ConnectedServiceNameSelector = ConnectedServiceNameARM && copyResultToAzureBlobStorage=true"
+    },
+    {
+      "name": "Destination",
+      "type": "pickList",
+      "label": "Destination Type",
+      "defaultValue": "AzureBlob",
+      "required": true,
+      "options": {
+        "AzureBlob": "Azure Blob"
+      },
+      "helpMarkDown": "This is where your output result and logs would be copied to. Currently only Azure Blob Storage is supported.",
+      "visibleRule": "copyResultToAzureBlobStorage=true"
+    },
+    {
+      "name": "StorageAccountRM",
+      "aliases": [
+        "storage"
+      ],
+      "type": "pickList",
+      "label": "RM Storage Account",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "Specify a pre-existing ARM storage account. It is also used as an intermediary for copying files to Azure VMs",
+      "properties": {
+        "EditableOptions": "True"
+      },
+      "visibleRule": "ConnectedServiceNameSelector = ConnectedServiceNameARM && copyResultToAzureBlobStorage=true"
+    },
+    {
+      "name": "ContainerName",
+      "type": "string",
+      "label": "Container Name",
+      "defaultValue": "$web",
+      "required": true,
+      "helpMarkDown": "This is the container name inside the storage account where your results and logs will be copied. This is defaulted to $web. Note that in case you want continious reporting available on html webpage, keep it to $web only. Files in $web will be available to view as html files. The container should be created previous to execution of this task.",
+      "visibleRule": "Destination = AzureBlob && copyResultToAzureBlobStorage=true"
+    },
+    {
+      "name": "BlobPrefix",
+      "type": "string",
+      "label": "Blob Prefix",
+      "defaultValue": "Releases/Release_$(Build.BuildNumber)",
+      "required": false,
+      "helpMarkDown": "This is the prefix inside container name where each run's report will be copied. It is essential to note that for continious integration and testing it's best to prefix it will build number. This way all continious build's result will be made available at all times as a http exposed url. If used in Build pipeline, it can be Releases/Release_DEV_$(Build.BuildNumber), if in release then it can be Release_DEV_$(Release.ReleaseName)_$(Release.AttemptNumber)",
+      "visibleRule": "Destination = AzureBlob && copyResultToAzureBlobStorage=true"
+    },
+    {
+      "name": "outputStorageUri",
+      "type": "string",
+      "label": "Storage Container URI",
+      "required": false,
+      "defaultValue": "",
+      "visibleRule": "Destination = AzureBlob && copyResultToAzureBlobStorage=true",
+      "helpMarkDown": "This is the Primary endpoint URI for your container. On Enabling static web hosting, this url is made available. If not specified, the task will not be able to create a direct html link to the test results. Sample on how to get this URI: <i>https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/tree/main/samples</i>"
+    },
+    {
+      "name": "jmeterURI",
+      "type": "string",
+      "label": "JMeter Download URL",
+      "required": true,
+      "defaultValue": "https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz",
+      "groupName": "advanced",
+      "helpMarkDown": "This is the https link to Jmeter binary. A tgz binary file https url is expected here. It is set to download 5.5 version of apache Jmeter by default."
+    },
+    {
+      "name": "jmeterFolderName",
+      "type": "string",
+      "label": "JMeter Folder Name",
+      "required": true,
+      "defaultValue": "apache-jmeter-5.5",
+      "groupName": "advanced",
+      "helpMarkDown": "In case you modify the JMeter Download URL, to some other version then this variable also needs to change. This is the folder name of the Jmeter binary file post extraction/unzip."
+    },
+    {
+      "name": "jmeterLogFolder",
+      "type": "string",
+      "label": "JMeter Log Folder Name",
+      "required": true,
+      "defaultValue": "CurrentLog",
+      "groupName": "advanced",
+      "helpMarkDown": "This is the name of Log folder that is created as a result of test run. This is defaulted to CurrentLog. This is one of the artifacts that is later published as well."
+    },
+    {
+      "name": "jmeterReportFolder",
+      "type": "string",
+      "label": "JMeter Report Folder Name",
+      "required": true,
+      "defaultValue": "CurrentReport",
+      "groupName": "advanced",
+      "helpMarkDown": "This is the name of Result folder that is created as a result of test run. This is defaulted to CurrentLog. This is one of the artifacts that is later published as well."
+    },
+    {
+      "name": "telemetryDataCollection",
+      "type": "boolean",
+      "label": "Telemetry Data Collection",
+      "defaultValue": "true",
+      "required": true,
+      "groupName": "advanced",
+      "helpMarkDown": "JMeter Performance Analyzer logs runs to improve and identify any application related issues. By sending us logs we would be able to keep on updating and identifying security bugs(if any) and help mitigate the issue. NO Personal data is logged into the telemetry. By turning this off, we would not be reciving any stats on the task run."
+    }
+  ],
+  "dataSourceBindings": [
+    {
+      "target": "StorageAccount",
+      "endpointId": "$(ConnectedServiceName)",
+      "dataSourceName": "AzureStorageServiceNames"
+    },
+    {
+      "target": "StorageAccountRM",
+      "endpointId": "$(ConnectedServiceNameARM)",
+      "dataSourceName": "AzureStorageAccountRM"
+    }
+  ],
+  "execution": {
+    "Node10": {
+      "target": "index.js"
+    }
+  }
 }
