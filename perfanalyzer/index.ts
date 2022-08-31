@@ -4,8 +4,8 @@
 import { publishData } from './src/azure-task-lib.utility'
 import { copyResultsToAzureBlob } from './src/blob-utils'
 import { getCommands } from './src/commands'
-import { CommandTypes, DEFAULT_JMETER_LOG_DIR_NAME, DEFAULT_JMETER_REPORT_DIR_NAME, ERROR_DEFAULT_MSG, InputVariables, InputVariableType, JMETER_BIN_Folder_NAME, JMETER_FILE_NAME, JMETER_LOG_FILE_NAME, LOG_JTL_FILE_NAME } from './src/constant'
-import { analyzeJTL, handleJMeterInputFile, handleJMeterJMXFile, handleJMeterPropertyFile, promiseFromChildProcess } from './src/jmeter-utils'
+import { CommandTypes, DEFAULT_JMETER_LOG_DIR_NAME, DEFAULT_JMETER_REPORT_DIR_NAME, ERROR_DEFAULT_MSG, InputVariables, InputVariableType, JMETER_BIN_Folder_NAME, JMETER_EXT_Folder_NAME, JMETER_FILE_NAME, JMETER_LIB_Folder_NAME, JMETER_LOG_FILE_NAME, LOG_JTL_FILE_NAME } from './src/constant'
+import { analyzeJTL, handleJMeterCustomPlugin, handleJMeterInputFile, handleJMeterJMXFile, handleJMeterPropertyFile, promiseFromChildProcess } from './src/jmeter-utils'
 import { replaceTokens } from './src/replaceToken'
 import { enableAppInsights, LogEvent, trackException, trackTrace } from './src/telemetry-client'
 import { TelemetryEvents, TraceLevel } from './src/telemetry.constants'
@@ -84,6 +84,7 @@ async function main() {
         let JMETER_FILE_Folder = tl.getInput(InputVariables.JMETER_FOLDER_NAME,true);
         let JMETER_BIN_Folder = Path.join(JMETER_FILE_Folder, JMETER_BIN_Folder_NAME);
         let JMETER_ABS_BIN_Folder = Path.join( process.cwd(),JMETER_FILE_Folder, JMETER_BIN_Folder_NAME);
+        let JMETER_ABS_LIB_EXT_Folder = Path.join( process.cwd(),JMETER_FILE_Folder, JMETER_LIB_Folder_NAME, JMETER_EXT_Folder_NAME);
 
         logInformation('Current Working directory: ' +  process.cwd(), TraceLevel.Verbose);
         logInformation('JMETER_URL ' + JMETER_URL, TraceLevel.Verbose);
@@ -101,6 +102,28 @@ async function main() {
         logInformation('Start Unzipping JMeter Binary', TraceLevel.Verbose)
         await unzipBinary(JMETER_FILE_NAME);
         logInformation('Completed Unzipping JMeter Binary', TraceLevel.Information)
+
+        let addCustomPluginsToLib = tl.getBoolInput(InputVariables.ADD_CUSTOM_PLUGIN_TO_JMETER_LIB,true);
+        if(addCustomPluginsToLib) {
+            logInformation('Custom Plugins Enabled', TraceLevel.Information);
+            LogEvent(TelemetryEvents.ENABLED_CUSTOM_PLUGINS);
+            let customPluginSource = tl.getInput(InputVariables.CUSTOM_PLUGIN_SOURCE,true);
+            if(isEmpty(customPluginSource))  {
+                let msg = 'No Source selected for custom plugin and addCustomPlugins were turned on. Either turn off the `addCustomPluginsToJMeterLib`  or provide source input for variable `customPluginSource`';
+                logInformation(msg, TraceLevel.Critical);
+                tl.setResult(tl.TaskResult.Failed, msg);
+                return;
+            }
+            let jmeterCustomPluginFileNames:string[] = await handleJMeterCustomPlugin(JMETER_ABS_LIB_EXT_Folder, customPluginSource);
+            if(null == jmeterCustomPluginFileNames || jmeterCustomPluginFileNames.length == 0)  {
+                logInformation('No Custom Plugins were copied to jeter lib/ext folder', TraceLevel.Warning); 
+                //return;
+            } else {
+                logInformation(jmeterCustomPluginFileNames.length + ' Plugins were copied to jeter lib/ext folder', TraceLevel.Information); 
+            }
+        } else {
+            logInformation('Custom Plugins not enabled', TraceLevel.Information);
+        }
 
         await process.chdir(JMETER_ABS_BIN_Folder);
         logInformation('Change Directory to JMeter Bin Path ' + JMETER_ABS_BIN_Folder + ' completed. Current Working Directory: ' + process.cwd(), TraceLevel.Verbose);
@@ -229,3 +252,4 @@ function allowCompleteReadWriteAccess(path: string) {
 
 enableAppInsights();
 main();
+
