@@ -123,6 +123,14 @@ The following variables are used in the pipeline. Some have default values which
 
 `Fail Task if test failure count is more than`: In case your JMeter test failure count is more than the number specified, then the pipeline will fail.
 
+`Add Custom Plugin(jars) To Jmeter Lib/ext Folder`: This would allow you to copy your custom plugins to Jmeter Lib/Ext Folder. Might be used in custom implementation and 3rd Party jars used to run JMX
+
+`Source Folder for Custom Plugins`: Source Type from where you want to copy custom plugins to JMeter's lib/ext folder.
+
+`Folder Path For JMeter Plugins`: This is the path of the Plugins Input source code Folder. All files inside this folder will be made available to Jmeter via copying to ext folder. You can select the folder path and update the input here. This is visible in case you select 'SourceCode' in the `Source Folder for Custom Plugins` step.
+
+`Custom Plugin File(s) Or Jar(s) Source URL Comma Separated`: This provides you the option to provide your Plugin File(s) via a direct external URL(s). You can specify multiple URLs comma separated. All files mentioned will be downloaded sequentially and made available to JMeter for test run via copying to ext folder. One or many, comma Separated, https URLs are expected here.This is visible in case you select 'urls' in the `Source Folder for Custom Plugins` step.
+
 `Copy Performance Test Result to Azure Blob Storage`: This is a boolean flag that if set to true enabling this would help to copy Apache JMeter's Performance Test Report, Log File and JTL File to be copied to Azure Blob Storage. Using Static website hosting turned on you can access any run report later as well via a direct link."
 
 `ConnectedServiceNameSelector`: This is a picklist option to specify where to make azure connection. Currently this is set to Azure Resource Manager only.

@@ -27,7 +27,12 @@ export enum InputVariables {
     ARTIFACT_NAME_LOG = 'artifactNameLog',
     FAIL_PIPELINE_IF_JMETER_FAILS = 'failPipelineIfJMeterFails',
     MAX_FAILURE_COUNT_FOR_JMETER = 'maxFailureCountForJMeter',
-    LOG_TELEMETRY = 'telemetryDataCollection'
+    LOG_TELEMETRY = 'telemetryDataCollection',
+
+    ADD_CUSTOM_PLUGIN_TO_JMETER_LIB = 'addCustomPluginsToJMeterLib',
+    CUSTOM_PLUGIN_SOURCE = 'customPluginSource',
+    CUSTOM_PLUGIN_SOURCE_CODE_PATH = 'customPluginSourceCodeFolderPath',
+    CUSTOM_PLUGIN_URL_PATHS = 'customPluginURLs'
 }
 
 export enum CommandTypes {
@@ -60,8 +65,10 @@ export enum InputVariableType {
     None = 'none'
 }
 
-export const JMETER_FILE_NAME='apache-jmeter.tgz'
-export const JMETER_BIN_Folder_NAME= 'bin'
+export const JMETER_FILE_NAME='apache-jmeter.tgz';
+export const JMETER_BIN_Folder_NAME= 'bin';
+export const JMETER_LIB_Folder_NAME= 'lib';
+export const JMETER_EXT_Folder_NAME= 'ext';
 export const DEFAULT_JMETER_REPORT_DIR_NAME = 'CurrentReport';
 export const DEFAULT_JMETER_LOG_DIR_NAME = 'CurrentLog';
 export const AZURE_STORAGE_ACCOUNT_NAME_PLACEHOLDER = '${storageAccountName}';

@@ -74,5 +74,11 @@ export enum TraceLevel {
     AGENT_OS_TYPE_IDENTIFIED = 'Agent OS Type Identified',
 
     NO_BLOB_PRIMARY_ENDPOINT_URI = 'No Blob Storage URI Provided',
-    PROVIDED_BLOB_PRIMARY_ENDPOINT_URI = 'Blob Storage URI Provided'
+    PROVIDED_BLOB_PRIMARY_ENDPOINT_URI = 'Blob Storage URI Provided',
+
+    ENABLED_CUSTOM_PLUGINS = 'Enabled Custom PLugins',
+    ENABLED_CUSTOM_PLUGINS_SOURCE_CODE = 'Enabled Custom PLugins download via source Code',
+    ENABLED_CUSTOM_PLUGINS_URLS = 'Enabled Custom PLugins download via URLs',
+    DOWNLOADED_CUSTOM_PLUGINS = 'Successfully downloaded custom plugins to jmeter lib-ext folder',
+    FAILED_DOWNLOADING_CUSTOM_PLUGINS_URLS = 'Failed to download custom plugins to jmeter lib-ext folder',
   }

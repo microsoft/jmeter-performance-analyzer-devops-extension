@@ -9,8 +9,8 @@
   "author": "Microsoft",
   "version": {
     "Major": 1,
-    "Minor": 4,
-    "Patch": 40
+    "Minor": 5,
+    "Patch": 44
   },
   "instanceNameFormat": "Run Perf Analyzer",
   "groups": [
@@ -97,7 +97,7 @@
       "label": "JMX Input File Source(s)",
       "required": true,
       "defaultValue": "none",
-      "visibleRule": "jmxPropertySource!=none",
+      "visibleRule": "",
       "helpMarkDown": "This provides you the option to provide your JMeter Input File Source. Your test might require some test data stored in csv,xls etc. This tasks enables to procure those files and makes it available to test. It can be none (in case your jmx does not require any input file to run), source code of the pipeline or it can be a direct extenal URL. This is set to default to None. This option is visible only if `JMX Property File Source` is not set to None.",
       "options": {
         "none": "None",
@@ -165,6 +165,45 @@
       "required": true,
       "visibleRule": "failPipelineIfJMeterFails=true",
       "helpMarkDown": "In case your JMeter test failure count is more than the number specified, then the pipeline will fail."
+    },
+    {
+      "name": "addCustomPluginsToJMeterLib",
+      "type": "boolean",
+      "label": "Add Custom Plugin(jars) To Jmeter Lib/ext Folder",
+      "defaultValue": "false",
+      "required": true,
+      "helpMarkDown": "You might have some custom plugins and jars for your JMeter Local which you might want to use in JMX. Enabling this would allow you to copy those plugins to JMeter's Plugin Lib Directory"
+    },
+    {
+      "name": "customPluginSource",
+      "type": "radio",
+      "label": "Source Folder for Custom Plugins",
+      "required": true,
+      "defaultValue": "none",
+      "visibleRule": "addCustomPluginsToJMeterLib=true",
+      "helpMarkDown": "Allows you to chose the custom plugin source.",
+      "options": {
+        "sourceCode": "Source Code Folder",
+        "urls": "External URL(s)"
+      }
+    },
+    {
+      "name": "customPluginSourceCodeFolderPath",
+      "type": "filePath",
+      "label": "Folder Path For JMeter Plugins",
+      "defaultValue": "",
+      "helpMarkDown": "Input the source folder path for jmeter plugin directory. Please note this should be a folder path and not a file path. This is visible in case you select 'Source Code Folder' in the `Custom Plugins(customPluginSource)` step.",
+      "required": true,
+      "visibleRule": "customPluginSource=sourceCode"
+    },
+    {
+      "name": "customPluginURLs",
+      "type": "multiLine",
+      "label": "Custom Plugin File(s) Or Jar(s) Source URL Comma Separated",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "This provides you the option to provide your Custom Plugin File(s) Or Jar(s) via a direct extenal URL(s). You can specify multiple urls comma separated. All files mentioned will be downloaded sequentially and made available to Jmeter Lib Folder for test run. One or many, comma seperated, https urls are expected here.",
+      "visibleRule": "customPluginSource=urls"
     },
     {
       "name": "copyResultToAzureBlobStorage",

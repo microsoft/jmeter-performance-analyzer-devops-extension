@@ -82,6 +82,62 @@ export async function handleJMeterPropertyFile(JMETER_BIN_Folder: string): Promi
     }
 }
 
+export async function handleJMeterCustomPlugin(JMETER_ABS_LIB_EXT_Folder: string, customPluginSource: string): Promise<string[]> {
+     await process.chdir(JMETER_ABS_LIB_EXT_Folder);
+
+     if(customPluginSource==InputVariableType.SourceCode) {
+         let customPluginSourceCodeFolderPath = tl.getInput(InputVariables.CUSTOM_PLUGIN_SOURCE_CODE_PATH,true);
+         LogEvent(TelemetryEvents.ENABLED_CUSTOM_PLUGINS_SOURCE_CODE);
+         if(! customPluginSourceCodeFolderPath || customPluginSourceCodeFolderPath.length == 0) {
+             let msg = "You have set customPluginSource to sourceCode, but provided no folder path for the plugin files (customPluginSourceCodeFolderPath). Missing plugin property folder path. Either set addCustomPluginsToJMeterLib to false or provide path to folder where your plugin files are. (customPluginSourceCodeFolderPath)";
+             logInformation(msg, TraceLevel.Error);
+             tl.setResult(tl.TaskResult.Failed, msg);
+             return [];
+        }
+         logInformation('Downloading Plugin File(s) from source ' + customPluginSourceCodeFolderPath +  ' to destination' + JMETER_ABS_LIB_EXT_Folder, TraceLevel.Information);
+         let res = copyDirectoryRecursiveSync(customPluginSourceCodeFolderPath, JMETER_ABS_LIB_EXT_Folder, false);
+         LogEvent(TelemetryEvents.DOWNLOADED_CUSTOM_PLUGINS);
+         return res;
+     } else if(customPluginSource == InputVariableType.Urls){
+         let customPluginSourceUrls= tl.getDelimitedInput(InputVariables.CUSTOM_PLUGIN_URL_PATHS,',',true);
+         LogEvent(TelemetryEvents.ENABLED_CUSTOM_PLUGINS_URLS);
+         if(isEmpty(customPluginSourceUrls)) {
+             let msg = "You have set customPluginSource to urls, but provided no array of comma seperated plugin file paths to download from (customPluginURLs). Missing comma seperated http file path(s). Either set addCustomPluginsToJMeterLib to false or provide path to folder where your plugin files are. (customPluginURLs)";
+             logInformation(msg, TraceLevel.Error);
+             tl.setResult(tl.TaskResult.Failed, msg);
+             return [];
+         }
+         
+         let fileNames: string[] = [];
+         let count = 0;
+ 
+         for(let file of customPluginSourceUrls) {
+            if(isEmpty(file)) {
+                logInformation('Skipping Empty File name', TraceLevel.Warning);
+                continue;
+            }
+            count++;
+            file= file.trim();
+            let fileName = Path.parse(file).base;
+            logInformation('Downloading (' + count + '/' + customPluginSourceUrls.length + '). File from source ' + file + ' to destination' + fileName + ' to preloaded location: ' + JMETER_ABS_LIB_EXT_Folder , TraceLevel.Verbose);
+ 
+            try {
+                 await downloadFile(file, fileName);
+                 fileNames.push(fileName);
+            } catch(e) {
+             tl.error(e);
+             logInformation('Could not download File: ' + file, TraceLevel.Error)
+             logInformation(ERROR_DEFAULT_MSG, TraceLevel.Error);
+            }
+            LogEvent(TelemetryEvents.DOWNLOADED_JMETER_INPUT_FILES_URL);
+         }
+         LogEvent(TelemetryEvents.DOWNLOADED_CUSTOM_PLUGINS);
+         return fileNames;
+     }
+     LogEvent(TelemetryEvents.FAILED_DOWNLOADING_CUSTOM_PLUGINS_URLS);
+     return null;
+}
+
 export async function handleJMeterInputFile(JMETER_BIN_Folder: string): Promise<string[]>{
     let jmxInputFilesSource = tl.getInput(InputVariables.JMX_INPUT_FILE_SOURCE,true);
 
