@@ -18,7 +18,7 @@ You can get the task [HERE](https://marketplace.visualstudio.com/items?itemName=
 
 ## Latest Updates
 
-#### V1.5.3
+#### V1.5.44
 - Enabled Custom Plugin Jars to be copied to JMeter's lib/ext folder
 - Allowed input files to be copied without need to provide property file
 
