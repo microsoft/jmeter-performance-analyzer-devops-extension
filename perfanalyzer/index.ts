@@ -34,7 +34,7 @@ async function PostResults(jmeterReportFolder: string, jmeterLogFolder: string, 
     }
 
     let ReportABSPath = Path.join(JMETER_ABS_BIN_Folder,jmeterReportFolder);
-    let LogABSPath = Path.join(JMETER_ABS_BIN_Folder,jmeterReportFolder);
+    let LogABSPath = Path.join(JMETER_ABS_BIN_Folder,jmeterLogFolder);
 
     let publishResultsToBuildArtifact = tl.getBoolInput(InputVariables.PUBLISH_RESULTS_TO_BUILD_ARTIFACT, true);
 
