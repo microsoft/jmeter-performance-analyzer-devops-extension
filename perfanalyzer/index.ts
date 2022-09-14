@@ -211,7 +211,7 @@ async function main() {
         });
 
         child.stdout.on('data', function (data) {
-            logInformation(data,TraceLevel.Verbose, false);
+            logInformation(data,TraceLevel.Verbose, false, false);
         });
         child.stderr.on('data', function (data) {
             logInformation(`stderr: ${data}`, TraceLevel.Error, false);
