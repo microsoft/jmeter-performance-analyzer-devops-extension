@@ -1,6 +1,6 @@
 {
   "name": "microsoftperfanalyzer",
-  "version": "1.5.49",
+  "version": "1.5.50",
   "description": "This task enables to run Performance testng using Apache Jmeter, Analyze report and post results",
   "main": "index.js",
   "scripts": {
