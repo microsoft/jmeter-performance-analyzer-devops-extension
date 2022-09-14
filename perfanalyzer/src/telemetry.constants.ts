@@ -25,6 +25,7 @@ export enum TraceLevel {
   
  
   export enum TelemetryEvents {
+    TELEMETRY_TURNED_OFF = 'Telemetry Turned Off',
     STARTED_PERFORMANCE_TEST = 'Started Performance Test',
     COMPLETED_PERFORMANCE_TEST = 'Completed Performance Test',
 

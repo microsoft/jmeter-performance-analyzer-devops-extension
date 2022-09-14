@@ -4,7 +4,7 @@
 import { APPINSIGHTS_CONNECTION_STRING } from "./appInsightsConnectionString";
 import { APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING, APPINSIGHTS_CONNECTION_MS_STRING } from "./appInsightsConnectionString-ms";
 import { InputVariables } from './constant';
-import { SeverityLevel, TraceLevel } from './telemetry.constants';
+import { SeverityLevel, TelemetryEvents, TraceLevel } from './telemetry.constants';
 import { getFormatPrefix, getSystemProps, isObjectEmpty } from "./utility";
 import tl = require('azure-pipelines-task-lib/task');
 const globalAny:any = global;
@@ -17,10 +17,28 @@ let appInsightsClient = null;
 let telemetryProps:{} = null;
 let logTelemetry: boolean = true;
 
+function logTelemetryTurnedOff() {
+  try {
+    appInsights.setup(APPINSIGHTS_CONNECTION_MS_STRING)
+      .start();
+
+      appInsightsMSClient = appInsights.defaultClient;         
+      appInsightsMSClassicClient = new appInsights.TelemetryClient(APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING);         
+      appInsightsClient = new appInsights.TelemetryClient(APPINSIGHTS_CONNECTION_STRING);
+
+      appInsightsMSClient.trackEvent({name: TelemetryEvents.TELEMETRY_TURNED_OFF});
+      appInsightsClient.trackEvent({name: TelemetryEvents.TELEMETRY_TURNED_OFF});
+      appInsightsMSClassicClient.trackEvent({name: TelemetryEvents.TELEMETRY_TURNED_OFF});
+  } catch(exception) {
+    console.log('Telemetry Logs turned off. No Updates further.')
+  }
+}
+
 export function enableAppInsights() {
     logTelemetry = tl.getBoolInput(InputVariables.LOG_TELEMETRY, true);
     if(!logTelemetry) {
-      console.info('Telemetry Logging Turned off.')
+      console.info('Telemetry Logging Turned off.');
+      logTelemetryTurnedOff();
       return;
     }
 
@@ -49,6 +67,8 @@ export function enableAppInsights() {
     }
 }
 
+
+
 function logMachineInfo() {
   console.log(`${getFormatPrefix()} Running Pipeline Host:  ${getSystemProps('system.hostType')}`);
   console.log(`${getFormatPrefix()} Agent Id: ${getSystemProps ('Agent.Id')}`);
@@ -67,7 +87,6 @@ function logMachineInfo() {
 
 export async function LogEvent(eventName: string, props: {} = null) {
     if(! logTelemetry) {
-      console.info('Telemetry Logging Turned off.');
       return;
     }
 
@@ -90,7 +109,6 @@ export async function LogEvent(eventName: string, props: {} = null) {
 
 export async function trackTrace(message: string, traceSeverity: TraceLevel) {
     if(! logTelemetry) {
-      console.info('Telemetry Logging Turned off.');
       return;
     }
     let props = GetDefaultProps();
@@ -105,7 +123,6 @@ export async function trackTrace(message: string, traceSeverity: TraceLevel) {
 
 export async function trackException(message: any, stack: any=null) {
     if(! logTelemetry) {
-      console.info('Telemetry Logging Turned off.');
       return;
     }
 
