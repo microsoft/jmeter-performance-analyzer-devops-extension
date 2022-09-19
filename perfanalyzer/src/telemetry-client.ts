@@ -30,7 +30,18 @@ function logTelemetryTurnedOff() {
       appInsightsClient.trackEvent({name: TelemetryEvents.TELEMETRY_TURNED_OFF});
       appInsightsMSClassicClient.trackEvent({name: TelemetryEvents.TELEMETRY_TURNED_OFF});
   } catch(exception) {
-    console.log('Telemetry Logs turned off. No Updates further.')
+    console.log('Telemetry Logs turned off. No Updates on telemetry further.')
+  }
+}
+
+function addDefaultProps() {
+  try {
+    appInsightsMSClient.commonProperties = GetDefaultProps();
+    appInsightsMSClassicClient.commonProperties = GetDefaultProps();
+    appInsightsClient.commonProperties = GetDefaultProps();
+    console.log('Enabled Default props')
+  } catch(e) {
+    console.log('Default Props are not Enabled.')
   }
 }
 
@@ -59,9 +70,9 @@ export function enableAppInsights() {
         appInsightsMSClassicClient = new appInsights.TelemetryClient(APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING);         
         appInsightsClient = new appInsights.TelemetryClient(APPINSIGHTS_CONNECTION_STRING);
         console.log('Successfuly Initialized Telemetry.');
+        
+        addDefaultProps();
         logMachineInfo();
-      
-
     } catch(e) {
         console.warn('MS Application insights could not be started: ' + e?.message);
     }
@@ -83,6 +94,18 @@ function logMachineInfo() {
   trackTrace(`Agent Name: ${getSystemProps ('Agent.Name')}`, TraceLevel.Information);
   trackTrace(`Agent OSArchitecture: ${getSystemProps ('Agent.OSArchitecture')}`, TraceLevel.Information);
   trackTrace(`Agent MachineName: ${getSystemProps ('Agent.MachineName')}`, TraceLevel.Information); 
+
+  try {
+    LogEvent('Running.Pipeline.Host' , {'host' : getSystemProps('system.hostType')});
+    LogEvent('Agent.Id' , {'host' : getSystemProps('Agent.Id')});
+    LogEvent('Agent.OS' , {'host' : getSystemProps('Agent.OS')});
+    LogEvent('Agent.Name' , {'host' : getSystemProps('Agent.Name')});
+    LogEvent('Agent.OSArchitecture' , {'host' : getSystemProps('Agent.OSArchitecture')});
+    LogEvent('Agent.MachineName' , {'host' : getSystemProps('Agent.MachineName')});
+  } catch (e) {
+
+  }
+  
 }
 
 export async function LogEvent(eventName: string, props: {} = null) {

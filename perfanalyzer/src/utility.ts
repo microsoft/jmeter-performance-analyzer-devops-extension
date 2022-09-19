@@ -21,7 +21,7 @@ export function getFormatPrefix() {
     return `${formattedDate} ${UNIQUE_RUN_ID} - ${process.cwd()} `;
 }
 
-export function logInformation(data: any, traceLevel: TraceLevel, printDate: boolean = true) {
+export function logInformation(data: any, traceLevel: TraceLevel, printDate: boolean = true, logInTelemetry: boolean = true) {
     let formattedData = data;
     if(printDate) {
         formattedData = `${getFormatPrefix()} - ${data}`;
@@ -29,7 +29,10 @@ export function logInformation(data: any, traceLevel: TraceLevel, printDate: boo
 
     console.log(formattedData);
     tl.debug(formattedData)
-    trackTrace(formattedData, traceLevel);
+    if(logInTelemetry) {
+        trackTrace(formattedData, traceLevel);
+    }
+    
 }
 
 export async function downloadFile(fileSource: string, destinationFilePath: string) {
