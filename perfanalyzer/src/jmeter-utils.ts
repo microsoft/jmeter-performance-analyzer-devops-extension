@@ -9,6 +9,16 @@ let csv = require('csv-parser')
 const fs = require('fs');
 const tl = require('azure-pipelines-task-lib/task');
 const Path = require('path');
+
+function getFileName(filePath: string): string {
+    let fileName = Path.parse(filePath).base;
+    let paramIndex = fileName.indexOf("?");
+    if( paramIndex!= -1) {
+        fileName = fileName.substring(0,paramIndex);
+    }
+    logInformation('Extracted file Name from source Path: ' + filePath + " as FileName: " + fileName + ' The parameter index was ' + paramIndex, TraceLevel.Information);
+    return fileName;
+}
 export async function handleJMeterJMXFile(JMETER_BIN_Folder: string): Promise<string>{
 
     let jmxSourceInput = tl.getInput(InputVariables.JMX_SOURCE,true);
@@ -20,7 +30,7 @@ export async function handleJMeterJMXFile(JMETER_BIN_Folder: string): Promise<st
             tl.setResult(tl.TaskResult.Failed, msg);
             return '';
         }
-        let fileName=Path.parse(jmxSourceRunFilePath).base;
+        let fileName=getFileName(jmxSourceRunFilePath);
         let destinationFilePath = Path.join(JMETER_BIN_Folder,fileName);
         logInformation('Copying JMX Source File from Source: ' + jmxSourceRunFilePath + " to destination: " + destinationFilePath, TraceLevel.Information);
         LogEvent(TelemetryEvents.DOWNLOADED_JMETER_JMX_SRC);
@@ -35,7 +45,7 @@ export async function handleJMeterJMXFile(JMETER_BIN_Folder: string): Promise<st
             return '';
         }
         jmxSourceRunFileURL= jmxSourceRunFileURL.trim();
-        let fileName=Path.parse(jmxSourceRunFileURL).base
+        let fileName=getFileName(jmxSourceRunFileURL);
         logInformation('Downloading File from source ' + jmxSourceRunFileURL +  ' to destination' + fileName + ' at location preloaded: ' + JMETER_BIN_Folder, TraceLevel.Information);
         await downloadFile(jmxSourceRunFileURL, fileName);
         LogEvent(TelemetryEvents.DOWNLOADED_JMETER_JMX_URL);
@@ -58,7 +68,7 @@ export async function handleJMeterPropertyFile(JMETER_BIN_Folder: string): Promi
             tl.setResult(tl.TaskResult.Failed, msg);
             return '';
         }
-        let fileName=Path.parse(jmxPropertyFilePath).base;
+        let fileName=getFileName(jmxPropertyFilePath);
         let destinationFilePath = Path.join(JMETER_BIN_Folder,fileName);
         logInformation('Copying JMX Property File from Source: ' + jmxPropertyFilePath + " to destination: " + destinationFilePath, TraceLevel.Information);
         await copyFileToDirectory(jmxPropertyFilePath,destinationFilePath);
@@ -74,8 +84,8 @@ export async function handleJMeterPropertyFile(JMETER_BIN_Folder: string): Promi
             return '';
         }
         jmxPropertyFileURL= jmxPropertyFileURL.trim();
-        let fileName=Path.parse(jmxPropertyFileURL).base
-        logInformation('Downloading File from source ' + jmxPropertyFileURL +  ' to destination' + fileName + ' at location preloaded: ' + JMETER_BIN_Folder, TraceLevel.Information);
+        let fileName=getFileName(jmxPropertyFileURL);
+        logInformation('Downloading File from source ' + jmxPropertyFileURL +  ' to destination ' + fileName + ' at location preloaded: ' + JMETER_BIN_Folder, TraceLevel.Information);
         await downloadFile(jmxPropertyFileURL, fileName);
         LogEvent(TelemetryEvents.DOWNLOADED_JMETER_PROPERTY_URL);
         return fileName;
@@ -118,7 +128,7 @@ export async function handleJMeterCustomPlugin(JMETER_ABS_LIB_EXT_Folder: string
             }
             count++;
             file= file.trim();
-            let fileName = Path.parse(file).base;
+            let fileName = getFileName(file);
             logInformation('Downloading (' + count + '/' + customPluginSourceUrls.length + '). File from source ' + file + ' to destination' + fileName + ' to preloaded location: ' + JMETER_ABS_LIB_EXT_Folder , TraceLevel.Verbose);
  
             try {
@@ -174,7 +184,7 @@ export async function handleJMeterInputFile(JMETER_BIN_Folder: string): Promise<
            }
            count++;
            file= file.trim();
-           let fileName = Path.parse(file).base;
+           let fileName = getFileName(file);
            logInformation('Downloading (' + count + '/' + jmxInputFolderSourceUrls.length + '). File from source ' + file + ' to destination' + fileName + ' to preloaded location: ' + JMETER_BIN_Folder , TraceLevel.Verbose);
 
            try {
