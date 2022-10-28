@@ -23,6 +23,10 @@ You need to enable static hosting in the storage container in order to be able t
 #### V1.1.55
 - Stable Version.
 
+#### V1.6.55
+- Added support for command line arguments
+- Bug fix for file download with parameters.
+
 ## Demo
 
 ![project-screenshots/Steps.gif](project-screenshots/Steps.gif)
