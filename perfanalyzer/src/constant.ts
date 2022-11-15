@@ -32,7 +32,8 @@ export enum InputVariables {
     ADD_CUSTOM_PLUGIN_TO_JMETER_LIB = 'addCustomPluginsToJMeterLib',
     CUSTOM_PLUGIN_SOURCE = 'customPluginSource',
     CUSTOM_PLUGIN_SOURCE_CODE_PATH = 'customPluginSourceCodeFolderPath',
-    CUSTOM_PLUGIN_URL_PATHS = 'customPluginURLs'
+    CUSTOM_PLUGIN_URL_PATHS = 'customPluginURLs',
+    ADDITIONAL_COMMAND_LINE_ARGUMENTS = 'additionalCommandLineArguments'
 }
 
 export enum CommandTypes {
@@ -48,14 +49,14 @@ export enum OSTypes {
 }
 
 export const Commands = {
-    JMETER_RUN_WITH_PROPERTY_WINDOWS : '.\\jmeter -q {0} -n -t {1}  -l {2} -j {3} -f -e -o {4}',
-    JMETER_RUN_WITH_PROPERTY_LINUX : './jmeter.sh -q {0} -n -t {1}  -l {2} -j {3} -f -e -o {4}',
-    JMETER_RUN_WITH_PROPERTY_MACOS : './jmeter.sh -q {0} -n -t {1}  -l {2} -j {3} -f -e -o {4}',
+    JMETER_RUN_WITH_PROPERTY_WINDOWS : '.\\jmeter -q {0} -n -t {1}  -l {2} -j {3} -f -e -o {4} {5}',
+    JMETER_RUN_WITH_PROPERTY_LINUX : './jmeter.sh -q {0} -n -t {1}  -l {2} -j {3} -f -e -o {4} {5}',
+    JMETER_RUN_WITH_PROPERTY_MACOS : './jmeter.sh -q {0} -n -t {1}  -l {2} -j {3} -f -e -o {4} {5}',
 
     
-    JMETER_RUN_WITHOUT_PROPERTY_WINDOWS : '.\\jmeter -n -t {0} -l {1} -j {2} -f -e -o  {3}',
-    JMETER_RUN_WITHOUT_PROPERTY_LINUX : './jmeter.sh -n -t {0} -l {1} -j {2} -f -e -o  {3}',
-    JMETER_RUN_WITHOUT_PROPERTY_MACOS : './jmeter.sh -n -t {0} -l {1} -j {2} -f -e -o  {3}'
+    JMETER_RUN_WITHOUT_PROPERTY_WINDOWS : '.\\jmeter -n -t {0} -l {1} -j {2} -f -e -o  {3} {4}',
+    JMETER_RUN_WITHOUT_PROPERTY_LINUX : './jmeter.sh -n -t {0} -l {1} -j {2} -f -e -o  {3} {4}',
+    JMETER_RUN_WITHOUT_PROPERTY_MACOS : './jmeter.sh -n -t {0} -l {1} -j {2} -f -e -o  {3} {4}'
 }
 
 export enum InputVariableType {

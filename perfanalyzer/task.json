@@ -9,8 +9,8 @@
   "author": "Microsoft",
   "version": {
     "Major": 1,
-    "Minor": 5,
-    "Patch": 54
+    "Minor": 6,
+    "Patch": 56
   },
   "instanceNameFormat": "Run Perf Analyzer",
   "groups": [
@@ -204,6 +204,15 @@
       "required": true,
       "helpMarkDown": "This provides you the option to provide your Custom Plugin File(s) Or Jar(s) via a direct extenal URL(s). You can specify multiple urls comma separated. All files mentioned will be downloaded sequentially and made available to Jmeter Lib Folder for test run. One or many, comma seperated, https urls are expected here.",
       "visibleRule": "customPluginSource=urls"
+    },
+    {
+      "name": "additionalCommandLineArguments",
+      "type": "multiLine",
+      "label": "Additional Command Line Arguments",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "The arguments specified here will be appened to the Jmeter run command. The run script looks like jmeter -q {propertFileIfAny} -n -t {JMXFile}  -l {LogFile} {Your Arguments go here}. Hence this can be '-JUser=admin -dSomeProperty=Value'. Please note that this is appened as it is hence User must ensure correctness of the command.",
+      "visibleRule": ""
     },
     {
       "name": "copyResultToAzureBlobStorage",

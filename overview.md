@@ -23,6 +23,10 @@ You need to enable static hosting in the storage container in order to be able t
 #### V1.1.55
 - Stable Version.
 
+#### V1.6.55
+- Added support for command line arguments
+- Bug fix for file download with parameters.
+
 ## Demo
 
 ![project-screenshots/Steps.gif](project-screenshots/Steps.gif)
@@ -130,6 +134,8 @@ The following variables are used in the pipeline. Some have default values which
 `Folder Path For JMeter Plugins`: This is the path of the Plugins Input source code Folder. All files inside this folder will be made available to Jmeter via copying to ext folder. You can select the folder path and update the input here. This is visible in case you select 'SourceCode' in the `Source Folder for Custom Plugins` step.
 
 `Custom Plugin File(s) Or Jar(s) Source URL Comma Separated`: This provides you the option to provide your Plugin File(s) via a direct external URL(s). You can specify multiple URLs comma separated. All files mentioned will be downloaded sequentially and made available to JMeter for test run via copying to ext folder. One or many, comma Separated, https URLs are expected here.This is visible in case you select 'urls' in the `Source Folder for Custom Plugins` step.
+
+`Additional Command Line Arguments`: The arguments specified here will be appened to the Jmeter run command. The run script looks like jmeter -q {propertFileIfAny} -n -t {JMXFile}  -l {LogFile} {Your Arguments go here}. Hence this can be '-JUser=admin -dSomeProperty=Value'. Please note that this is appened as it is hence User must ensure correctness of the command.
 
 `Copy Performance Test Result to Azure Blob Storage`: This is a boolean flag that if set to true enabling this would help to copy Apache JMeter's Performance Test Report, Log File and JTL File to be copied to Azure Blob Storage. Using Static website hosting turned on you can access any run report later as well via a direct link."
 

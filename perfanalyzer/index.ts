@@ -174,10 +174,14 @@ async function main() {
         let command = '';
         let CurrentLogJTLFile =  Path.join(jmeterLogFolder, LOG_JTL_FILE_NAME);
         let CurrentLogLogFile =  Path.join(jmeterLogFolder, JMETER_LOG_FILE_NAME);
+        let additionalCommandLineArguments = tl.getInput(InputVariables.ADDITIONAL_COMMAND_LINE_ARGUMENTS,true);        
+        
+        logInformation('Additional command Length: ' + (null ==  additionalCommandLineArguments || additionalCommandLineArguments.length == 0) ? 0 : additionalCommandLineArguments.length, TraceLevel.Information);
+        logInformation('Additional command to be appeneded while Run: ' + additionalCommandLineArguments, TraceLevel.Information);
 
         if(jmxPropertySource==InputVariableType.None) {
             LogEvent(TelemetryEvents.JMETER_RUN_WITHOUT_PROPERTY_FILE);
-            command = getCommands(CommandTypes.JMETER_RUN_WITHOUT_PROPERTY, jmeterJMXFileName, CurrentLogJTLFile, CurrentLogLogFile, jmeterReportFolder);
+            command = getCommands(CommandTypes.JMETER_RUN_WITHOUT_PROPERTY, jmeterJMXFileName, CurrentLogJTLFile, CurrentLogLogFile, jmeterReportFolder, additionalCommandLineArguments);
             logInformation('Running JMeter Without Property File: ' + command, TraceLevel.Information);
         } else {
             LogEvent(TelemetryEvents.JMETER_RUN_WITH_PROPERTY_FILE);
@@ -185,7 +189,7 @@ async function main() {
             await replaceTokens(jmeterPropertyFileName)
             logInformation('Completed Replace Tokens', TraceLevel.Information);
 
-            command = getCommands(CommandTypes.JMETER_RUN_WITH_PROPERTY, jmeterPropertyFileName, jmeterJMXFileName, CurrentLogJTLFile, CurrentLogLogFile, jmeterReportFolder);
+            command = getCommands(CommandTypes.JMETER_RUN_WITH_PROPERTY, jmeterPropertyFileName, jmeterJMXFileName, CurrentLogJTLFile, CurrentLogLogFile, jmeterReportFolder, additionalCommandLineArguments);
             logInformation('Running JMeter with property file ' + command, TraceLevel.Information);
         }
 
