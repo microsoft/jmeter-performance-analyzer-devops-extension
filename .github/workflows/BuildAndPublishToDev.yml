@@ -33,8 +33,8 @@ jobs:
         node-version: '14'
     - name: Increment Version
       run: |
-        ./publish/increment-version.sh
         ls
+        .\publish\increment-version.sh
       shell: bash  
   package:
     runs-on: ubuntu-latest
