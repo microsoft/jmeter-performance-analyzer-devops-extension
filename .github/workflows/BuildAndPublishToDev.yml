@@ -6,7 +6,7 @@ on:
       - RELEASES/**
 jobs:
   build:
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
       with:
@@ -27,11 +27,13 @@ jobs:
         tsc index.ts
         cd ..
   installs:
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest
+    steps:
     - name: npm install tfx cli
       run: |
         npm install -g tfx-cli
   bump-version:
+    steps:
     runs-on: ubuntu-latest  
     - name: Increment Version
       run: |
@@ -39,11 +41,13 @@ jobs:
          ./publish/increment_version.sh
       shell: bash  
   package:
+    steps:
     runs-on: ubuntu-latest
     - name: npx tfx package
       run: |
         npx tfx extension create --manifest-globs vss-extension.json
   publish:
+    steps:
     runs-on: ubuntu-latest    
     - name: Publish to Dev
       run: |
