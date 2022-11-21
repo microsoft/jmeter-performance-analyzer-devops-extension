@@ -38,8 +38,6 @@ jobs:
     - name: Increment Version
       run: |
         ls
-        cd ../publish
-        ./increment_version.sh
       shell: bash  
   package:
     runs-on: ubuntu-latest
@@ -52,4 +50,5 @@ jobs:
     steps:
     - name: Publish to Dev
       run: |
+        npm install -g tfx-cli
         tfx extension publish --publisher MishraPrateek --manifest-js vss-extension.dev.json
