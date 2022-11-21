@@ -1,4 +1,4 @@
-name: CICD
+name: IntegrationTest
 on: 
   push:
     branches:    

@@ -1,4 +1,4 @@
-name: CICD
+name: PublishToProd
 on: 
   push:
     branches:    
