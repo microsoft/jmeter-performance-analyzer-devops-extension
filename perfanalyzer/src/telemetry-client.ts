@@ -5,7 +5,7 @@ import { APPINSIGHTS_CONNECTION_STRING } from "./appInsightsConnectionString";
 import { APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING, APPINSIGHTS_CONNECTION_MS_STRING } from "./appInsightsConnectionString-ms";
 import { InputVariables } from './constant';
 import { SeverityLevel, TelemetryEvents, TraceLevel } from './telemetry.constants';
-import { getFormatPrefix, getSystemProps, isObjectEmpty } from "./utility";
+import { getFormatPrefix, getSystemProps, getUniqueId, isObjectEmpty } from "./utility";
 import tl = require('azure-pipelines-task-lib/task');
 const globalAny:any = global;
 let appInsights = require('applicationinsights');
@@ -81,12 +81,12 @@ export function enableAppInsights() {
 
 
 function logMachineInfo() {
-  console.log(`${getFormatPrefix()} Running Pipeline Host:  ${getSystemProps('system.hostType')}`);
-  console.log(`${getFormatPrefix()} Agent Id: ${getSystemProps ('Agent.Id')}`);
-  console.log(`${getFormatPrefix()} Agent OS: ${getSystemProps ('Agent.OS')}`);
-  console.log(`${getFormatPrefix()} Agent Name: ${getSystemProps ('Agent.Name')}`);
-  console.log(`${getFormatPrefix()} Agent OSArchitecture: ${getSystemProps ('Agent.OSArchitecture')}`);
-  console.log(`${getFormatPrefix()} Agent MachineName: ${getSystemProps ('Agent.MachineName')}`); 
+  console.log(`Running Pipeline Host:  ${getSystemProps('system.hostType')}`);
+  console.log(`Agent Id: ${getSystemProps ('Agent.Id')}`);
+  console.log(`Agent OS: ${getSystemProps ('Agent.OS')}`);
+  console.log(`Agent Name: ${getSystemProps ('Agent.Name')}`);
+  console.log(`Agent OSArchitecture: ${getSystemProps ('Agent.OSArchitecture')}`);
+  console.log(`Agent MachineName: ${getSystemProps ('Agent.MachineName')}`); 
 
   trackTrace('Running Pipeline Host: ' + getSystemProps('system.hostType'), TraceLevel.Information);
   trackTrace(`Agent Id: ${getSystemProps ('Agent.Id')}`, TraceLevel.Information);
@@ -189,7 +189,7 @@ function GetDefaultProps() {
     }
 
     let props = {
-
+        xcv: getUniqueId(),
         buildQueuedBy	: getSystemProps ('Build.QueuedBy'),
         buildQueuedById: getSystemProps ('Build.QueuedById'),
         buildReason: getSystemProps ('Build.Reason'),

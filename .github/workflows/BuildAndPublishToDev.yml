@@ -25,3 +25,26 @@ jobs:
         echo 'export const APPINSIGHTS_CONNECTION_STRING=${{ secrets.APPINSIGHTS_CONNECTION_TEST_STRING }}' >>  appInsightsConnectionString.js
         cd ..
         tsc index.ts
+        cd ..
+  installs:
+    runs-on: ubuntu-latest    
+    - name: npm install tfx cli
+      run: |
+        npm install -g tfx-cli
+  bump-version:
+    runs-on: ubuntu-latest  
+    - name: Increment Version
+      run: |
+         chmod +x ./publish/increment_version.sh
+         ./publish/increment_version.sh
+      shell: bash  
+  package:
+    runs-on: ubuntu-latest
+    - name: npx tfx package
+      run: |
+        npx tfx extension create --manifest-globs vss-extension.json
+  publish:
+    runs-on: ubuntu-latest    
+    - name: Publish to Dev
+      run: |
+        tfx extension publish --publisher MishraPrateek --manifest-js vss-extension.dev.json

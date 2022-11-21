@@ -20,6 +20,10 @@ export function getFormatPrefix() {
     let formattedDate = (moment(Date.now())).format(DATE_FORMAT);
     return `${formattedDate} ${UNIQUE_RUN_ID} - ${process.cwd()} `;
 }
+export function getUniqueId() {
+    return UNIQUE_RUN_ID;
+}
+ 
 export function deleteFolderRecursive(dir: string) {
     var list = fs.readdirSync(dir);
     for(var i = 0; i < list.length; i++) {
@@ -46,10 +50,10 @@ export function replaceSpaceWithUnderscore(input: string): string {
 
 export function logInformation(data: any, traceLevel: TraceLevel, printDate: boolean = true, logInTelemetry: boolean = true) {
     let formattedData = data;
-    if(printDate) {
+    /*if(printDate) {
         formattedData = `${getFormatPrefix()} - ${data}`;
     }
-
+    */
     console.log(formattedData);
     tl.debug(formattedData)
     if(logInTelemetry) {

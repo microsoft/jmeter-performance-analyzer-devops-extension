@@ -1,9 +1,9 @@
 {
   "manifestVersion": 1,
-  "id": "jmeter-perf-analyzer",
-  "name": "JMeter Performance Analyzer",
-  "version": "1.6.66",
-  "publisher": "id-az-pipeline",
+  "id": "jmeter-perf-analyzer-dev",
+  "name": "JMeter Performance Analyzer UAT",
+  "version": "1.6.65",
+  "publisher": "MishraPrateek",
   "public": true,
   "targets": [
     {
