@@ -38,7 +38,7 @@ jobs:
     - name: Increment Version
       run: |
         ls
-        cd publish
+        cd ../publish
         ./increment_version.sh
       shell: bash  
   package:
