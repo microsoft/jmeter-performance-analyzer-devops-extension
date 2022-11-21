@@ -37,8 +37,7 @@ jobs:
     steps:
     - name: Increment Version
       run: |
-         chmod +x ./publish/increment_version.sh
-         ./publish/increment_version.sh
+        ./publish/increment_version.sh
       shell: bash  
   package:
     runs-on: ubuntu-latest
