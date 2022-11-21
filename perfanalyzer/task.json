@@ -10,7 +10,7 @@
   "version": {
     "Major": 1,
     "Minor": 6,
-    "Patch": 60
+    "Patch": 61
   },
   "instanceNameFormat": "Run Perf Analyzer",
   "groups": [

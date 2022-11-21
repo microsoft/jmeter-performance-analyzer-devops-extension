@@ -6,8 +6,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { DATE_FORMAT } from './constant';
 import { trackTrace } from './telemetry-client';
 import { TraceLevel } from './telemetry.constants';
-import { rm } from 'node:fs/promises';
-
 const globalAny:any = global;
 
 const tl = require('azure-pipelines-task-lib/task');
@@ -22,8 +20,23 @@ export function getFormatPrefix() {
     let formattedDate = (moment(Date.now())).format(DATE_FORMAT);
     return `${formattedDate} ${UNIQUE_RUN_ID} - ${process.cwd()} `;
 }
-export async function deleteFolderRecursive(folderName: string) {
-    await rm(folderName, { recursive: true, force: true });
+export async function deleteFolderRecursive(dir: string) {
+    var list = fs.readdirSync(dir);
+    for(var i = 0; i < list.length; i++) {
+        var filename = Path.join(dir, list[i]);
+        var stat = fs.statSync(filename);
+
+        if(filename == "." || filename == "..") {
+            // pass these files
+        } else if(stat.isDirectory()) {
+            // rmdir recursively
+            deleteFolderRecursive(filename);
+        } else {
+            // rm fiilename
+            fs.unlinkSync(filename);
+        }
+    }
+    fs.rmdirSync(dir);
 
 }
 
