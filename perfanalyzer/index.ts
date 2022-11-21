@@ -113,7 +113,9 @@ async function main() {
         logInformation('Current Working directory: ' +  process.cwd(), TraceLevel.Verbose);
         logInformation('JMETER_URL ' + JMETER_URL, TraceLevel.Verbose);
         logInformation('JMETER_ORIGINAL_FILE_Folder ' + JMETER_ORIGINAL_FILE_Folder, TraceLevel.Verbose);
+        logInformation('JMETER_ORIGINAL_FILE_Folder_ABS_PATH ' + JMETER_ORIGINAL_FILE_Folder_ABS_PATH, TraceLevel.Verbose);
         logInformation('JMETER_FILE_Folder ' + JMETER_FILE_Folder, TraceLevel.Verbose);
+        logInformation('JMETER_FILE_Folder_ABS ' + JMETER_FILE_Folder_ABS, TraceLevel.Verbose);
         logInformation('JMETER_BIN_Folder ' + JMETER_BIN_Folder, TraceLevel.Verbose);
         logInformation('JMETER_ABS_BIN_Folder ' + JMETER_ABS_BIN_Folder, TraceLevel.Verbose);
         logInformation('Current Working directory: ' +  process.cwd(), TraceLevel.Verbose);
