@@ -1,4 +1,4 @@
-name: PublishToDev
+name: BuildAndPublishToDev
 on: 
   push:
     branches:    
