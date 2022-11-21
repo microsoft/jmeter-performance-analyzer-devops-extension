@@ -112,6 +112,7 @@ async function main() {
         logInformation('Root directory: ' +  ROOT_DIR, TraceLevel.Verbose);
         logInformation('Current Working directory: ' +  process.cwd(), TraceLevel.Verbose);
         logInformation('JMETER_URL ' + JMETER_URL, TraceLevel.Verbose);
+        logInformation('JMETER_ORIGINAL_FILE_Folder ' + JMETER_ORIGINAL_FILE_Folder, TraceLevel.Verbose);
         logInformation('JMETER_FILE_Folder ' + JMETER_FILE_Folder, TraceLevel.Verbose);
         logInformation('JMETER_BIN_Folder ' + JMETER_BIN_Folder, TraceLevel.Verbose);
         logInformation('JMETER_ABS_BIN_Folder ' + JMETER_ABS_BIN_Folder, TraceLevel.Verbose);
@@ -207,6 +208,7 @@ async function main() {
         logInformation('Additional command Length: ' + (null ==  additionalCommandLineArguments || additionalCommandLineArguments.length == 0) ? 0 : additionalCommandLineArguments.length, TraceLevel.Information);
         logInformation('Additional command to be appeneded while Run: ' + additionalCommandLineArguments, TraceLevel.Information);
         additionalCommandLineArguments = (null ==  additionalCommandLineArguments || additionalCommandLineArguments.length == 0) ? '' : additionalCommandLineArguments;
+        logInformation('Current Working directory: ' +  process.cwd(), TraceLevel.Verbose);
         if(jmxPropertySource==InputVariableType.None) {
             LogEvent(TelemetryEvents.JMETER_RUN_WITHOUT_PROPERTY_FILE);
             command = getCommands(CommandTypes.JMETER_RUN_WITHOUT_PROPERTY, jmeterJMXFileName, CurrentLogJTLFile, CurrentLogLogFile, jmeterReportFolder, additionalCommandLineArguments);
@@ -221,6 +223,7 @@ async function main() {
             logInformation('Running JMeter with property file ' + command, TraceLevel.Information);
         }
 
+        
         var child = exec(command);
         promiseFromChildProcess(child).then(async function (result:any) {
             logInformation(`promise complete: ${result}`, TraceLevel.Information);

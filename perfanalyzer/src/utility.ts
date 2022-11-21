@@ -59,7 +59,7 @@ export function logInformation(data: any, traceLevel: TraceLevel, printDate: boo
 }
 
 export function renameFolder(JMETER_ORIGINAL_FILE_Folder_ABS_PATH: any, JMETER_FILE_Folder_ABS: any) {
-    fs.rename(JMETER_ORIGINAL_FILE_Folder_ABS_PATH, JMETER_FILE_Folder_ABS, function(err) {
+    fs.renameSync(JMETER_ORIGINAL_FILE_Folder_ABS_PATH, JMETER_FILE_Folder_ABS, function(err) {
         if (err) {
             trackTrace(err, TraceLevel.Critical)
         } else {
