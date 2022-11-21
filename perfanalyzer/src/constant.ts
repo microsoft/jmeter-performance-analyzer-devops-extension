@@ -13,6 +13,7 @@ export enum InputVariables {
     JMX_INPUT_FILES_URL ='jmxInputFilesUrls',
     JMX_BINARY_URI ='jmeterURI',
     JMETER_FOLDER_NAME ='jmeterFolderName',
+    JMETER_CUSTOM_UNZIPPED_FOLDER_NAME ='jmeterCustomUnzippedFolderName',
     JMETER_LOG_FOLDER = 'jmeterLogFolder',
     JMETER_REPORT_FOLDER = 'jmeterReportFolder',
     COPY_RESULT_TO_AZURE_BLOB_STORAGE = 'copyResultToAzureBlobStorage',

@@ -9,7 +9,7 @@ import { analyzeJTL, handleJMeterCustomPlugin, handleJMeterInputFile, handleJMet
 import { replaceTokens } from './src/replaceToken'
 import { enableAppInsights, LogEvent, trackException, trackTrace } from './src/telemetry-client'
 import { TelemetryEvents, TraceLevel } from './src/telemetry.constants'
-import { downloadFile, isEmpty, logInformation, getType, unzipBinary } from './src/utility'
+import { downloadFile, isEmpty, logInformation, getType, unzipBinary, renameFolder, replaceSpaceWithUnderscore } from './src/utility'
 const tl = require('azure-pipelines-task-lib/task');
 const Path = require('path');
 var exec = require('child_process').exec;
@@ -81,11 +81,19 @@ async function main() {
         LogEvent(TelemetryEvents.STARTED_PERFORMANCE_TEST);
 
         let JMETER_URL = tl.getInput(InputVariables.JMX_BINARY_URI,true);
-        let JMETER_FILE_Folder = tl.getInput(InputVariables.JMETER_FOLDER_NAME,true);
+        let JMETER_CUSTOM_UNZIPPED_FOLDER_NAME = tl.getInput(InputVariables.JMETER_CUSTOM_UNZIPPED_FOLDER_NAME,true);
+        let JMETER_ORIGINAL_FILE_Folder = tl.getInput(InputVariables.JMETER_FOLDER_NAME,true);
+        let JMETER_ORIGINAL_FILE_Folder_ABS_PATH = Path.join( process.cwd(),JMETER_ORIGINAL_FILE_Folder);
+
+        let JMETER_FILE_Folder = JMETER_CUSTOM_UNZIPPED_FOLDER_NAME;
+        let JMETER_FILE_Folder_ABS= Path.join( process.cwd(),JMETER_FILE_Folder);
+
         let JMETER_BIN_Folder = Path.join(JMETER_FILE_Folder, JMETER_BIN_Folder_NAME);
         let JMETER_ABS_BIN_Folder = Path.join( process.cwd(),JMETER_FILE_Folder, JMETER_BIN_Folder_NAME);
         let JMETER_ABS_LIB_EXT_Folder = Path.join( process.cwd(),JMETER_FILE_Folder, JMETER_LIB_Folder_NAME, JMETER_EXT_Folder_NAME);
+        
 
+        
         logInformation('Current Working directory: ' +  process.cwd(), TraceLevel.Verbose);
         logInformation('JMETER_URL ' + JMETER_URL, TraceLevel.Verbose);
         logInformation('JMETER_FILE_Folder ' + JMETER_FILE_Folder, TraceLevel.Verbose);
@@ -102,6 +110,10 @@ async function main() {
         logInformation('Start Unzipping JMeter Binary', TraceLevel.Verbose)
         await unzipBinary(JMETER_FILE_NAME);
         logInformation('Completed Unzipping JMeter Binary', TraceLevel.Information)
+
+        logInformation('Rename JMeter Folder from '+JMETER_FILE_Folder_ABS+'name to ' + JMETER_CUSTOM_UNZIPPED_FOLDER_NAME, TraceLevel.Verbose)
+        renameFolder(JMETER_ORIGINAL_FILE_Folder_ABS_PATH,JMETER_FILE_Folder_ABS);
+        logInformation('Completed Renaming folder JMeter Binary to ' + JMETER_CUSTOM_UNZIPPED_FOLDER_NAME, TraceLevel.Information)
 
         let addCustomPluginsToLib = tl.getBoolInput(InputVariables.ADD_CUSTOM_PLUGIN_TO_JMETER_LIB,true);
         if(addCustomPluginsToLib) {
@@ -158,8 +170,8 @@ async function main() {
             logInformation('Completed Handle Input Files. FileCount: ' + ((null != jmeterInputFileNames) ? jmeterInputFileNames?.length : 0), TraceLevel.Information);
         }
 
-        let jmeterLogFolder = tl.getInput(InputVariables.JMETER_LOG_FOLDER,true);
-        let jmeterReportFolder = tl.getInput(InputVariables.JMETER_REPORT_FOLDER,true);
+        let jmeterLogFolder = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_LOG_FOLDER,true));
+        let jmeterReportFolder = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_REPORT_FOLDER,true));
 
         if(isEmpty(jmeterLogFolder)) {
             jmeterLogFolder = DEFAULT_JMETER_LOG_DIR_NAME;
@@ -256,4 +268,6 @@ function allowCompleteReadWriteAccess(path: string) {
 
 enableAppInsights();
 main();
+
+
 

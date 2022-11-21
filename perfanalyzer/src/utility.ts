@@ -21,6 +21,10 @@ export function getFormatPrefix() {
     return `${formattedDate} ${UNIQUE_RUN_ID} - ${process.cwd()} `;
 }
 
+export function replaceSpaceWithUnderscore(input: string): string {
+    return input.split(" ").join("");
+}
+
 export function logInformation(data: any, traceLevel: TraceLevel, printDate: boolean = true, logInTelemetry: boolean = true) {
     let formattedData = data;
     if(printDate) {
@@ -33,6 +37,16 @@ export function logInformation(data: any, traceLevel: TraceLevel, printDate: boo
         trackTrace(formattedData, traceLevel);
     }
     
+}
+
+export function renameFolder(JMETER_ORIGINAL_FILE_Folder_ABS_PATH: any, JMETER_FILE_Folder_ABS: any) {
+    fs.rename(JMETER_ORIGINAL_FILE_Folder_ABS_PATH, JMETER_FILE_Folder_ABS, function(err) {
+        if (err) {
+            trackTrace(err, TraceLevel.Critical)
+        } else {
+            trackTrace("Successfully renamed the directory from " + JMETER_ORIGINAL_FILE_Folder_ABS_PATH + " to " + JMETER_FILE_Folder_ABS, TraceLevel.Information)
+        }
+      })
 }
 
 export async function downloadFile(fileSource: string, destinationFilePath: string) {
