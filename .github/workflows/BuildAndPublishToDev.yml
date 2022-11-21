@@ -32,23 +32,23 @@ jobs:
     - name: npm install tfx cli
       run: |
         npm install -g tfx-cli
-  bump-version:
-    steps:
+  bumpversion:
     runs-on: ubuntu-latest  
+    steps:
     - name: Increment Version
       run: |
          chmod +x ./publish/increment_version.sh
          ./publish/increment_version.sh
       shell: bash  
   package:
-    steps:
     runs-on: ubuntu-latest
+    steps:
     - name: npx tfx package
       run: |
         npx tfx extension create --manifest-globs vss-extension.json
   publish:
-    steps:
     runs-on: ubuntu-latest    
+    steps:
     - name: Publish to Dev
       run: |
         tfx extension publish --publisher MishraPrateek --manifest-js vss-extension.dev.json
