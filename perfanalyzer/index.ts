@@ -80,7 +80,7 @@ async function delete_jmeter_folder(ROOT_DIR: string, JMETER_FILE_Folder_ABS: an
     try {
         trackTrace(`Attempting to clean up Jmeter Folder '${JMETER_FILE_Folder_ABS}' from '${ROOT_DIR}' `, TraceLevel.Information);
         await process.chdir(ROOT_DIR);
-        await deleteFolderRecursive(JMETER_FILE_Folder_ABS);
+        deleteFolderRecursive(JMETER_FILE_Folder_ABS);
     } catch(e) {
         trackTrace(`Warning: Failed to delete Jmeter folder'${e}' `, TraceLevel.Warning);
     }

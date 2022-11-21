@@ -20,7 +20,7 @@ export function getFormatPrefix() {
     let formattedDate = (moment(Date.now())).format(DATE_FORMAT);
     return `${formattedDate} ${UNIQUE_RUN_ID} - ${process.cwd()} `;
 }
-export async function deleteFolderRecursive(dir: string) {
+export function deleteFolderRecursive(dir: string) {
     var list = fs.readdirSync(dir);
     for(var i = 0; i < list.length; i++) {
         var filename = Path.join(dir, list[i]);
