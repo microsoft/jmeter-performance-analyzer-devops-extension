@@ -12,7 +12,7 @@ jobs:
         node-version: '14'
     - name: Change directory
       run: |
-        cd perfanalyzer
+        cd perfanalyzer 
     - name: npm install
       run: |
         cd perfanalyzer
