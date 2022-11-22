@@ -226,6 +226,17 @@ async function main() {
         }
 
         
+        exec("ls -la", (error, stdout, stderr) => {
+            if (error) {
+                console.log(`error: ${error.message}`);
+                return;
+            }
+            if (stderr) {
+                console.log(`stderr: ${stderr}`);
+                return;
+            }
+            console.log(`stdout: ${stdout}`);
+        });
         var child = exec(command);
         promiseFromChildProcess(child).then(async function (result:any) {
             logInformation(`promise complete: ${result}`, TraceLevel.Information);
