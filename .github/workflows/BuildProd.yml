@@ -18,10 +18,10 @@ jobs:
         cd perfanalyzer
         npm install
         cd src
-        touch appInsightsConnectionString-ms.js
-        touch appInsightsConnectionString.js
-        echo 'export const APPINSIGHTS_CONNECTION_MS_STRING=${{ secrets.APPINSIGHTS_CONNECTION_MS_STRING }}; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING=${{ secrets.APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING }}' >>  appInsightsConnectionString-ms.js
-        echo 'export const APPINSIGHTS_CONNECTION_STRING=${{ secrets.APPINSIGHTS_CONNECTION_STRING }}' >>  appInsightsConnectionString.js
+        touch appInsightsConnectionString-ms.ts
+        touch appInsightsConnectionString.ts
+        echo "export const APPINSIGHTS_CONNECTION_MS_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_STRING }}'; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING }}'" >>  appInsightsConnectionString-ms.ts
+        echo "export const APPINSIGHTS_CONNECTION_STRING='${{ secrets.APPINSIGHTS_CONNECTION_STRING }}'" >>  appInsightsConnectionString.ts
         cd ..
         tsc index.ts
   bumpversion:
@@ -38,10 +38,10 @@ jobs:
         cd perfanalyzer
         npm install
         cd src
-        touch appInsightsConnectionString-ms.js
-        touch appInsightsConnectionString.js
-        echo 'export const APPINSIGHTS_CONNECTION_MS_STRING=${{ secrets.APPINSIGHTS_CONNECTION_MS_STRING }}; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING=${{ secrets.APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING }}' >>  appInsightsConnectionString-ms.js
-        echo 'export const APPINSIGHTS_CONNECTION_STRING=${{ secrets.APPINSIGHTS_CONNECTION_STRING }}' >>  appInsightsConnectionString.js
+        touch appInsightsConnectionString-ms.ts
+        touch appInsightsConnectionString.ts
+        echo "export const APPINSIGHTS_CONNECTION_MS_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_STRING }}'; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING }}'" >>  appInsightsConnectionString-ms.ts
+        echo "export const APPINSIGHTS_CONNECTION_STRING='${{ secrets.APPINSIGHTS_CONNECTION_STRING }}'" >>  appInsightsConnectionString.ts
         cd ..
         tsc index.ts
     - name: Increment Version
@@ -63,10 +63,10 @@ jobs:
         cd perfanalyzer
         npm install
         cd src
-        touch appInsightsConnectionString-ms.js
-        touch appInsightsConnectionString.js
-        echo 'export const APPINSIGHTS_CONNECTION_MS_STRING=${{ secrets.APPINSIGHTS_CONNECTION_MS_STRING }}; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING=${{ secrets.APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING }}' >>  appInsightsConnectionString-ms.js
-        echo 'export const APPINSIGHTS_CONNECTION_STRING=${{ secrets.APPINSIGHTS_CONNECTION_STRING }}' >>  appInsightsConnectionString.js
+        touch appInsightsConnectionString-ms.ts
+        touch appInsightsConnectionString.ts
+        echo "export const APPINSIGHTS_CONNECTION_MS_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_STRING }}'; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING }}'" >>  appInsightsConnectionString-ms.ts
+        echo "export const APPINSIGHTS_CONNECTION_STRING='${{ secrets.APPINSIGHTS_CONNECTION_STRING }}'" >>  appInsightsConnectionString.ts
         cd ..
         tsc index.ts
     - name: Increment Version
@@ -91,10 +91,10 @@ jobs:
         cd perfanalyzer
         npm install
         cd src
-        touch appInsightsConnectionString-ms.js
-        touch appInsightsConnectionString.js
-        echo 'export const APPINSIGHTS_CONNECTION_MS_STRING=${{ secrets.APPINSIGHTS_CONNECTION_MS_STRING }}; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING=${{ secrets.APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING }}' >>  appInsightsConnectionString-ms.js
-        echo 'export const APPINSIGHTS_CONNECTION_STRING=${{ secrets.APPINSIGHTS_CONNECTION_STRING }}' >>  appInsightsConnectionString.js
+        touch appInsightsConnectionString-ms.ts
+        touch appInsightsConnectionString.ts
+        echo "export const APPINSIGHTS_CONNECTION_MS_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_STRING }}'; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING }}'" >>  appInsightsConnectionString-ms.ts
+        echo "export const APPINSIGHTS_CONNECTION_STRING='${{ secrets.APPINSIGHTS_CONNECTION_STRING }}'" >>  appInsightsConnectionString.ts
         cd ..
         tsc index.ts
     - name: Increment Version

@@ -20,9 +20,9 @@ jobs:
         cd perfanalyzer
         npm install
         cd src
-        touch appInsightsConnectionString-ms.js
-        touch appInsightsConnectionString.js
-        echo 'export const APPINSIGHTS_CONNECTION_MS_STRING=${{ secrets.APPINSIGHTS_CONNECTION_MS_TEST_STRING }}; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING=${{ secrets.APPINSIGHTS_CONNECTION_MS_CLASSIC_TEST_STRING }}' >>  appInsightsConnectionString-ms.js
-        echo 'export const APPINSIGHTS_CONNECTION_STRING=${{ secrets.APPINSIGHTS_CONNECTION_TEST_STRING }}' >>  appInsightsConnectionString.js
+        touch appInsightsConnectionString-ms.ts
+        touch appInsightsConnectionString.ts
+        echo "export const APPINSIGHTS_CONNECTION_MS_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_TEST_STRING }}'; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_CLASSIC_TEST_STRING }}'" >>  appInsightsConnectionString-ms.ts
+        echo "export const APPINSIGHTS_CONNECTION_STRING='${{ secrets.APPINSIGHTS_CONNECTION_TEST_STRING }}'" >>  appInsightsConnectionString.ts
         cd ..
         tsc index.ts
