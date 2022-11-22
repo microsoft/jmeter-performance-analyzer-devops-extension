@@ -1,5 +1,5 @@
 #!/bin/sh
-echo 'Incrementing versions: {perfanalyzer/package.json &  perfanalyzer/vss-extension.json}'
+echo 'Incrementing versions: {perfanalyzer/package.json &  perfanalyzer/vss-extension.json & perfanalyzer/vss-extension.json}'
 
 IFS=.
 PACKAGE_JSON_VERSION='';
@@ -59,6 +59,7 @@ FINAL_VERSION_CONCAT="$MAJOR_VERION.$MINOR_VERION.$PATCH_VERION"
 echo "Updated Version: $FINAL_VERSION_CONCAT";
 
 json -I -f vss-extension.json -e "this.version='$FINAL_VERSION_CONCAT'"
+json -I -f vss-extension.dev.json -e "this.version='$FINAL_VERSION_CONCAT'"
 
 cd perfanalyzer
 json -I -f package.json -e "this.version='$FINAL_VERSION_CONCAT'"
