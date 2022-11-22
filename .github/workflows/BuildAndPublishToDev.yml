@@ -33,7 +33,7 @@ jobs:
         node-version: '14'
     - name: Increment Version
       run: |
-        ls
+        npm i -g json
         bash increment_version.sh
       shell: bash  
   package:
