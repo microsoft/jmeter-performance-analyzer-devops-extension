@@ -4,7 +4,7 @@
   "name": "JMeter Performance Analyzer UAT",
   "version": "1.6.65",
   "publisher": "MishraPrateek",
-  "public": true,
+  "public": false,
   "targets": [
     {
       "id": "Microsoft.VisualStudio.Services"
