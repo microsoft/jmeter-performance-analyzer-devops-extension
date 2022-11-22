@@ -1,6 +1,6 @@
 {
   "manifestVersion": 1,
-  "id": "jmeter-perf-analyzer-dev",
+  "id": "perf-analyzer-dev",
   "name": "JMeter Performance Analyzer UAT",
   "version": "1.6.65",
   "publisher": "MishraPrateek",
