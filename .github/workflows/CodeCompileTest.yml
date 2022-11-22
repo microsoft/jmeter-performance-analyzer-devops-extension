@@ -1,4 +1,4 @@
-name: IntegrationTest
+name: CodeCompileTest
 on: 
   push:
     branches:    
