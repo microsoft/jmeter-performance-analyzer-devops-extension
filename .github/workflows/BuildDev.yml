@@ -1,4 +1,4 @@
-name: BuildAndPublishToDev
+name: BuildDev
 on: 
   push:
     branches:    
@@ -113,5 +113,5 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: upload-artifacts
+        name: jmeter-perf-analyzer-dev-publisherName-MishraPrateek
         path: publishdev
