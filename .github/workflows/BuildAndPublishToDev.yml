@@ -47,5 +47,5 @@ jobs:
     steps:
     - name: Publish to Dev
       run: |
-        npm install -g tfx-cli
+        npx tfx extension create --manifest-globs vss-extension.dev.json
         tfx extension publish --publisher MishraPrateek --manifest-js vss-extension.dev.json
