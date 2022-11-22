@@ -105,5 +105,6 @@ jobs:
       shell: bash
     - name: Publish to Dev
       run: |
+        npm install --global tfx-cli -g
         npx tfx extension create --manifest-globs vss-extension.dev.json
         npx tfx extension publish --publisher MishraPrateek --manifest-js vss-extension.dev.json
