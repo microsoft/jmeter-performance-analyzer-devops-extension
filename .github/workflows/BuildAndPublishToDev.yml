@@ -48,4 +48,4 @@ jobs:
     - name: Publish to Dev
       run: |
         npx tfx extension create --manifest-globs vss-extension.dev.json
-        tfx extension publish --publisher MishraPrateek --manifest-js vss-extension.dev.json
+        npx tfx extension publish --publisher MishraPrateek --manifest-js vss-extension.dev.json
