@@ -1,9 +1,4 @@
 name: BuildAndPublishToDev
-on: 
-  push:
-    branches:    
-      - main
-      - RELEASES/**
 jobs:
   build:
     runs-on: ubuntu-latest
