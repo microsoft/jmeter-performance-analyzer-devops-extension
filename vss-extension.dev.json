@@ -4,7 +4,6 @@
   "name": "JMeter Performance Analyzer UAT",
   "version": "1.6.65",
   "publisher": "MishraPrateek",
-  "public": false,
   "targets": [
     {
       "id": "Microsoft.VisualStudio.Services"
@@ -20,80 +19,12 @@
   "files": [
     {
       "path": "perfanalyzer"
-    },
-    {
-      "path": "overview.md",
-      "addressable": true
-    },
+    }, 
     {
       "path": "images/extension-icon.png",
       "addressable": true
-    },
-    {
-      "path": "project-screenshots",
-      "addressable": true
     }
-  ],
-  "screenshots": [
-    {
-      "path": "project-screenshots/P4.png"
-    },
-    {
-      "path": "project-screenshots/P5.png"
-    },
-    {
-      "path": "project-screenshots/P10.png"
-    }
-  ],
-  "content": {
-    "details": {
-      "path": "overview.md"
-    },
-    "sample": {
-      "path": "samples/README.md"
-    },
-    "license": {
-      "path": "LICENSE"
-    }
-  },
-  "repository": {
-    "type": "git",
-    "uri": "https://github.com/microsoft/jmeter-performance-analyzer-devops-extension"
-  },
-  "links": {
-    "repository": {
-      "uri": "https://github.com/microsoft/jmeter-performance-analyzer-devops-extension"
-    },
-    "issues": {
-      "uri": "https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/issues"
-    },
-    "samples": {
-      "uri": "https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/samples/README.md"
-    },
-    "readMe": {
-      "uri": "https://github.com/microsoft/jmeter-performance-analyzer-devops-extension/blob/main/README.md"
-    }
-  },
-  "branding": {
-    "color": "#FFFFFF",
-    "theme": "light"
-  },
-  "tags": [
-    "performance",
-    "performance testing",
-    "perf analyzer",
-    "performanceanalyzer",
-    "coverage",
-    "publish",
-    "report",
-    "publishreport",
-    "SSDT",
-    "Apache",
-    "ApacheJMeter",
-    "ApacheJMeterPerformanceTest",
-    "coverage",
-    "tag"
-  ],
+  ],  
   "contributions": [
     {
       "id": "custom-build-release-task",
