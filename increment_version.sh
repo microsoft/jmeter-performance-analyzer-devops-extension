@@ -66,9 +66,4 @@ json -I -f package.json -e "this.version='$FINAL_VERSION_CONCAT'"
 json -I -f task.json -e "this.version.Major=$MAJOR_VERION"
 json -I -f task.json -e "this.version.Minor=$MINOR_VERION"
 json -I -f task.json -e "this.version.Patch=$PATCH_VERION"
-
-git add package.json
-git add task.json
-git add ../vss-extension.json
-git commit -m "[Automated] Updated Version"
-git push
+ 
