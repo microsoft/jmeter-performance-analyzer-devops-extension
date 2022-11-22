@@ -31,6 +31,20 @@ jobs:
     - uses: actions/checkout@v1
       with:
         node-version: '14'
+    - name: Change directory
+      run: |
+        cd perfanalyzer
+    - name: npm install
+      run: |
+        cd perfanalyzer
+        npm install
+        cd src
+        touch appInsightsConnectionString-ms.js
+        touch appInsightsConnectionString.js
+        echo 'export const APPINSIGHTS_CONNECTION_MS_STRING=${{ secrets.APPINSIGHTS_CONNECTION_MS_TEST_STRING }}; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING=${{ secrets.APPINSIGHTS_CONNECTION_MS_CLASSIC_TEST_STRING }}' >>  appInsightsConnectionString-ms.js
+        echo 'export const APPINSIGHTS_CONNECTION_STRING=${{ secrets.APPINSIGHTS_CONNECTION_TEST_STRING }}' >>  appInsightsConnectionString.js
+        cd ..
+        tsc index.ts
     - name: Increment Version
       run: |
         npm i -g json
@@ -39,12 +53,56 @@ jobs:
   package:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v1
+      with:
+        node-version: '14'
+    - name: Change directory
+      run: |
+        cd perfanalyzer
+    - name: npm install
+      run: |
+        cd perfanalyzer
+        npm install
+        cd src
+        touch appInsightsConnectionString-ms.js
+        touch appInsightsConnectionString.js
+        echo 'export const APPINSIGHTS_CONNECTION_MS_STRING=${{ secrets.APPINSIGHTS_CONNECTION_MS_TEST_STRING }}; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING=${{ secrets.APPINSIGHTS_CONNECTION_MS_CLASSIC_TEST_STRING }}' >>  appInsightsConnectionString-ms.js
+        echo 'export const APPINSIGHTS_CONNECTION_STRING=${{ secrets.APPINSIGHTS_CONNECTION_TEST_STRING }}' >>  appInsightsConnectionString.js
+        cd ..
+        tsc index.ts
+    - name: Increment Version
+      run: |
+        npm i -g json
+        bash increment_version.sh
+      shell: bash
     - name: npx tfx package
       run: |
-        npx tfx extension create --manifest-globs vss-extension.json
+        npx tfx extension create --manifest-globs vss-extension.dev.json
   publish:
     runs-on: ubuntu-latest    
     steps:
+    - uses: actions/checkout@v1
+      with:
+        node-version: '14'
+    - name: Change directory
+      run: |
+        cd perfanalyzer
+    - name: npm install
+      run: |
+        cd perfanalyzer
+        npm install
+        cd src
+        touch appInsightsConnectionString-ms.js
+        touch appInsightsConnectionString.js
+        echo 'export const APPINSIGHTS_CONNECTION_MS_STRING=${{ secrets.APPINSIGHTS_CONNECTION_MS_TEST_STRING }}; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING=${{ secrets.APPINSIGHTS_CONNECTION_MS_CLASSIC_TEST_STRING }}' >>  appInsightsConnectionString-ms.js
+        echo 'export const APPINSIGHTS_CONNECTION_STRING=${{ secrets.APPINSIGHTS_CONNECTION_TEST_STRING }}' >>  appInsightsConnectionString.js
+        cd ..
+        tsc index.ts
+    - name: Increment Version
+      run: |
+        npm i -g json
+        bash increment_version.sh
+      shell: bash
     - name: Publish to Dev
       run: |
         npx tfx extension create --manifest-globs vss-extension.dev.json
