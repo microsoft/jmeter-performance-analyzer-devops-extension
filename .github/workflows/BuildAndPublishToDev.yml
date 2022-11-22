@@ -34,7 +34,7 @@ jobs:
     - name: Increment Version
       run: |
         ls
-        bash increment-version.sh
+        bash increment_version.sh
       shell: bash  
   package:
     runs-on: ubuntu-latest

@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "jmeter-perf-analyzer",
   "name": "JMeter Performance Analyzer",
-  "version": "1.6.88",
+  "version": "1.6.89",
   "publisher": "id-az-pipeline",
   "public": true,
   "targets": [
