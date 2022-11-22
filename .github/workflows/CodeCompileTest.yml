@@ -5,7 +5,6 @@ on:
       - main
       - RELEASES/**
       - users/**
-      - Test/**
 jobs:
   build:
     runs-on: ubuntu-latest    
