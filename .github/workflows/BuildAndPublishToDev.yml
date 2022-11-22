@@ -105,6 +105,7 @@ jobs:
       shell: bash
     - name: Publish to Dev
       run: |
+        mv 'perfanalyzer/node_modules/azure-pipelines-tasks-azure-arm-rest-v2/openssl/OpenSSL License.txt' 'perfanalyzer/node_modules/azure-pipelines-tasks-azure-arm-rest-v2/openssl/OpenSSL_License.txt'
         npm install --global tfx-cli -g
         npx tfx extension create --manifest-globs vss-extension.dev.json
         npx tfx extension publish --publisher MishraPrateek --manifest-js vss-extension.dev.json
