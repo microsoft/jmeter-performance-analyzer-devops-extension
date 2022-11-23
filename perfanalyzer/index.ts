@@ -239,7 +239,7 @@ async function main() {
         promiseFromChildProcess(child).then(function (result:any) {
             logInformation(`promise complete: ${result}`, TraceLevel.Information);
             
-            if(result && getType(result) =='number' && result == 0) {
+            if(getType(result) =='number' && result == 0) {
                 logInformation('Closing Code Status: Success', TraceLevel.Information);
                 PostResults(jmeterReportFolder, jmeterLogFolder, JMETER_ABS_BIN_Folder);
                 logInformation('Task Completed.', TraceLevel.Information);
