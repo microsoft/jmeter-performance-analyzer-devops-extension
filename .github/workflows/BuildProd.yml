@@ -100,7 +100,7 @@ jobs:
         npm install --global tfx-cli -g
         npx tfx extension create --manifest-globs vss-extension.json
         mkdir publishprod
-        mv *.vsix* publishprod
+        mv *.vsix publishprod
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
