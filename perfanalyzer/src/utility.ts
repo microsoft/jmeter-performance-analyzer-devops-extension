@@ -18,19 +18,56 @@ globalAny.UNIQUE_RUN_ID = UNIQUE_RUN_ID;
 
 export function getFormatPrefix() {
     let formattedDate = (moment(Date.now())).format(DATE_FORMAT);
-    return `${formattedDate} ${UNIQUE_RUN_ID} - ${process.cwd()} `;
+    return `${formattedDate} ${UNIQUE_RUN_ID}`;
+}
+export function getUniqueId() {
+    return UNIQUE_RUN_ID;
+}
+ 
+export function deleteFolderRecursive(dir: string) {
+    var list = fs.readdirSync(dir);
+    for(var i = 0; i < list.length; i++) {
+        var filename = Path.join(dir, list[i]);
+        var stat = fs.statSync(filename);
+
+        if(filename == "." || filename == "..") {
+            // pass these files
+        } else if(stat.isDirectory()) {
+            // rmdir recursively
+            deleteFolderRecursive(filename);
+        } else {
+            // rm fiilename
+            fs.unlinkSync(filename);
+        }
+    }
+    fs.rmdirSync(dir);
+
+}
+
+export function replaceSpaceWithUnderscore(input: string): string {
+    return input.split(" ").join("");
 }
 
 export function logInformation(data: any, traceLevel: TraceLevel, printDate: boolean = true, logInTelemetry: boolean = true) {
-    let formattedData = data;
-    if(printDate) {
-        formattedData = `${getFormatPrefix()} - ${data}`;
-    }
-
-    console.log(formattedData);
-    tl.debug(formattedData)
+    
+    if(printDate) { 
+        console.log( `${getFormatPrefix()} - ${data}`);
+    } else {
+        console.log(data);
+    } 
+    tl.debug(data)
     if(logInTelemetry) {
-        trackTrace(formattedData, traceLevel);
+        trackTrace(data, traceLevel);
+    }
+    
+}
+
+export async function renameFolder(JMETER_ORIGINAL_FILE_Folder_ABS_PATH: any, JMETER_FILE_Folder_ABS: any) {
+    if(JMETER_ORIGINAL_FILE_Folder_ABS_PATH == JMETER_FILE_Folder_ABS) {
+        logInformation('Rename folder not required since jmeter path is same as original name', TraceLevel.Information)
+    } else {
+        await makeDirectory(JMETER_FILE_Folder_ABS);
+        await copyDirectoryRecursiveSync(JMETER_ORIGINAL_FILE_Folder_ABS_PATH, JMETER_FILE_Folder_ABS, true, false);
     }
     
 }
@@ -59,6 +96,21 @@ export async function unzipBinary(fileName: string) {
     await tar.x({file: fileName});
 }
 
+export async function makeDirectory(filePath: string) {
+    try {
+        await fs.mkdir(filePath, (err) => {
+            if (err) {
+                logInformation('Make directory completed with error ' + err, TraceLevel.Information);
+            }
+            console.log('Directory created successfully: ' + filePath);
+        });
+    } catch (err) {
+        logInformation('Error creating directory ' + err, TraceLevel.Error);
+    }
+    
+}
+
+
 
 export function copyFileToDirectory(sourcefilePath: string, destinationFilePath: string) {
     let msg = 'Start Copying File to destination ' + destinationFilePath + ' from source ' + sourcefilePath;
@@ -69,23 +121,34 @@ export function copyFileToDirectory(sourcefilePath: string, destinationFilePath:
       });
 }
 
-export function copyDirectoryRecursiveSync(source, target, move): string[] {
+export function copyDirectoryRecursiveSync(source:string, target:string, move: boolean, copyFileAtSameLevel: boolean): string[] {
     if (!fs.lstatSync(source).isDirectory())
         return [];
     let files: string[] = []
     var operation = move ? fs.renameSync : fs.copyFileSync;
-    fs.readdirSync(source).forEach(function (itemName) {
-        var sourcePath = Path.join(source, itemName);
-        var targetPath = Path.join(target, itemName);
-
-        if (fs.lstatSync(sourcePath).isDirectory()) {
-            copyDirectoryRecursiveSync(sourcePath, target, false);
-        }
-        else {
-            operation(sourcePath, targetPath);
-            files.push(sourcePath);
-        }
-    });
+    if(fs.lstatSync(source).isDirectory()) {
+        fs.readdirSync(source).forEach(function (itemName) {
+            var sourcePath = Path.join(source, itemName);
+            var targetPath = Path.join(target, itemName);
+    
+            if (fs.lstatSync(sourcePath).isDirectory()) {
+                if(copyFileAtSameLevel) {
+                    copyDirectoryRecursiveSync(sourcePath, target, move, copyFileAtSameLevel);
+                } else {
+                    fs.mkdirSync(targetPath);
+                    copyDirectoryRecursiveSync(sourcePath, targetPath, move, copyFileAtSameLevel);
+                }
+                
+            }
+            else {
+                operation(sourcePath, targetPath);
+                files.push(sourcePath);
+            }
+        });
+    } else {
+        console.log('Not a directory: ' + source);
+    }
+   
     return files;
 }
 

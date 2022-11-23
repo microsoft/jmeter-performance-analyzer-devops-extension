@@ -1,0 +1,40 @@
+{
+  "manifestVersion": 1,
+  "id": "perf-analyzer-dev",
+  "name": "JMeter Performance Analyzer UAT",
+  "version": "1.7.34",
+  "publisher": "MishraPrateek",
+  "targets": [
+    {
+      "id": "Microsoft.VisualStudio.Services"
+    }
+  ],
+  "description": "This task enables to run Performance testing using Apache Jmeter, Analyze report and post results.",
+  "categories": [
+    "Azure Pipelines"
+  ],
+  "icons": {
+    "default": "images/extension-icon.png"
+  },
+  "files": [
+    {
+      "path": "perfanalyzer"
+    },
+    {
+      "path": "images/extension-icon.png",
+      "addressable": true
+    }
+  ],
+  "contributions": [
+    {
+      "id": "custom-build-release-task",
+      "type": "ms.vss-distributed-task.task",
+      "targets": [
+        "ms.vss-distributed-task.tasks"
+      ],
+      "properties": {
+        "name": "perfanalyzer"
+      }
+    }
+  ]
+}

@@ -19,6 +19,14 @@ function getFileName(filePath: string): string {
     logInformation('Extracted file Name from source Path: ' + filePath + " as FileName: " + fileName + ' The parameter index was ' + paramIndex, TraceLevel.Information);
     return fileName;
 }
+
+export function getJmeterFolderNameFromURL(JMETER_URL: string) {
+    let start = JMETER_URL.lastIndexOf("/");
+    let end =JMETER_URL.lastIndexOf(".");
+    return JMETER_URL.substring(start+1,end);
+    
+}
+
 export async function handleJMeterJMXFile(JMETER_BIN_Folder: string): Promise<string>{
 
     let jmxSourceInput = tl.getInput(InputVariables.JMX_SOURCE,true);
@@ -105,7 +113,7 @@ export async function handleJMeterCustomPlugin(JMETER_ABS_LIB_EXT_Folder: string
              return [];
         }
          logInformation('Downloading Plugin File(s) from source ' + customPluginSourceCodeFolderPath +  ' to destination' + JMETER_ABS_LIB_EXT_Folder, TraceLevel.Information);
-         let res = copyDirectoryRecursiveSync(customPluginSourceCodeFolderPath, JMETER_ABS_LIB_EXT_Folder, false);
+         let res = copyDirectoryRecursiveSync(customPluginSourceCodeFolderPath, JMETER_ABS_LIB_EXT_Folder, false, true);
          LogEvent(TelemetryEvents.DOWNLOADED_CUSTOM_PLUGINS);
          return res;
      } else if(customPluginSource == InputVariableType.Urls){
@@ -165,7 +173,7 @@ export async function handleJMeterInputFile(JMETER_BIN_Folder: string): Promise<
        }
         logInformation('Downloading Input File(s) from source ' + jmxInputFolderSourcePath +  ' to destination' + JMETER_BIN_Folder, TraceLevel.Information);
         LogEvent(TelemetryEvents.DOWNLOADED_JMETER_INPUT_FILES_SRC);
-        return copyDirectoryRecursiveSync(jmxInputFolderSourcePath, JMETER_BIN_Folder, false);
+        return copyDirectoryRecursiveSync(jmxInputFolderSourcePath, JMETER_BIN_Folder, false, true);
     } else {
         let jmxInputFolderSourceUrls= tl.getDelimitedInput(InputVariables.JMX_INPUT_FILES_URL,',',true);
         if(isEmpty(jmxInputFolderSourceUrls)) {
@@ -213,7 +221,7 @@ export function promiseFromChildProcess(child) {
 export function analyzeJTL(JMeterLogFolderPath: string) {
 
     try {
-        
+        logInformation('Analzying run', TraceLevel.Information)
         let filePath = Path.join(JMeterLogFolderPath, LOG_JTL_FILE_NAME);
         logInformation('Reading File: ' + filePath, TraceLevel.Information)
         let readStream = fs.createReadStream(filePath);
@@ -236,6 +244,8 @@ export function analyzeJTL(JMeterLogFolderPath: string) {
     } catch(e) {
         tl.warning(' JMeter JTL Analysis failed: ' + e?.message , e)
         LogEvent(TelemetryEvents.JMETER_TASK_ANALYZER_FAILED);
+    } finally {
+        logInformation('Analzying run complete', TraceLevel.Information)
     }
 
 }

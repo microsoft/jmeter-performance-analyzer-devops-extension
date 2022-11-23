@@ -9,8 +9,8 @@
   "author": "Microsoft",
   "version": {
     "Major": 1,
-    "Minor": 6,
-    "Patch": 57
+    "Minor": 7,
+    "Patch": 34
   },
   "instanceNameFormat": "Run Perf Analyzer",
   "groups": [
@@ -135,7 +135,7 @@
       "name": "artifactNameReport",
       "type": "string",
       "label": "Artifact Name for Apache Jmeter Reports",
-      "defaultValue": "PerfAnalyzerReport",
+      "defaultValue": "PerfAnalyzerReport_$(Stage.StageDisplayName)",
       "required": true,
       "visibleRule": "publishResultsToBuildArtifact=true",
       "helpMarkDown": "This is a boolean flag that if set to true will publish the test results and logs to pipeline artifacts. This should not be enabled if this task is used in a release pipeline. This is default set to true and will yield the result on task completion."
@@ -144,7 +144,7 @@
       "name": "artifactNameLog",
       "type": "string",
       "label": "Artifact Name for Apache Jmeter Logs",
-      "defaultValue": "PerfAnalyzerLogs",
+      "defaultValue": "PerfAnalyzerLogs_$(Stage.StageDisplayName)",
       "required": true,
       "visibleRule": "publishResultsToBuildArtifact=true",
       "helpMarkDown": "This is the output artifact name for the test logs. Only visible if the `Publish Logs and Test Results to Pipeline Artifacts` is set to true."
@@ -313,20 +313,20 @@
       "helpMarkDown": "This is the https link to Jmeter binary. A tgz binary file https url is expected here. It is set to download 5.5 version of apache Jmeter by default."
     },
     {
-      "name": "jmeterFolderName",
+      "name": "jmeterCustomUnzippedFolderName",
       "type": "string",
-      "label": "JMeter Folder Name",
+      "label": "JMeter Custom Unzipped Folder Name",
       "required": true,
       "defaultValue": "apache-jmeter-5.5",
       "groupName": "advanced",
-      "helpMarkDown": "In case you modify the JMeter Download URL, to some other version then this variable also needs to change. This is the folder name of the Jmeter binary file post extraction/unzip."
+      "helpMarkDown": "In case you wish to unzip the Jmeter binary to a custom folder, you can update the path name here. This is useful if you want to have seperate Jmeter instances task in same pipeline."
     },
     {
       "name": "jmeterLogFolder",
       "type": "string",
       "label": "JMeter Log Folder Name",
       "required": true,
-      "defaultValue": "CurrentLog",
+      "defaultValue": "CurrentLog_$(Stage.StageDisplayName)",
       "groupName": "advanced",
       "helpMarkDown": "This is the name of Log folder that is created as a result of test run. This is defaulted to CurrentLog. This is one of the artifacts that is later published as well."
     },
@@ -335,7 +335,7 @@
       "type": "string",
       "label": "JMeter Report Folder Name",
       "required": true,
-      "defaultValue": "CurrentReport",
+      "defaultValue": "CurrentReport_$(Stage.StageDisplayName)",
       "groupName": "advanced",
       "helpMarkDown": "This is the name of Result folder that is created as a result of test run. This is defaulted to CurrentLog. This is one of the artifacts that is later published as well."
     },

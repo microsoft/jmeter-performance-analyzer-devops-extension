@@ -1,0 +1,111 @@
+name: BuildDev
+on: 
+  push:
+    branches:    
+      - main
+      - RELEASES/**
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Change directory
+      run: |
+        cd perfanalyzer 
+    - name: npm install
+      run: |
+        cd perfanalyzer
+        npm install
+        cd src
+        touch appInsightsConnectionString-ms.ts
+        touch appInsightsConnectionString.ts
+        echo "export const APPINSIGHTS_CONNECTION_MS_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_TEST_STRING }}'; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_CLASSIC_TEST_STRING }}'" 
+        echo "export const APPINSIGHTS_CONNECTION_STRING='${{ secrets.APPINSIGHTS_CONNECTION_TEST_STRING }}'"
+        echo "export const APPINSIGHTS_CONNECTION_MS_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_TEST_STRING }}'; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_CLASSIC_TEST_STRING }}'" >>  appInsightsConnectionString-ms.ts
+        echo "export const APPINSIGHTS_CONNECTION_STRING='${{ secrets.APPINSIGHTS_CONNECTION_TEST_STRING }}'" >>  appInsightsConnectionString.ts
+        cd ..
+        tsc index.ts
+  bumpversion:
+    runs-on: ubuntu-latest  
+    steps:
+    - uses: actions/checkout@v1
+    - name: Change directory
+      run: |
+        cd perfanalyzer
+    - name: npm install
+      run: |
+        cd perfanalyzer
+        npm install
+        cd src
+        touch appInsightsConnectionString-ms.ts
+        touch appInsightsConnectionString.ts
+        echo "export const APPINSIGHTS_CONNECTION_MS_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_TEST_STRING }}'; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_CLASSIC_TEST_STRING }}'" >>  appInsightsConnectionString-ms.ts
+        echo "export const APPINSIGHTS_CONNECTION_STRING='${{ secrets.APPINSIGHTS_CONNECTION_TEST_STRING }}'" >>  appInsightsConnectionString.ts
+        cd ..
+        tsc index.ts
+    - name: Increment Version
+      run: |
+        npm i -g json
+        bash increment_version.sh
+      shell: bash  
+  package:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Change directory
+      run: |
+        cd perfanalyzer
+    - name: npm install
+      run: |
+        cd perfanalyzer
+        npm install
+        cd src
+        touch appInsightsConnectionString-ms.ts
+        touch appInsightsConnectionString.ts
+        echo "export const APPINSIGHTS_CONNECTION_MS_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_TEST_STRING }}'; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_CLASSIC_TEST_STRING }}'" >>  appInsightsConnectionString-ms.ts
+        echo "export const APPINSIGHTS_CONNECTION_STRING='${{ secrets.APPINSIGHTS_CONNECTION_TEST_STRING }}'" >>  appInsightsConnectionString.ts
+        cd ..
+        tsc index.ts
+    - name: Increment Version
+      run: |
+        npm i -g json
+        bash increment_version.sh
+      shell: bash
+    - name: npx tfx package
+      run: |
+        npx tfx extension create --manifest-globs vss-extension.dev.json
+  publish:
+    runs-on: ubuntu-latest    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Change directory
+      run: |
+        cd perfanalyzer
+    - name: npm install
+      run: |
+        cd perfanalyzer
+        npm install
+        cd src
+        touch appInsightsConnectionString-ms.ts
+        touch appInsightsConnectionString.ts
+        echo "export const APPINSIGHTS_CONNECTION_MS_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_TEST_STRING }}'; export const APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING='${{ secrets.APPINSIGHTS_CONNECTION_MS_CLASSIC_TEST_STRING }}'" >>  appInsightsConnectionString-ms.ts
+        echo "export const APPINSIGHTS_CONNECTION_STRING='${{ secrets.APPINSIGHTS_CONNECTION_TEST_STRING }}'" >>  appInsightsConnectionString.ts
+        cd ..
+        tsc index.ts
+    - name: Increment Version
+      run: |
+        npm i -g json
+        bash increment_version.sh
+      shell: bash
+    - name: Publish to Dev
+      run: |
+        mv 'perfanalyzer/node_modules/azure-pipelines-tasks-azure-arm-rest-v2/openssl/OpenSSL License.txt' 'perfanalyzer/node_modules/azure-pipelines-tasks-azure-arm-rest-v2/openssl/OpenSSL_License.txt'
+        npm install --global tfx-cli -g
+        npx tfx extension create --manifest-globs vss-extension.dev.json
+        mkdir publishdev
+        mv *.vsix publishdev
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: jmeter-perf-analyzer-dev
+        path: publishdev

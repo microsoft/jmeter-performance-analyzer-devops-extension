@@ -1,19 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+import { chdir } from 'node:process'
 import { publishData } from './src/azure-task-lib.utility'
 import { copyResultsToAzureBlob } from './src/blob-utils'
 import { getCommands } from './src/commands'
 import { CommandTypes, DEFAULT_JMETER_LOG_DIR_NAME, DEFAULT_JMETER_REPORT_DIR_NAME, ERROR_DEFAULT_MSG, InputVariables, InputVariableType, JMETER_BIN_Folder_NAME, JMETER_EXT_Folder_NAME, JMETER_FILE_NAME, JMETER_LIB_Folder_NAME, JMETER_LOG_FILE_NAME, LOG_JTL_FILE_NAME } from './src/constant'
-import { analyzeJTL, handleJMeterCustomPlugin, handleJMeterInputFile, handleJMeterJMXFile, handleJMeterPropertyFile, promiseFromChildProcess } from './src/jmeter-utils'
+import { analyzeJTL, getJmeterFolderNameFromURL, handleJMeterCustomPlugin, handleJMeterInputFile, handleJMeterJMXFile, handleJMeterPropertyFile, promiseFromChildProcess } from './src/jmeter-utils'
 import { replaceTokens } from './src/replaceToken'
 import { enableAppInsights, LogEvent, trackException, trackTrace } from './src/telemetry-client'
 import { TelemetryEvents, TraceLevel } from './src/telemetry.constants'
-import { downloadFile, isEmpty, logInformation, getType, unzipBinary } from './src/utility'
+import { downloadFile, isEmpty, logInformation, getType, unzipBinary, renameFolder, replaceSpaceWithUnderscore, deleteFolderRecursive } from './src/utility'
 const tl = require('azure-pipelines-task-lib/task');
 const Path = require('path');
 var exec = require('child_process').exec;
 const fs = require('fs');
+
+//Global file Variable
+let ROOT_DIR = "";
+let JMETER_FILE_Folder_ABS: string = "";
 
 async function PostResults(jmeterReportFolder: string, jmeterLogFolder: string, JMETER_ABS_BIN_Folder: string) {
     try {
@@ -39,8 +44,8 @@ async function PostResults(jmeterReportFolder: string, jmeterLogFolder: string, 
     let publishResultsToBuildArtifact = tl.getBoolInput(InputVariables.PUBLISH_RESULTS_TO_BUILD_ARTIFACT, true);
 
     if(publishResultsToBuildArtifact) {
-        let artifactReport = tl.getInput(InputVariables.ARTIFACT_NAME_REPORT,true);
-        let artifactLOG = tl.getInput(InputVariables.ARTIFACT_NAME_LOG,true);
+        let artifactReport = replaceSpaceWithUnderscore(tl.getInput(InputVariables.ARTIFACT_NAME_REPORT,true));
+        let artifactLOG = replaceSpaceWithUnderscore(tl.getInput(InputVariables.ARTIFACT_NAME_LOG,true));
         LogEvent(TelemetryEvents.PUBLISH_DATA_TO_BUILD_ARTIFACT);
         logInformation(TelemetryEvents.PUBLISH_DATA_TO_BUILD_ARTIFACT, TraceLevel.Verbose);
 
@@ -72,29 +77,55 @@ async function PostResults(jmeterReportFolder: string, jmeterLogFolder: string, 
         analyzeJTL(jmeterLogFolder);
     } else {
         analyzeJTL(jmeterLogFolder);
+    }    
+}
+
+async function delete_jmeter_folder(ROOT_DIR: string, JMETER_FILE_Folder_ABS: any) {
+    try {
+        trackTrace(`Attempting to clean up Jmeter Folder '${JMETER_FILE_Folder_ABS}' from '${ROOT_DIR}' `, TraceLevel.Information);
+        logInformation('Current Working directory: ' +  process.cwd(), TraceLevel.Verbose);
+        await process.chdir(ROOT_DIR);
+        logInformation('Current Working directory: ' +  process.cwd(), TraceLevel.Verbose);
+        deleteFolderRecursive(JMETER_FILE_Folder_ABS);
+    } catch(e) {
+        trackTrace(`Warning: Failed to delete Jmeter folder'${e}' `, TraceLevel.Warning);
     }
+    
 }
 
 async function main() {
-    let startTimeInSeconds = Math.round(Date.now() / 1000)
+    let startTimeInSeconds = Math.round(Date.now() / 1000);
+    ROOT_DIR = process.cwd();
+    JMETER_FILE_Folder_ABS= "";
     try {
         LogEvent(TelemetryEvents.STARTED_PERFORMANCE_TEST);
 
+        
         let JMETER_URL = tl.getInput(InputVariables.JMX_BINARY_URI,true);
-        let JMETER_FILE_Folder = tl.getInput(InputVariables.JMETER_FOLDER_NAME,true);
+        let JMETER_CUSTOM_UNZIPPED_FOLDER_NAME = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_CUSTOM_UNZIPPED_FOLDER_NAME,true));
+        let JMETER_ORIGINAL_FILE_Folder = getJmeterFolderNameFromURL(JMETER_URL);
+        let JMETER_ORIGINAL_FILE_Folder_ABS_PATH = Path.join( process.cwd(),JMETER_ORIGINAL_FILE_Folder);
+
+        let JMETER_FILE_Folder = JMETER_CUSTOM_UNZIPPED_FOLDER_NAME;
+        JMETER_FILE_Folder_ABS= Path.join( process.cwd(),JMETER_FILE_Folder);
+
         let JMETER_BIN_Folder = Path.join(JMETER_FILE_Folder, JMETER_BIN_Folder_NAME);
         let JMETER_ABS_BIN_Folder = Path.join( process.cwd(),JMETER_FILE_Folder, JMETER_BIN_Folder_NAME);
         let JMETER_ABS_LIB_EXT_Folder = Path.join( process.cwd(),JMETER_FILE_Folder, JMETER_LIB_Folder_NAME, JMETER_EXT_Folder_NAME);
-
-        logInformation('Current Working directory: ' +  process.cwd(), TraceLevel.Verbose);
-        logInformation('JMETER_URL ' + JMETER_URL, TraceLevel.Verbose);
-        logInformation('JMETER_FILE_Folder ' + JMETER_FILE_Folder, TraceLevel.Verbose);
-        logInformation('JMETER_BIN_Folder ' + JMETER_BIN_Folder, TraceLevel.Verbose);
-        logInformation('JMETER_ABS_BIN_Folder ' + JMETER_ABS_BIN_Folder, TraceLevel.Verbose);
-        logInformation('Current Working directory: ' +  process.cwd(), TraceLevel.Verbose);
         
 
-        logInformation('Start Downloading JMeter Binary', TraceLevel.Verbose)
+        logInformation('Root directory: ' +  ROOT_DIR, TraceLevel.Verbose);
+        logInformation('Current Working directory: ' +  process.cwd(), TraceLevel.Verbose);
+        logInformation('JMETER_URL ' + JMETER_URL, TraceLevel.Verbose);
+        logInformation('JMETER_ORIGINAL_FILE_Folder ' + JMETER_ORIGINAL_FILE_Folder, TraceLevel.Verbose);
+        logInformation('JMETER_ORIGINAL_FILE_Folder_ABS_PATH ' + JMETER_ORIGINAL_FILE_Folder_ABS_PATH, TraceLevel.Verbose);
+        logInformation('JMETER_FILE_Folder ' + JMETER_FILE_Folder, TraceLevel.Verbose);
+        logInformation('JMETER_FILE_Folder_ABS ' + JMETER_FILE_Folder_ABS, TraceLevel.Verbose);
+        logInformation('JMETER_BIN_Folder ' + JMETER_BIN_Folder, TraceLevel.Verbose);
+        logInformation('JMETER_ABS_BIN_Folder ' + JMETER_ABS_BIN_Folder, TraceLevel.Verbose);
+        logInformation('Current Working directory: ' +  process.cwd(), TraceLevel.Verbose);        
+
+        logInformation('Start Downloading JMeter Binary File', TraceLevel.Verbose)
         await downloadFile(JMETER_URL, JMETER_FILE_NAME);
         logInformation('Completed Downloading JMeter Binary', TraceLevel.Information)
         LogEvent(TelemetryEvents.DOWNLOADED_JMETER_BINARY);
@@ -102,6 +133,11 @@ async function main() {
         logInformation('Start Unzipping JMeter Binary', TraceLevel.Verbose)
         await unzipBinary(JMETER_FILE_NAME);
         logInformation('Completed Unzipping JMeter Binary', TraceLevel.Information)
+ 
+        logInformation('Rename JMeter Folder from ' + JMETER_ORIGINAL_FILE_Folder + ' to ' + JMETER_CUSTOM_UNZIPPED_FOLDER_NAME, TraceLevel.Verbose)
+        await renameFolder(JMETER_ORIGINAL_FILE_Folder_ABS_PATH,JMETER_FILE_Folder_ABS);
+        logInformation('Completed Renaming folder JMeter Binary to ' + JMETER_CUSTOM_UNZIPPED_FOLDER_NAME, TraceLevel.Information)
+ 
 
         let addCustomPluginsToLib = tl.getBoolInput(InputVariables.ADD_CUSTOM_PLUGIN_TO_JMETER_LIB,true);
         if(addCustomPluginsToLib) {
@@ -158,8 +194,8 @@ async function main() {
             logInformation('Completed Handle Input Files. FileCount: ' + ((null != jmeterInputFileNames) ? jmeterInputFileNames?.length : 0), TraceLevel.Information);
         }
 
-        let jmeterLogFolder = tl.getInput(InputVariables.JMETER_LOG_FOLDER,true);
-        let jmeterReportFolder = tl.getInput(InputVariables.JMETER_REPORT_FOLDER,true);
+        let jmeterLogFolder = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_LOG_FOLDER,true));
+        let jmeterReportFolder = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_REPORT_FOLDER,true));
 
         if(isEmpty(jmeterLogFolder)) {
             jmeterLogFolder = DEFAULT_JMETER_LOG_DIR_NAME;
@@ -179,6 +215,7 @@ async function main() {
         logInformation('Additional command Length: ' + (null ==  additionalCommandLineArguments || additionalCommandLineArguments.length == 0) ? 0 : additionalCommandLineArguments.length, TraceLevel.Information);
         logInformation('Additional command to be appeneded while Run: ' + additionalCommandLineArguments, TraceLevel.Information);
         additionalCommandLineArguments = (null ==  additionalCommandLineArguments || additionalCommandLineArguments.length == 0) ? '' : additionalCommandLineArguments;
+        logInformation('Current Working directory: ' +  process.cwd(), TraceLevel.Verbose);
         if(jmxPropertySource==InputVariableType.None) {
             LogEvent(TelemetryEvents.JMETER_RUN_WITHOUT_PROPERTY_FILE);
             command = getCommands(CommandTypes.JMETER_RUN_WITHOUT_PROPERTY, jmeterJMXFileName, CurrentLogJTLFile, CurrentLogLogFile, jmeterReportFolder, additionalCommandLineArguments);
@@ -194,13 +231,13 @@ async function main() {
         }
 
         var child = exec(command);
-        promiseFromChildProcess(child).then(function (result:any) {
+        promiseFromChildProcess(child).then(async function (result:any) {
             logInformation(`promise complete: ${result}`, TraceLevel.Information);
             
-            if(getType(result) =='number' && result == 0) {
+            if(result == 0) {
                 logInformation('Closing Code Status: Success', TraceLevel.Information);
-                PostResults(jmeterReportFolder, jmeterLogFolder, JMETER_ABS_BIN_Folder);
-                logInformation('Task Completed.', TraceLevel.Information)
+                await PostResults(jmeterReportFolder, jmeterLogFolder, JMETER_ABS_BIN_Folder);
+                logInformation('Task Completed.', TraceLevel.Information);
             } else {
                 let msg = `Closing Status was not Success. Task to execute command failed with code: ${result}`
                 logInformation(msg, TraceLevel.Error);
@@ -218,11 +255,11 @@ async function main() {
             logInformation(data,TraceLevel.Verbose, false, false);
         });
         child.stderr.on('data', function (data) {
-            logInformation(`stderr: ${data}`, TraceLevel.Error, false);
+            logInformation(`stderr: ${data}`, TraceLevel.Error,false);
         });
         child.on('close', function (code) {
             logInformation(`closing code: ${code}`, TraceLevel.Information);
-            LogEvent(TelemetryEvents.CLOSE_CODE, {code: code.toString()});
+            LogEvent(TelemetryEvents.CLOSE_CODE, {code: code?.toString()});
         });
         const { stdout, stderr } = await child;
 
@@ -232,13 +269,16 @@ async function main() {
         trackException(err?.message, err)
         logInformation(ERROR_DEFAULT_MSG, TraceLevel.Error);
         tl.setResult(tl.TaskResult.Failed, err?.message);
-        LogEvent(TelemetryEvents.JMETER_RUN_FAILURE)
+        LogEvent(TelemetryEvents.JMETER_RUN_FAILURE);
+    } finally {
+            
+        let endTimeInSeconds = Math.round(Date.now() / 1000)
+        let timeToRunInSeconds: number = endTimeInSeconds - startTimeInSeconds;
+        trackTrace(`Time to run JMeter Task in seconds = '${timeToRunInSeconds}'`, TraceLevel.Information);
+        LogEvent(TelemetryEvents.COMPLETED_PERFORMANCE_TEST);        
+        //delete_jmeter_folder(ROOT_DIR, JMETER_FILE_Folder_ABS);
     }
     
-    let endTimeInSeconds = Math.round(Date.now() / 1000)
-    let timeToRunInSeconds: number = endTimeInSeconds - startTimeInSeconds;
-    trackTrace(`Time to run JMeter Task in seconds = '${timeToRunInSeconds}'`, TraceLevel.Information);
-    LogEvent(TelemetryEvents.COMPLETED_PERFORMANCE_TEST);
 }
 
 function allowCompleteReadWriteAccess(path: string) {
@@ -256,4 +296,3 @@ function allowCompleteReadWriteAccess(path: string) {
 
 enableAppInsights();
 main();
-

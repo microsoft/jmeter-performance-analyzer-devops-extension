@@ -1,6 +1,5 @@
 #!/bin/sh
-echo 'Any commit will pop the following versions: {perfanalyzer/package.json &  perfanalyzer/vss-extension.json && perfanalyzer/vss-extension.dev.json}'
-echo 'To Install Husky run cd .. && husky install perfanalyzer/.husky'
+echo 'Incrementing versions: {perfanalyzer/package.json &  perfanalyzer/vss-extension.json & perfanalyzer/vss-extension.json}'
 
 IFS=.
 PACKAGE_JSON_VERSION='';
@@ -8,22 +7,8 @@ VSS_EXTENSION_JSON_VERSION='';
 
 re="\"(version)\": \"([^\"]*)\"";
 
-# Get Git File Count Changed
-FILE_CHANGE_COUNT=0;
-FILE_CHANGE_COUNT=`git status -s | egrep "^M" | wc -l`
-
 # Set version change type to default to patch (2=patch, 1=minor, 0=major)
-VERSION_CHANGE_TYPE=-1;
-
-if (( $FILE_CHANGE_COUNT > 10 )); then 
-    VERSION_CHANGE_TYPE=1;
-elif (($FILE_CHANGE_COUNT > 100 )); then 
-    VERSION_CHANGE_TYPE=0;
-else
-    VERSION_CHANGE_TYPE=2
-fi
-
-echo 'VERSION_CHANGE_TYPE (2=patch, 1=minor, 0=major) : ' $VERSION_CHANGE_TYPE
+VERSION_CHANGE_TYPE=2;
 
 # Reading current version.
 while read -r l; do
@@ -82,8 +67,3 @@ json -I -f package.json -e "this.version='$FINAL_VERSION_CONCAT'"
 json -I -f task.json -e "this.version.Major=$MAJOR_VERION"
 json -I -f task.json -e "this.version.Minor=$MINOR_VERION"
 json -I -f task.json -e "this.version.Patch=$PATCH_VERION"
-
-git add package.json
-git add task.json
-git add ../vss-extension.json
-git add ../vss-extension.dev.json
