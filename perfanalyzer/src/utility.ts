@@ -18,7 +18,7 @@ globalAny.UNIQUE_RUN_ID = UNIQUE_RUN_ID;
 
 export function getFormatPrefix() {
     let formattedDate = (moment(Date.now())).format(DATE_FORMAT);
-    return `${formattedDate} ${UNIQUE_RUN_ID} - ${process.cwd()} `;
+    return `${formattedDate} ${UNIQUE_RUN_ID}`;
 }
 export function getUniqueId() {
     return UNIQUE_RUN_ID;

@@ -5,7 +5,7 @@ import { APPINSIGHTS_CONNECTION_STRING } from "./appInsightsConnectionString";
 import { APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING, APPINSIGHTS_CONNECTION_MS_STRING } from "./appInsightsConnectionString-ms";
 import { InputVariables } from './constant';
 import { SeverityLevel, TelemetryEvents, TraceLevel } from './telemetry.constants';
-import { getFormatPrefix, getSystemProps, getUniqueId, isObjectEmpty } from "./utility";
+import { getSystemProps, getUniqueId, isObjectEmpty } from "./utility";
 import tl = require('azure-pipelines-task-lib/task');
 const globalAny:any = global;
 let appInsights = require('applicationinsights');
