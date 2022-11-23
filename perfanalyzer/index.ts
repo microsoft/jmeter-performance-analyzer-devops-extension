@@ -133,11 +133,11 @@ async function main() {
         logInformation('Start Unzipping JMeter Binary', TraceLevel.Verbose)
         await unzipBinary(JMETER_FILE_NAME);
         logInformation('Completed Unzipping JMeter Binary', TraceLevel.Information)
-/*
+ 
         logInformation('Rename JMeter Folder from ' + JMETER_ORIGINAL_FILE_Folder + ' to ' + JMETER_CUSTOM_UNZIPPED_FOLDER_NAME, TraceLevel.Verbose)
         await renameFolder(JMETER_ORIGINAL_FILE_Folder_ABS_PATH,JMETER_FILE_Folder_ABS);
         logInformation('Completed Renaming folder JMeter Binary to ' + JMETER_CUSTOM_UNZIPPED_FOLDER_NAME, TraceLevel.Information)
-        */
+ 
 
         let addCustomPluginsToLib = tl.getBoolInput(InputVariables.ADD_CUSTOM_PLUGIN_TO_JMETER_LIB,true);
         if(addCustomPluginsToLib) {
@@ -276,7 +276,7 @@ async function main() {
         let timeToRunInSeconds: number = endTimeInSeconds - startTimeInSeconds;
         trackTrace(`Time to run JMeter Task in seconds = '${timeToRunInSeconds}'`, TraceLevel.Information);
         LogEvent(TelemetryEvents.COMPLETED_PERFORMANCE_TEST);        
-        delete_jmeter_folder(ROOT_DIR, JMETER_FILE_Folder_ABS);
+        //delete_jmeter_folder(ROOT_DIR, JMETER_FILE_Folder_ABS);
     }
     
 }
