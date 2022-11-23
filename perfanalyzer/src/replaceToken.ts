@@ -48,7 +48,7 @@ export async function replaceTokens(fileName: string | null | undefined) {
             var file = files[i];
             logInformation(`Starting regex replacement in [${file}]`, TraceLevel.Verbose);
 
-            var contents = fs.readFileSync(file).toString();
+            var contents = fs.readFileSync(file)?.toString();
             var reg = new RegExp(tokenRegex, "g");
 
             var match: RegExpExecArray | null;

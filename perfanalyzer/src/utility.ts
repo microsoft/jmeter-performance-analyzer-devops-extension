@@ -65,8 +65,10 @@ export function logInformation(data: any, traceLevel: TraceLevel, printDate: boo
 export function renameFolder(JMETER_ORIGINAL_FILE_Folder_ABS_PATH: any, JMETER_FILE_Folder_ABS: any) {
     fs.renameSync(JMETER_ORIGINAL_FILE_Folder_ABS_PATH, JMETER_FILE_Folder_ABS, function(err) {
         if (err) {
+            logInformation(err,TraceLevel.Critical);
             trackTrace(err, TraceLevel.Critical)
         } else {
+            logInformation('success',TraceLevel.Information);
             trackTrace("Successfully renamed the directory from " + JMETER_ORIGINAL_FILE_Folder_ABS_PATH + " to " + JMETER_FILE_Folder_ABS, TraceLevel.Information)
         }
       })

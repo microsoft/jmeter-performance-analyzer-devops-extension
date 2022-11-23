@@ -213,7 +213,7 @@ export function promiseFromChildProcess(child) {
 export function analyzeJTL(JMeterLogFolderPath: string) {
 
     try {
-        
+        logInformation('Analzying run', TraceLevel.Information)
         let filePath = Path.join(JMeterLogFolderPath, LOG_JTL_FILE_NAME);
         logInformation('Reading File: ' + filePath, TraceLevel.Information)
         let readStream = fs.createReadStream(filePath);
@@ -236,6 +236,8 @@ export function analyzeJTL(JMeterLogFolderPath: string) {
     } catch(e) {
         tl.warning(' JMeter JTL Analysis failed: ' + e?.message , e)
         LogEvent(TelemetryEvents.JMETER_TASK_ANALYZER_FAILED);
+    } finally {
+        logInformation('Analzying run complete', TraceLevel.Information)
     }
 
 }

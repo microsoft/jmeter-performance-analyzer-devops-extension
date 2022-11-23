@@ -150,7 +150,7 @@ export async function trackException(message: any, stack: any=null) {
     }
 
     try {
-        let msgTrack = `${message} - ${(null == stack)? '' : stack.toString() }`;
+        let msgTrack = `${message} - ${(null == stack)? '' : stack?.toString() }`;
         const error = new MyError(globalAny.UNIQUE_RUN_ID, message, stack);
         trackTrace(msgTrack, TraceLevel.Error);
         appInsightsMSClient.trackException({id: globalAny.UNIQUE_RUN_ID, error: {name: globalAny.UNIQUE_RUN_ID, message: error}, exception:stack, severityLevel: SeverityLevel.Error });
@@ -245,7 +245,7 @@ class MyError extends Error {
     constructor (guid: string, msg: string, stack: any) {
       super(msg)
       this.name = guid
-      let stackMsg = (stack)?  stack.toString() : '';
+      let stackMsg = (stack)?  stack?.toString() : '';
       this.message = `${msg} - ${stackMsg}`;
       this.stack = stack;
     }
