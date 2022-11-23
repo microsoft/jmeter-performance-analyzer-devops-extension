@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "perf-analyzer-dev",
   "name": "JMeter Performance Analyzer UAT",
-  "version": "1.7.29",
+  "version": "1.7.30",
   "publisher": "MishraPrateek",
   "targets": [
     {

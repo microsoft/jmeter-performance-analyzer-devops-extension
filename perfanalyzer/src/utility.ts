@@ -132,9 +132,11 @@ export function copyDirectoryRecursiveSync(source:string, target:string, move: b
 
         if (fs.lstatSync(sourcePath).isDirectory()) {
             if(copyFileAtSameLevel) {
+                console.log('copying file from ' + sourcePath + ' to ' + targetPath)
                 copyDirectoryRecursiveSync(sourcePath, target, move, copyFileAtSameLevel);
             } else {
                 fs.mkdirSync(targetPath);
+                console.log('Reiterating directory from ' + sourcePath + ' to ' + targetPath)
                 copyDirectoryRecursiveSync(sourcePath, targetPath, move, copyFileAtSameLevel);
             }
             
