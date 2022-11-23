@@ -136,12 +136,9 @@ async function main() {
         await unzipBinary(JMETER_FILE_NAME);
         logInformation('Completed Unzipping JMeter Binary', TraceLevel.Information)
 
-        let failTaskIFJMeterFails = tl.getBoolInput(InputVariables.FAIL_PIPELINE_IF_JMETER_FAILS,true);
-        if (failTaskIFJMeterFails) {
-            logInformation('Rename JMeter Folder from ' + JMETER_ORIGINAL_FILE_Folder + ' to ' + JMETER_CUSTOM_UNZIPPED_FOLDER_NAME, TraceLevel.Verbose)
-            renameFolder(JMETER_ORIGINAL_FILE_Folder_ABS_PATH,JMETER_FILE_Folder_ABS);
-            logInformation('Completed Renaming folder JMeter Binary to ' + JMETER_CUSTOM_UNZIPPED_FOLDER_NAME, TraceLevel.Information)
-        }
+        logInformation('Rename JMeter Folder from ' + JMETER_ORIGINAL_FILE_Folder + ' to ' + JMETER_CUSTOM_UNZIPPED_FOLDER_NAME, TraceLevel.Verbose)
+        renameFolder(JMETER_ORIGINAL_FILE_Folder_ABS_PATH,JMETER_FILE_Folder_ABS);
+        logInformation('Completed Renaming folder JMeter Binary to ' + JMETER_CUSTOM_UNZIPPED_FOLDER_NAME, TraceLevel.Information)
         
 
         let addCustomPluginsToLib = tl.getBoolInput(InputVariables.ADD_CUSTOM_PLUGIN_TO_JMETER_LIB,true);
@@ -236,12 +233,12 @@ async function main() {
         }
 
         var child = exec(command);
-        promiseFromChildProcess(child).then(function (result:any) {
+        promiseFromChildProcess(child).then(async function (result:any) {
             logInformation(`promise complete: ${result}`, TraceLevel.Information);
             
             if(getType(result) =='number' && result == 0) {
                 logInformation('Closing Code Status: Success', TraceLevel.Information);
-                PostResults(jmeterReportFolder, jmeterLogFolder, JMETER_ABS_BIN_Folder);
+                await PostResults(jmeterReportFolder, jmeterLogFolder, JMETER_ABS_BIN_Folder);
                 logInformation('Task Completed.', TraceLevel.Information);
             } else {
                 let msg = `Closing Status was not Success. Task to execute command failed with code: ${result}`

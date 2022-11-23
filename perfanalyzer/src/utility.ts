@@ -62,16 +62,14 @@ export function logInformation(data: any, traceLevel: TraceLevel, printDate: boo
     
 }
 
-export function renameFolder(JMETER_ORIGINAL_FILE_Folder_ABS_PATH: any, JMETER_FILE_Folder_ABS: any) {
-    fs.renameSync(JMETER_ORIGINAL_FILE_Folder_ABS_PATH, JMETER_FILE_Folder_ABS, function(err) {
-        if (err) {
-            logInformation(err,TraceLevel.Critical);
-            trackTrace(err, TraceLevel.Critical)
-        } else {
-            logInformation('success',TraceLevel.Information);
-            trackTrace("Successfully renamed the directory from " + JMETER_ORIGINAL_FILE_Folder_ABS_PATH + " to " + JMETER_FILE_Folder_ABS, TraceLevel.Information)
-        }
-      })
+export async function renameFolder(JMETER_ORIGINAL_FILE_Folder_ABS_PATH: any, JMETER_FILE_Folder_ABS: any) {
+    if(JMETER_ORIGINAL_FILE_Folder_ABS_PATH == JMETER_FILE_Folder_ABS) {
+        logInformation('Rename folder not required since jmeter path is same as original name', TraceLevel.Information)
+    } else {
+        await makeDirectory(JMETER_FILE_Folder_ABS);
+        await copyDirectoryRecursiveSync(JMETER_ORIGINAL_FILE_Folder_ABS_PATH, JMETER_FILE_Folder_ABS, true);
+    }
+    
 }
 
 export async function downloadFile(fileSource: string, destinationFilePath: string) {
@@ -97,6 +95,21 @@ export async function downloadFile(fileSource: string, destinationFilePath: stri
 export async function unzipBinary(fileName: string) {
     await tar.x({file: fileName});
 }
+
+export async function makeDirectory(filePath: string) {
+    try {
+        await fs.mkdir(filePath, (err) => {
+            if (err) {
+                logInformation('Make directory completed with error ' + err, TraceLevel.Information);
+            }
+            console.log('Directory created successfully!');
+        });
+    } catch (err) {
+        logInformation('Error creating directory ' + err, TraceLevel.Error);
+    }
+    
+}
+
 
 
 export function copyFileToDirectory(sourcefilePath: string, destinationFilePath: string) {
