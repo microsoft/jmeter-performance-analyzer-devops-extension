@@ -77,10 +77,7 @@ async function PostResults(jmeterReportFolder: string, jmeterLogFolder: string, 
         analyzeJTL(jmeterLogFolder);
     } else {
         analyzeJTL(jmeterLogFolder);
-    }
-
-    delete_jmeter_folder(ROOT_DIR, JMETER_FILE_Folder_ABS);
-    
+    }    
 }
 
 async function delete_jmeter_folder(ROOT_DIR: string, JMETER_FILE_Folder_ABS: any) {
@@ -236,7 +233,7 @@ async function main() {
         promiseFromChildProcess(child).then(async function (result:any) {
             logInformation(`promise complete: ${result}`, TraceLevel.Information);
             
-            if(getType(result) =='number' && result == 0) {
+            if(result == 0) {
                 logInformation('Closing Code Status: Success', TraceLevel.Information);
                 await PostResults(jmeterReportFolder, jmeterLogFolder, JMETER_ABS_BIN_Folder);
                 logInformation('Task Completed.', TraceLevel.Information);
@@ -277,7 +274,8 @@ async function main() {
         let endTimeInSeconds = Math.round(Date.now() / 1000)
         let timeToRunInSeconds: number = endTimeInSeconds - startTimeInSeconds;
         trackTrace(`Time to run JMeter Task in seconds = '${timeToRunInSeconds}'`, TraceLevel.Information);
-        LogEvent(TelemetryEvents.COMPLETED_PERFORMANCE_TEST);
+        LogEvent(TelemetryEvents.COMPLETED_PERFORMANCE_TEST);        
+        delete_jmeter_folder(ROOT_DIR, JMETER_FILE_Folder_ABS);
     }
     
 }
