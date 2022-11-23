@@ -83,7 +83,9 @@ async function PostResults(jmeterReportFolder: string, jmeterLogFolder: string, 
 async function delete_jmeter_folder(ROOT_DIR: string, JMETER_FILE_Folder_ABS: any) {
     try {
         trackTrace(`Attempting to clean up Jmeter Folder '${JMETER_FILE_Folder_ABS}' from '${ROOT_DIR}' `, TraceLevel.Information);
+        logInformation('Current Working directory: ' +  process.cwd(), TraceLevel.Verbose);
         await process.chdir(ROOT_DIR);
+        logInformation('Current Working directory: ' +  process.cwd(), TraceLevel.Verbose);
         deleteFolderRecursive(JMETER_FILE_Folder_ABS);
     } catch(e) {
         trackTrace(`Warning: Failed to delete Jmeter folder'${e}' `, TraceLevel.Warning);
@@ -274,7 +276,7 @@ async function main() {
         let timeToRunInSeconds: number = endTimeInSeconds - startTimeInSeconds;
         trackTrace(`Time to run JMeter Task in seconds = '${timeToRunInSeconds}'`, TraceLevel.Information);
         LogEvent(TelemetryEvents.COMPLETED_PERFORMANCE_TEST);        
-        //delete_jmeter_folder(ROOT_DIR, JMETER_FILE_Folder_ABS);
+        delete_jmeter_folder(ROOT_DIR, JMETER_FILE_Folder_ABS);
     }
     
 }

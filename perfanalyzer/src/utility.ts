@@ -49,15 +49,15 @@ export function replaceSpaceWithUnderscore(input: string): string {
 }
 
 export function logInformation(data: any, traceLevel: TraceLevel, printDate: boolean = true, logInTelemetry: boolean = true) {
-    let formattedData = data;
-    /*if(printDate) {
-        formattedData = `${getFormatPrefix()} - ${data}`;
-    }
-    */
-    console.log(formattedData);
-    tl.debug(formattedData)
+    
+    if(printDate) { 
+        console.log( `${getFormatPrefix()} - ${data}`);
+    } else {
+        console.log(data);
+    } 
+    tl.debug(data)
     if(logInTelemetry) {
-        trackTrace(formattedData, traceLevel);
+        trackTrace(data, traceLevel);
     }
     
 }
