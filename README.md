@@ -164,9 +164,7 @@ These variables are available under the `advanced` section of the pipeline. Thes
 
 `JMeter Folder Name`: In case you modify the JMeter Download URL, to some other version then this variable also needs to change. This is the folder name of the JMeter binary file post extraction/unzip.
 
-`JMeter Folder Name`: In case you modify the JMeter Download URL, to some other version then this variable also needs to change. This is the folder name of the JMeter binary file post extraction/unzip.
-
-`JMeter Custom Unzipped Folder Name`: In case you wish to unzip the Jmeter binary to a custom folder, you can update the path name here. This is different from the above step. Change in the variable `jmeterFolderName` is required only if in case you modify the Jmeter URL. The above variable is the value of folder name present inside the zip/.tgz file. To modify once you have downloaded the Jmeter binary, please use this variable for update.
+`JMeter Custom Unzipped Folder Name`: In case you wish to unzip the Jmeter binary to a custom folder, you can update the path name here. This is useful if you want to have seperate Jmeter instances task in same pipeline.
 
 `JMeter Log Folder Name`: This is the name of Log folder that is created as a result of test run. This is defaulted to `CurrentLog_$(System.StageName)`. This is one of the artifacts that is later published as well.
 

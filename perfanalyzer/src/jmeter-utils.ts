@@ -19,6 +19,14 @@ function getFileName(filePath: string): string {
     logInformation('Extracted file Name from source Path: ' + filePath + " as FileName: " + fileName + ' The parameter index was ' + paramIndex, TraceLevel.Information);
     return fileName;
 }
+
+export function getJmeterFolderNameFromURL(JMETER_URL: string) {
+    let start = JMETER_URL.lastIndexOf("/");
+    let end =JMETER_URL.lastIndexOf(".");
+    return JMETER_URL.substring(start+1,end);
+    
+}
+
 export async function handleJMeterJMXFile(JMETER_BIN_Folder: string): Promise<string>{
 
     let jmxSourceInput = tl.getInput(InputVariables.JMX_SOURCE,true);

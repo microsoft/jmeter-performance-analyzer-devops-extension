@@ -10,7 +10,7 @@
   "version": {
     "Major": 1,
     "Minor": 7,
-    "Patch": 33
+    "Patch": 34
   },
   "instanceNameFormat": "Run Perf Analyzer",
   "groups": [
@@ -313,22 +313,13 @@
       "helpMarkDown": "This is the https link to Jmeter binary. A tgz binary file https url is expected here. It is set to download 5.5 version of apache Jmeter by default."
     },
     {
-      "name": "jmeterFolderName",
-      "type": "string",
-      "label": "JMeter Folder Name",
-      "required": true,
-      "defaultValue": "apache-jmeter-5.5",
-      "groupName": "advanced",
-      "helpMarkDown": "In case you modify the JMeter Download URL, to some other version then this variable also needs to change. This is the folder name of the Jmeter binary file post extraction/unzip."
-    },
-    {
       "name": "jmeterCustomUnzippedFolderName",
       "type": "string",
       "label": "JMeter Custom Unzipped Folder Name",
       "required": true,
       "defaultValue": "apache-jmeter-5.5",
       "groupName": "advanced",
-      "helpMarkDown": "In case you wish to unzip the Jmeter binary to a custom folder, you can update the path name here. This is different from the above step. Change in the variable `jmeterFolderName` is required only if in case you modify the Jmeter URL. The above variable is the value of folder name present inside the zip/.tgz file. To modify once you have downloaded the Jmeter binary, please use this variable for update"
+      "helpMarkDown": "In case you wish to unzip the Jmeter binary to a custom folder, you can update the path name here. This is useful if you want to have seperate Jmeter instances task in same pipeline."
     },
     {
       "name": "jmeterLogFolder",

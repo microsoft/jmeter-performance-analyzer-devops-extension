@@ -6,7 +6,7 @@ import { publishData } from './src/azure-task-lib.utility'
 import { copyResultsToAzureBlob } from './src/blob-utils'
 import { getCommands } from './src/commands'
 import { CommandTypes, DEFAULT_JMETER_LOG_DIR_NAME, DEFAULT_JMETER_REPORT_DIR_NAME, ERROR_DEFAULT_MSG, InputVariables, InputVariableType, JMETER_BIN_Folder_NAME, JMETER_EXT_Folder_NAME, JMETER_FILE_NAME, JMETER_LIB_Folder_NAME, JMETER_LOG_FILE_NAME, LOG_JTL_FILE_NAME } from './src/constant'
-import { analyzeJTL, handleJMeterCustomPlugin, handleJMeterInputFile, handleJMeterJMXFile, handleJMeterPropertyFile, promiseFromChildProcess } from './src/jmeter-utils'
+import { analyzeJTL, getJmeterFolderNameFromURL, handleJMeterCustomPlugin, handleJMeterInputFile, handleJMeterJMXFile, handleJMeterPropertyFile, promiseFromChildProcess } from './src/jmeter-utils'
 import { replaceTokens } from './src/replaceToken'
 import { enableAppInsights, LogEvent, trackException, trackTrace } from './src/telemetry-client'
 import { TelemetryEvents, TraceLevel } from './src/telemetry.constants'
@@ -103,7 +103,7 @@ async function main() {
         
         let JMETER_URL = tl.getInput(InputVariables.JMX_BINARY_URI,true);
         let JMETER_CUSTOM_UNZIPPED_FOLDER_NAME = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_CUSTOM_UNZIPPED_FOLDER_NAME,true));
-        let JMETER_ORIGINAL_FILE_Folder = tl.getInput(InputVariables.JMETER_FOLDER_NAME,true);
+        let JMETER_ORIGINAL_FILE_Folder = getJmeterFolderNameFromURL(JMETER_URL);
         let JMETER_ORIGINAL_FILE_Folder_ABS_PATH = Path.join( process.cwd(),JMETER_ORIGINAL_FILE_Folder);
 
         let JMETER_FILE_Folder = JMETER_CUSTOM_UNZIPPED_FOLDER_NAME;
