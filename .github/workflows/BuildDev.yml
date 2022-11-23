@@ -102,8 +102,10 @@ jobs:
         mv 'perfanalyzer/node_modules/azure-pipelines-tasks-azure-arm-rest-v2/openssl/OpenSSL License.txt' 'perfanalyzer/node_modules/azure-pipelines-tasks-azure-arm-rest-v2/openssl/OpenSSL_License.txt'
         npm install --global tfx-cli -g
         npx tfx extension create --manifest-globs vss-extension.dev.json
+        mkdir publishdev
+        mv *.vsix publishdev
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
         name: jmeter-perf-analyzer-dev
-        path: *.vsix
+        path: publishdev
