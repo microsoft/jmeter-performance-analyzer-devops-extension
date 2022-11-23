@@ -9,8 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-      with:
-        node-version: '14'
     - name: Change directory
       run: |
         cd perfanalyzer 
@@ -31,8 +29,6 @@ jobs:
     runs-on: ubuntu-latest  
     steps:
     - uses: actions/checkout@v1
-      with:
-        node-version: '14'
     - name: Change directory
       run: |
         cd perfanalyzer
@@ -56,8 +52,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-      with:
-        node-version: '14'
     - name: Change directory
       run: |
         cd perfanalyzer
@@ -84,8 +78,6 @@ jobs:
     runs-on: ubuntu-latest    
     steps:
     - uses: actions/checkout@v1
-      with:
-        node-version: '14'
     - name: Change directory
       run: |
         cd perfanalyzer
@@ -111,9 +103,9 @@ jobs:
         npm install --global tfx-cli -g
         npx tfx extension create --manifest-globs vss-extension.dev.json
         mkdir publishdev
-        mv MishraPrateek* publishdev
+        mv .vsix* publishdev
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: jmeter-perf-analyzer-dev-publisherName-MishraPrateek
+        name: jmeter-perf-analyzer-dev
         path: publishdev

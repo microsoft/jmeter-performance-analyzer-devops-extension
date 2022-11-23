@@ -8,8 +8,6 @@ jobs:
     runs-on: ubuntu-latest    
     steps:
     - uses: actions/checkout@v1
-      with:
-        node-version: '14'
     - name: change directory
       run: |
         cd perfanalyzer
@@ -28,8 +26,6 @@ jobs:
     runs-on: ubuntu-latest  
     steps:
     - uses: actions/checkout@v1
-      with:
-        node-version: '14'
     - name: Change directory
       run: |
         cd perfanalyzer
@@ -52,9 +48,7 @@ jobs:
   package:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-      with:
-        node-version: '14'
+    - uses: actions/checkout@v1 
     - name: Change directory
       run: |
         cd perfanalyzer
@@ -80,9 +74,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest    
     steps:
-    - uses: actions/checkout@v1
-      with:
-        node-version: '14'
+    - uses: actions/checkout@v1 
     - name: Change directory
       run: |
         cd perfanalyzer
@@ -108,7 +100,7 @@ jobs:
         npm install --global tfx-cli -g
         npx tfx extension create --manifest-globs vss-extension.json
         mkdir publishprod
-        mv MishraPrateek* publishprod
+        mv *.vsix* publishprod
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:

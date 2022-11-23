@@ -254,7 +254,7 @@ async function main() {
             logInformation(data,TraceLevel.Verbose, false, false);
         });
         child.stderr.on('data', function (data) {
-            logInformation(`stderr: ${data}`, TraceLevel.Error, false);
+            logInformation(`stderr: ${data}`, TraceLevel.Error,false);
         });
         child.on('close', function (code) {
             logInformation(`closing code: ${code}`, TraceLevel.Information);
