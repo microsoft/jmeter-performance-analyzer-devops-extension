@@ -66,8 +66,12 @@ export async function renameFolder(JMETER_ORIGINAL_FILE_Folder_ABS_PATH: any, JM
     if(JMETER_ORIGINAL_FILE_Folder_ABS_PATH == JMETER_FILE_Folder_ABS) {
         logInformation('Rename folder not required since jmeter path is same as original name', TraceLevel.Information)
     } else {
-        await makeDirectory(JMETER_FILE_Folder_ABS);
-        await copyDirectoryRecursiveSync(JMETER_ORIGINAL_FILE_Folder_ABS_PATH, JMETER_FILE_Folder_ABS, true, false);
+        try {
+            await makeDirectory(JMETER_FILE_Folder_ABS);
+        } catch (e) {
+            logInformation('[Warning] Unable to create directory: ' + e, TraceLevel.Warning);
+        }
+        await copyDirectoryRecursiveSync(JMETER_ORIGINAL_FILE_Folder_ABS_PATH, JMETER_FILE_Folder_ABS, false, false);
     }
     
 }
@@ -102,7 +106,7 @@ export async function makeDirectory(filePath: string) {
             if (err) {
                 logInformation('Make directory completed with error ' + err, TraceLevel.Information);
             }
-            console.log('Directory created successfully: ' + filePath);
+            logInformation('Directory created successfully: ' + filePath, TraceLevel.Information);
         });
     } catch (err) {
         logInformation('Error creating directory ' + err, TraceLevel.Error);
