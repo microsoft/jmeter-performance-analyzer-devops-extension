@@ -126,26 +126,31 @@ export function copyDirectoryRecursiveSync(source:string, target:string, move: b
         return [];
     let files: string[] = []
     var operation = move ? fs.renameSync : fs.copyFileSync;
-    fs.readdirSync(source).forEach(function (itemName) {
-        var sourcePath = Path.join(source, itemName);
-        var targetPath = Path.join(target, itemName);
-
-        if (fs.lstatSync(sourcePath).isDirectory()) {
-            if(copyFileAtSameLevel) {
-                console.log('copying file from ' + sourcePath + ' to ' + targetPath)
-                copyDirectoryRecursiveSync(sourcePath, target, move, copyFileAtSameLevel);
-            } else {
-                fs.mkdirSync(targetPath);
-                console.log('Reiterating directory from ' + sourcePath + ' to ' + targetPath)
-                copyDirectoryRecursiveSync(sourcePath, targetPath, move, copyFileAtSameLevel);
+    if(fs.lstatSync(source).isDirectory()) {
+        fs.readdirSync(source).forEach(function (itemName) {
+            var sourcePath = Path.join(source, itemName);
+            var targetPath = Path.join(target, itemName);
+    
+            if (fs.lstatSync(sourcePath).isDirectory()) {
+                if(copyFileAtSameLevel) {
+                    console.log('copying file from ' + sourcePath + ' to ' + targetPath)
+                    copyDirectoryRecursiveSync(sourcePath, target, move, copyFileAtSameLevel);
+                } else {
+                    fs.mkdirSync(targetPath);
+                    console.log('Reiterating directory from ' + sourcePath + ' to ' + targetPath)
+                    copyDirectoryRecursiveSync(sourcePath, targetPath, move, copyFileAtSameLevel);
+                }
+                
             }
-            
-        }
-        else {
-            operation(sourcePath, targetPath);
-            files.push(sourcePath);
-        }
-    });
+            else {
+                operation(sourcePath, targetPath);
+                files.push(sourcePath);
+            }
+        });
+    } else {
+        console.log(' not a directory: ' + source);
+    }
+   
     return files;
 }
 
