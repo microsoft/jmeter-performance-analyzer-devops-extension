@@ -105,7 +105,7 @@ export async function handleJMeterCustomPlugin(JMETER_ABS_LIB_EXT_Folder: string
              return [];
         }
          logInformation('Downloading Plugin File(s) from source ' + customPluginSourceCodeFolderPath +  ' to destination' + JMETER_ABS_LIB_EXT_Folder, TraceLevel.Information);
-         let res = copyDirectoryRecursiveSync(customPluginSourceCodeFolderPath, JMETER_ABS_LIB_EXT_Folder, false);
+         let res = copyDirectoryRecursiveSync(customPluginSourceCodeFolderPath, JMETER_ABS_LIB_EXT_Folder, false, true);
          LogEvent(TelemetryEvents.DOWNLOADED_CUSTOM_PLUGINS);
          return res;
      } else if(customPluginSource == InputVariableType.Urls){
@@ -165,7 +165,7 @@ export async function handleJMeterInputFile(JMETER_BIN_Folder: string): Promise<
        }
         logInformation('Downloading Input File(s) from source ' + jmxInputFolderSourcePath +  ' to destination' + JMETER_BIN_Folder, TraceLevel.Information);
         LogEvent(TelemetryEvents.DOWNLOADED_JMETER_INPUT_FILES_SRC);
-        return copyDirectoryRecursiveSync(jmxInputFolderSourcePath, JMETER_BIN_Folder, false);
+        return copyDirectoryRecursiveSync(jmxInputFolderSourcePath, JMETER_BIN_Folder, false, true);
     } else {
         let jmxInputFolderSourceUrls= tl.getDelimitedInput(InputVariables.JMX_INPUT_FILES_URL,',',true);
         if(isEmpty(jmxInputFolderSourceUrls)) {

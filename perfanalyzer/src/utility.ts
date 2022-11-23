@@ -67,7 +67,7 @@ export async function renameFolder(JMETER_ORIGINAL_FILE_Folder_ABS_PATH: any, JM
         logInformation('Rename folder not required since jmeter path is same as original name', TraceLevel.Information)
     } else {
         await makeDirectory(JMETER_FILE_Folder_ABS);
-        await copyDirectoryRecursiveSync(JMETER_ORIGINAL_FILE_Folder_ABS_PATH, JMETER_FILE_Folder_ABS, true);
+        await copyDirectoryRecursiveSync(JMETER_ORIGINAL_FILE_Folder_ABS_PATH, JMETER_FILE_Folder_ABS, true, false);
     }
     
 }
@@ -102,7 +102,7 @@ export async function makeDirectory(filePath: string) {
             if (err) {
                 logInformation('Make directory completed with error ' + err, TraceLevel.Information);
             }
-            console.log('Directory created successfully!');
+            console.log('Directory created successfully: ' + filePath);
         });
     } catch (err) {
         logInformation('Error creating directory ' + err, TraceLevel.Error);
@@ -121,7 +121,7 @@ export function copyFileToDirectory(sourcefilePath: string, destinationFilePath:
       });
 }
 
-export function copyDirectoryRecursiveSync(source, target, move): string[] {
+export function copyDirectoryRecursiveSync(source:string, target:string, move: boolean, copyFileAtSameLevel: boolean): string[] {
     if (!fs.lstatSync(source).isDirectory())
         return [];
     let files: string[] = []
@@ -131,7 +131,13 @@ export function copyDirectoryRecursiveSync(source, target, move): string[] {
         var targetPath = Path.join(target, itemName);
 
         if (fs.lstatSync(sourcePath).isDirectory()) {
-            copyDirectoryRecursiveSync(sourcePath, target, false);
+            if(copyFileAtSameLevel) {
+                copyDirectoryRecursiveSync(sourcePath, target, move, copyFileAtSameLevel);
+            } else {
+                fs.mkdirSync(targetPath);
+                copyDirectoryRecursiveSync(sourcePath, targetPath, move, copyFileAtSameLevel);
+            }
+            
         }
         else {
             operation(sourcePath, targetPath);
