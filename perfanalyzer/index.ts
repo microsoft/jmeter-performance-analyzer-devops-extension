@@ -134,7 +134,7 @@ async function main() {
         logInformation('Completed Unzipping JMeter Binary', TraceLevel.Information)
 
         logInformation('Rename JMeter Folder from ' + JMETER_ORIGINAL_FILE_Folder + ' to ' + JMETER_CUSTOM_UNZIPPED_FOLDER_NAME, TraceLevel.Verbose)
-        renameFolder(JMETER_ORIGINAL_FILE_Folder_ABS_PATH,JMETER_FILE_Folder_ABS);
+        await renameFolder(JMETER_ORIGINAL_FILE_Folder_ABS_PATH,JMETER_FILE_Folder_ABS);
         logInformation('Completed Renaming folder JMeter Binary to ' + JMETER_CUSTOM_UNZIPPED_FOLDER_NAME, TraceLevel.Information)
         
 
