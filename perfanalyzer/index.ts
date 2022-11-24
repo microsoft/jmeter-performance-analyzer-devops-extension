@@ -10,7 +10,7 @@ import { analyzeJTL, getJmeterFolderNameFromURL, handleJMeterCustomPlugin, handl
 import { replaceTokens } from './src/replaceToken'
 import { enableAppInsights, LogEvent, trackException, trackTrace } from './src/telemetry-client'
 import { TelemetryEvents, TraceLevel } from './src/telemetry.constants'
-import { downloadFile, isEmpty, logInformation, getType, unzipBinary, replaceSpaceWithUnderscore, deleteFolderRecursive } from './src/utility'
+import { downloadFile, isEmpty, logInformation, getType, unzipBinary, replaceSpaceWithUnderscore, deleteFolderRecursive, getMathRandom } from './src/utility'
 const tl = require('azure-pipelines-task-lib/task');
 const Path = require('path');
 var exec = require('child_process').exec;
@@ -102,6 +102,7 @@ async function main() {
         
         let JMETER_URL = tl.getInput(InputVariables.JMX_BINARY_URI,true);
         let JMETER_CUSTOM_UNZIPPED_FOLDER_NAME = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_CUSTOM_UNZIPPED_FOLDER_NAME,true));
+        JMETER_CUSTOM_UNZIPPED_FOLDER_NAME = JMETER_CUSTOM_UNZIPPED_FOLDER_NAME.concat("_").concat(getMathRandom().toString());
         let JMETER_ORIGINAL_FILE_Folder = getJmeterFolderNameFromURL(JMETER_URL);
         let JMETER_ORIGINAL_FILE_Folder_ABS_PATH = Path.join( process.cwd(),JMETER_ORIGINAL_FILE_Folder);
 
