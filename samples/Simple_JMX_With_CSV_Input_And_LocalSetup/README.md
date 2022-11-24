@@ -40,11 +40,18 @@ This is how you can run the task in yur local.
 1. Add the Jmeter Task
 2. Use the JMX file
 3. Use the user.prod.properties
+
+   ![images/4.png](images/4.png)
 4. Provide value for
  a. FileNameAliasFile
  b. SomeclientId
  c. SomeclientSecret
 
+![images/5.png](images/5.png)
+
  in the pipeline variables. The default regex is set to ```"%(\\w+)%"``` Hence this would replace anything between `% % ` 
 5. Provide the input files
 6. Run the pipeline.
+
+![images/5.png](images/6.png)
+![images/5.png](images/7.png)
