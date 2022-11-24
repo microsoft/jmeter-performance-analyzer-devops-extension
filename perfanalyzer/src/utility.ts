@@ -60,21 +60,7 @@ export function logInformation(data: any, traceLevel: TraceLevel, printDate: boo
         trackTrace(data, traceLevel);
     }
     
-}
-
-export async function renameFolder(JMETER_ORIGINAL_FILE_Folder_ABS_PATH: any, JMETER_FILE_Folder_ABS: any) {
-    if(JMETER_ORIGINAL_FILE_Folder_ABS_PATH == JMETER_FILE_Folder_ABS) {
-        logInformation('Rename folder not required since jmeter path is same as original name', TraceLevel.Information)
-    } else {
-        try {
-            await makeDirectory(JMETER_FILE_Folder_ABS);
-        } catch (e) {
-            logInformation('[Warning] Unable to create directory: ' + e, TraceLevel.Warning);
-        }
-        await copyDirectoryRecursiveSync(JMETER_ORIGINAL_FILE_Folder_ABS_PATH, JMETER_FILE_Folder_ABS, false, false);
-    }
-    
-}
+} 
 
 export async function downloadFile(fileSource: string, destinationFilePath: string) {
     let event = 'Downloading File: ' + fileSource + ' to location: ' + destinationFilePath ;
@@ -96,8 +82,9 @@ export async function downloadFile(fileSource: string, destinationFilePath: stri
     });
 }
 
-export async function unzipBinary(fileName: string) {
-    await tar.x({file: fileName});
+export async function unzipBinary(fileName: string, path:string) {
+    await makeDirectory(path);
+    await tar.x({file: fileName ,C: path});
 }
 
 export async function makeDirectory(filePath: string) {
@@ -113,8 +100,6 @@ export async function makeDirectory(filePath: string) {
     }
     
 }
-
-
 
 export function copyFileToDirectory(sourcefilePath: string, destinationFilePath: string) {
     let msg = 'Start Copying File to destination ' + destinationFilePath + ' from source ' + sourcefilePath;
