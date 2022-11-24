@@ -23,7 +23,10 @@ export function getFormatPrefix() {
 export function getUniqueId() {
     return UNIQUE_RUN_ID;
 }
- 
+
+export function getMathRandom() {
+    return Math.floor(Math.random() * 9999999999); 
+}
 export function deleteFolderRecursive(dir: string) {
     var list = fs.readdirSync(dir);
     for(var i = 0; i < list.length; i++) {
