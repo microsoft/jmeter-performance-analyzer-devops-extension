@@ -166,7 +166,6 @@ async function main() {
         let jmxPropertySource = tl.getInput(InputVariables.JMX_PROPERTY_FILE_SOURCE,true);
         let jmxInputFilesSource = tl.getInput(InputVariables.JMX_INPUT_FILE_SOURCE,true);
         let jmeterPropertyFileName:string = '';
-
         if(jmxPropertySource == InputVariableType.None) {
             logInformation('No Property File Configuration Enabled. Skipping Property Configuration Step.', TraceLevel.Information)
         } else {

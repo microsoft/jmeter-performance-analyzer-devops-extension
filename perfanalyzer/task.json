@@ -10,7 +10,7 @@
   "version": {
     "Major": 1,
     "Minor": 7,
-    "Patch": 40
+    "Patch": 41
   },
   "instanceNameFormat": "Run Perf Analyzer",
   "groups": [
@@ -52,6 +52,15 @@
       "visibleRule": "jmxSource=url"
     },
     {
+      "name": "copyJMXFileToJMeterBin",
+      "type": "boolean",
+      "label": "Copy JMX File to bin folder (recommended:true)",
+      "defaultValue": "true",
+      "required": true,
+      "helpMarkDown": "This setting copies your jmx file to bin folder. This is by default set to true. Set it to false in case you want the absolute path to run. This is useful when you have relative paths set in the jmx for properties and input files and you might have a hierarchy of different projects with same jmx file name.",
+      "visibleRule": "jmxSource=sourceCode"
+    },
+    {
       "name": "jmxPropertySource",
       "type": "radio",
       "label": "JMX Property File Source",
@@ -81,6 +90,15 @@
       "required": true,
       "helpMarkDown": "This provides you the option to provide your JMeter Property File via a direct extenal URL. A https url is expected here. This file will be downloaded from the link and used as JMX Property file source to run the test.",
       "visibleRule": "jmxPropertySource=url"
+    },
+    {
+      "name": "copyPropertyFileToJMeterBin",
+      "type": "boolean",
+      "label": "Copy JMX Property File to bin folder (recommended:true)",
+      "defaultValue": "true",
+      "required": true,
+      "helpMarkDown": "This setting copies your jmx property file to bin folder. This is by default set to true. Set it to false in case you want the absolute path to run. This is useful when you have relative paths set in the jmx for properties and input files and you might have a hierarchy of different projects with same jmx file name.",
+      "visibleRule": "jmxPropertySource=sourceCode"
     },
     {
       "name": "tokenRegex",
@@ -122,6 +140,15 @@
       "required": true,
       "helpMarkDown": "This provides you the option to provide your JMeter Input File(s) via a direct extenal URL(s). You can specify multiple urls comma separated. All files mentioned will be downloaded sequentially and made available to Jmeter for test run. One or many, comma seperated, https urls are expected here.",
       "visibleRule": "jmxInputFilesSource=urls"
+    },
+    {
+      "name": "copyJMXInputFileToJmeterBin",
+      "type": "boolean",
+      "label": "Copy JMX Input Files to JMeter bin folder (recommended:true)",
+      "defaultValue": "true",
+      "required": true,
+      "helpMarkDown": "This setting copies your jmx input files to bin folder. This is by default set to true. Set it to false in case you want the absolute path to run. This is useful when you have relative paths set in the jmx for properties and input files and you might have a hierarchy of different projects with same jmx file name.",
+      "visibleRule": "jmxInputFilesSource=sourceCode"
     },
     {
       "name": "publishResultsToBuildArtifact",

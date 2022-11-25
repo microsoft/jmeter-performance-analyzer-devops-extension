@@ -107,11 +107,15 @@ The following variables are used in the pipeline. Some have default values which
 
 `JMX Run File Source URL` : This provides you the option to provide your JMX Source File via a direct external URL. A https URL is expected here. This file will be downloaded from the link and used as JMX file source to run the test.
 
+`Copy JMX File to bin folder` : This setting copies your jmx file to bin folder. This is by default set to true. This is by default set to true. Set it to false in case you want the absolute path to run. This is useful when you have relative paths set in the jmx for properties and input files and you might have a hierarchy of different projects with same jmx file name.
+
 `JMX Property File Source` : This provides you the option to provide your JMeter Property File Source. It can be none (in case your jmx does not require a property file to run), source code of the pipeline or it can be a direct external URL. This is set to default to SourceCode
 
 `JMX Property Source Path`: This is the path of the JMeter Property source code file. You can select the file path and update the input here. This is visible in case you select 'SourceCode' in the `JMX Property File Source` step.
 
 `JMeter Property Source URL` : This provides you the option to provide your JMeter Property File via a direct external URL. A https URL is expected here. This file will be downloaded from the link and used as JMX Property file source to run the test.
+
+`Copy JMX Property File to bin folder` : This setting copies your jmx property file to bin folder. This is by default set to true. Set it to false in case you want the absolute path to run. This is useful when you have relative paths set in the jmx for properties and input files and you might have a hierarchy of different projects with same jmx file name.
 
 `Token Regex"` : This provides you the option to specify the regex for replacing the tokens in property File to the values specified in pipeline variables. This is visible only if the JMX Property File source is not set to None. This regex must include a group match. The regex match should be return a group of 2 values, one with variable name second with variable and enclosure. Samples (Starts and ends with 1 underscore ==>  _(\\w+)_ ,Starts and ends with % ==>  %(\\w+)%)
 
@@ -120,6 +124,8 @@ The following variables are used in the pipeline. Some have default values which
 `JMX Input Folder Source`: This is the path of the JMeter Input source code Folder. All files inside this folder will be made available to JMeter test. You should the file names mentioned here in the property file and use that variable in JMX. You can select the folder path and update the input here. This is visible in case you select 'SourceCode' in the `JMX Input File Source(s) Source` step.
 
 `JMX Input File(s) Source URL Comma Separated` : This provides you the option to provide your JMeter Input File(s) via a direct external URL(s). You can specify multiple URLs comma separated. All files mentioned will be downloaded sequentially and made available to JMeter for test run. One or many, comma Separated, https URLs are expected here.
+
+`Copy JMX Input Files to JMeter bin folder` : This setting copies your jmx input files to bin folder. This is by default set to true. Set it to false in case you want the absolute path to run. This is useful when you have relative paths set in the jmx for properties and input files and you might have a hierarchy of different projects with same jmx file name.
 
 `Publish Logs and Test Results to Pipeline Artifacts`: This is a boolean flag that if set to true will publish the test results and logs to pipeline artifacts. This should not be enabled if this task is used in a release pipeline. This is default set to true and will yield the result on task completion.
 

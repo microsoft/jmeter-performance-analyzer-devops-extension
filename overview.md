@@ -14,6 +14,15 @@ You need to enable static hosting in the storage container in order to be able t
 
 ## Latest Updates
 
+#### V1.7.42
+- Support for custom Jmeter bin folder
+- Support for random variable addition to make jmeter bin unique folder
+- Support for disabling the copy of jmeter run files to bin
+
+#### V1.6.55
+- Added support for command line arguments
+- Bug fix for file download with parameters.
+
 #### V1.3.68
 - Fixed Issue for Storage Account Binding Name
 
@@ -23,9 +32,7 @@ You need to enable static hosting in the storage container in order to be able t
 #### V1.1.55
 - Stable Version.
 
-#### V1.6.55
-- Added support for command line arguments
-- Bug fix for file download with parameters.
+
 
 ## Demo
 
@@ -97,17 +104,22 @@ Follow this Link: [CLASSIC PIPELINE GUI BASED TASK BASED INPUT](https://github.c
 
 The following variables are used in the pipeline. Some have default values which can be updated.
 
+
 `JMX Run File Source` : This provides you the option to provide your JMX Source. It can be either from the source code of the pipeline or it can be a direct external URL. This is set to default to SourceCode
 
 `JMX Run File Source Path`: This is the path of the JMX source code file. You can select the file path and update the input here. This is visible in case you select 'SourceCode' in the `JMX RUN File Source` step.
 
 `JMX Run File Source URL` : This provides you the option to provide your JMX Source File via a direct external URL. A https URL is expected here. This file will be downloaded from the link and used as JMX file source to run the test.
 
+`Copy JMX File to bin folder` : This setting copies your jmx file to bin folder. This is by default set to true. This is by default set to true. Set it to false in case you want the absolute path to run. This is useful when you have relative paths set in the jmx for properties and input files and you might have a hierarchy of different projects with same jmx file name.
+
 `JMX Property File Source` : This provides you the option to provide your JMeter Property File Source. It can be none (in case your jmx does not require a property file to run), source code of the pipeline or it can be a direct external URL. This is set to default to SourceCode
 
 `JMX Property Source Path`: This is the path of the JMeter Property source code file. You can select the file path and update the input here. This is visible in case you select 'SourceCode' in the `JMX Property File Source` step.
 
 `JMeter Property Source URL` : This provides you the option to provide your JMeter Property File via a direct external URL. A https URL is expected here. This file will be downloaded from the link and used as JMX Property file source to run the test.
+
+`Copy JMX Property File to bin folder` : This setting copies your jmx property file to bin folder. This is by default set to true. Set it to false in case you want the absolute path to run. This is useful when you have relative paths set in the jmx for properties and input files and you might have a hierarchy of different projects with same jmx file name.
 
 `Token Regex"` : This provides you the option to specify the regex for replacing the tokens in property File to the values specified in pipeline variables. This is visible only if the JMX Property File source is not set to None. This regex must include a group match. The regex match should be return a group of 2 values, one with variable name second with variable and enclosure. Samples (Starts and ends with 1 underscore ==>  _(\\w+)_ ,Starts and ends with % ==>  %(\\w+)%)
 
@@ -116,6 +128,8 @@ The following variables are used in the pipeline. Some have default values which
 `JMX Input Folder Source`: This is the path of the JMeter Input source code Folder. All files inside this folder will be made available to JMeter test. You should the file names mentioned here in the property file and use that variable in JMX. You can select the folder path and update the input here. This is visible in case you select 'SourceCode' in the `JMX Input File Source(s) Source` step.
 
 `JMX Input File(s) Source URL Comma Separated` : This provides you the option to provide your JMeter Input File(s) via a direct external URL(s). You can specify multiple URLs comma separated. All files mentioned will be downloaded sequentially and made available to JMeter for test run. One or many, comma Separated, https URLs are expected here.
+
+`Copy JMX Input Files to JMeter bin folder` : This setting copies your jmx input files to bin folder. This is by default set to true. Set it to false in case you want the absolute path to run. This is useful when you have relative paths set in the jmx for properties and input files and you might have a hierarchy of different projects with same jmx file name.
 
 `Publish Logs and Test Results to Pipeline Artifacts`: This is a boolean flag that if set to true will publish the test results and logs to pipeline artifacts. This should not be enabled if this task is used in a release pipeline. This is default set to true and will yield the result on task completion.
 
@@ -149,7 +163,7 @@ The following variables are used in the pipeline. Some have default values which
 
 `Container Name`: This is the container name inside the storage account where your results and logs will be copied. This is defaulted to $web. Note that in case you want continuous reporting available on html webpage, keep it to $web only. Files in $web will be available to view as html files.
 
-`Blob Prefix`: This is the prefix inside container name where each run's report will be copied. It is essential to note that for continuous integration and testing it's best to prefix it will build number. This way all continuous build's result will be made available at all times as a http exposed UTL. If used in Build pipeline, it can be `Releases/Release_$(Build.BuildNumber)`, if in release then it can be `Releases/Release_$(Release.ReleaseId)`.
+`Blob Prefix`: This is the prefix inside container name where each run's report will be copied. It is essential to note that for continuous integration and testing it's best to prefix it will build number. This way all continuous build's result will be made available at all times as a http exposed UTL. If used in Build pipeline, it can be `Releases/Release_DEV_$(Build.BuildNumber)`, if in release then it can be `Release_DEV_$(Release.ReleaseName)_$(Release.AttemptNumber)`
 
 `Storage Container URI`: This is the Primary endpoint URI for your container. On Enabling static web hosting, this URL is made available. If not specified, the task will not be able to create a direct html link to the test results.
 

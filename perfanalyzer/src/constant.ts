@@ -28,7 +28,9 @@ export enum InputVariables {
     FAIL_PIPELINE_IF_JMETER_FAILS = 'failPipelineIfJMeterFails',
     MAX_FAILURE_COUNT_FOR_JMETER = 'maxFailureCountForJMeter',
     LOG_TELEMETRY = 'telemetryDataCollection',
-
+    COPY_INPUT_FILE_TO_JMETER_BIN= 'copyInputFileToJmeterBin',
+    COPY_PROPERTY_TO_JMETER_BIN = 'copyPropertyFileToJMeterBin',
+    COPY_JMX_TO_JMETER_BIN= 'copyJMXFileToJMeterBin',
     ADD_CUSTOM_PLUGIN_TO_JMETER_LIB = 'addCustomPluginsToJMeterLib',
     CUSTOM_PLUGIN_SOURCE = 'customPluginSource',
     CUSTOM_PLUGIN_SOURCE_CODE_PATH = 'customPluginSourceCodeFolderPath',
