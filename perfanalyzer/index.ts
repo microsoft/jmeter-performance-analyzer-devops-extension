@@ -202,8 +202,8 @@ async function main() {
             logInformation('Completed Handle Input Files. FileCount: ' + ((null != jmeterInputFileNames) ? jmeterInputFileNames?.length : 0), TraceLevel.Information);
         }
 
-        let jmeterLogFolder = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_LOG_FOLDER,true)).concat(randomString);
-        let jmeterReportFolder = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_REPORT_FOLDER,true)).concat(randomString);
+        let jmeterLogFolder = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_LOG_FOLDER,true)).concat("_").concat(randomSuffix);
+        let jmeterReportFolder = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_REPORT_FOLDER,true)).concat("_").concat(randomSuffix);
 
         if(isEmpty(jmeterLogFolder)) {
             jmeterLogFolder = DEFAULT_JMETER_LOG_DIR_NAME;
