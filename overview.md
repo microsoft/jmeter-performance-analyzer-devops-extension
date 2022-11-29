@@ -27,6 +27,10 @@ You need to enable static hosting in the storage container in order to be able t
 - Added support for command line arguments
 - Bug fix for file download with parameters.
 
+#### V1.7.46
+- Support for custom binary folder name
+- Option to use custom suffix to add to jmeter folder name
+
 ## Demo
 
 ![project-screenshots/Steps.gif](project-screenshots/Steps.gif)
@@ -157,6 +161,8 @@ The following variables are used in the pipeline. Some have default values which
 These variables are available under the `advanced` section of the pipeline. These are default to some values and do not require change unless you want to customize it.
 
 `JMeter Download URL`: This is the https link to JMeter binary. A TGZ binary file https URL is expected here. It is set to download 5.5 version of Apache JMeter by default.
+
+`Extracted folder name for JMeter binary`: In case you modify the JMeter Download URL, to some other version then this variable also needs to change. This is the folder name of the JMeter binary file post extraction/unzip.
 
 `JMeter Custom Unzipped Folder Name`: In case you wish to unzip the Jmeter binary to a custom folder, you can update the path name here. This is useful if you want to have seperate Jmeter instances task in same pipeline.
 

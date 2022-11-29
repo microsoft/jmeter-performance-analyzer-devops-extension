@@ -10,7 +10,7 @@
   "version": {
     "Major": 1,
     "Minor": 7,
-    "Patch": 44
+    "Patch": 45
   },
   "instanceNameFormat": "Run Perf Analyzer",
   "groups": [
@@ -311,6 +311,15 @@
       "defaultValue": "https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz",
       "groupName": "advanced",
       "helpMarkDown": "This is the https link to Jmeter binary. A tgz binary file https url is expected here. It is set to download 5.5 version of apache Jmeter by default."
+    },
+    {
+      "name": "extractedfolderNameforJMeterBinary",
+      "type": "string",
+      "label": "Extracted folder name for JMeter binary",
+      "required": true,
+      "defaultValue": "apache-jmeter-5.5",
+      "groupName": "advanced",
+      "helpMarkDown": "This is the folder name to which jmeter binary would extract to. In case this is something other than default mentioned please update it."
     },
     {
       "name": "jmeterCustomUnzippedFolderName",

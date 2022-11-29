@@ -17,6 +17,7 @@ export enum InputVariables {
     ADD_RANDOM_SUFFIX_TO_JMETER_ARTIFACTS = 'addRandomSuffixToJMeterArtifacts',
     JMETER_LOG_FOLDER = 'jmeterLogFolder',
     JMETER_REPORT_FOLDER = 'jmeterReportFolder',
+    EXTRACTED_FOLDER_NAME_FOR_JMETER_BINARY = 'extractedfolderNameforJMeterBinary',
     COPY_RESULT_TO_AZURE_BLOB_STORAGE = 'copyResultToAzureBlobStorage',
     PUBLISH_RESULTS_TO_BUILD_ARTIFACT = 'publishResultsToBuildArtifact',
     TOKEN_REGEX = 'tokenRegex',
