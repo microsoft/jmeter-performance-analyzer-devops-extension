@@ -10,7 +10,7 @@
   "version": {
     "Major": 1,
     "Minor": 7,
-    "Patch": 40
+    "Patch": 41
   },
   "instanceNameFormat": "Run Perf Analyzer",
   "groups": [
@@ -320,6 +320,22 @@
       "defaultValue": "apache-jmeter-5.5",
       "groupName": "advanced",
       "helpMarkDown": "In case you wish to unzip the Jmeter binary to a custom folder, you can update the path name here. This is useful if you want to have seperate Jmeter instances task in same pipeline."
+    },
+    {
+      "name": "addRandomSuffixToJMeterFolder",
+      "type": "boolean",
+      "label": "Add random suffix to JMeter Folders",
+      "defaultValue": "false",
+      "required": false,
+      "helpMarkDown": "This would enable you to create a unique jmeter folder by adding a random suffix at the end of download folder."
+    },
+    {
+      "name": "addRandomSuffixToJMeterArtifacts",
+      "type": "boolean",
+      "label": "Add random suffix to JMeter Artifacts",
+      "defaultValue": "false",
+      "required": false,
+      "helpMarkDown": "This would enable you to create a unique published folder(s) by adding a random suffix at the end of download folder."
     },
     {
       "name": "jmeterLogFolder",
