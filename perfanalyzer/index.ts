@@ -48,6 +48,7 @@ async function PostResults(jmeterReportFolder: string, jmeterLogFolder: string, 
         let artifactLOG = replaceSpaceWithUnderscore(tl.getInput(InputVariables.ARTIFACT_NAME_LOG,true));
         let randomSuffix:string = "";
         if(tl.getBoolInput(InputVariables.ADD_RANDOM_SUFFIX_TO_JMETER_ARTIFACTS,false)) {
+            randomSuffix = getMathRandom().toString();
             logInformation('Random Suffix String to be appended at the end of JMeter artifacts ' +  randomSuffix, TraceLevel.Information);
             artifactReport = artifactReport.concat("_").concat(randomSuffix);
             artifactLOG = artifactLOG.concat("_").concat(randomSuffix);

@@ -10,7 +10,7 @@
   "version": {
     "Major": 1,
     "Minor": 7,
-    "Patch": 42
+    "Patch": 44
   },
   "instanceNameFormat": "Run Perf Analyzer",
   "groups": [
@@ -326,6 +326,7 @@
       "type": "boolean",
       "label": "Add random suffix to JMeter Folders",
       "defaultValue": "false",
+      "groupName": "advanced",
       "required": false,
       "helpMarkDown": "This would enable you to create a unique jmeter folder by adding a random suffix at the end of download folder."
     },
@@ -334,6 +335,7 @@
       "type": "boolean",
       "label": "Add random suffix to JMeter Artifacts",
       "defaultValue": "false",
+      "groupName": "advanced",
       "required": false,
       "helpMarkDown": "This would enable you to create a unique published folder(s) by adding a random suffix at the end of download folder."
     },
