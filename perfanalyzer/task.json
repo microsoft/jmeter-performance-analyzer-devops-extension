@@ -10,7 +10,7 @@
   "version": {
     "Major": 1,
     "Minor": 7,
-    "Patch": 41
+    "Patch": 48
   },
   "instanceNameFormat": "Run Perf Analyzer",
   "groups": [
@@ -340,6 +340,15 @@
       "helpMarkDown": "This is the https link to Jmeter binary. A tgz binary file https url is expected here. It is set to download 5.5 version of apache Jmeter by default."
     },
     {
+      "name": "extractedfolderNameforJMeterBinary",
+      "type": "string",
+      "label": "Extracted folder name for JMeter binary",
+      "required": true,
+      "defaultValue": "apache-jmeter-5.5",
+      "groupName": "advanced",
+      "helpMarkDown": "This is the folder name to which jmeter binary would extract to. In case this is something other than default mentioned please update it. Also update this if you modify the above jmeter url to the extracted folder name."
+    },
+    {
       "name": "jmeterCustomUnzippedFolderName",
       "type": "string",
       "label": "JMeter Custom Unzipped Folder Name",
@@ -347,6 +356,24 @@
       "defaultValue": "apache-jmeter-5.5",
       "groupName": "advanced",
       "helpMarkDown": "In case you wish to unzip the Jmeter binary to a custom folder, you can update the path name here. This is useful if you want to have seperate Jmeter instances task in same pipeline."
+    },
+    {
+      "name": "addRandomSuffixToJMeterFolder",
+      "type": "boolean",
+      "label": "Add random suffix to JMeter Folders",
+      "defaultValue": "false",
+      "groupName": "advanced",
+      "required": false,
+      "helpMarkDown": "This would enable you to create a unique jmeter folder by adding a random suffix at the end of download folder."
+    },
+    {
+      "name": "addRandomSuffixToJMeterArtifacts",
+      "type": "boolean",
+      "label": "Add random suffix to JMeter Artifacts",
+      "defaultValue": "false",
+      "groupName": "advanced",
+      "required": false,
+      "helpMarkDown": "This would enable you to create a unique published folder(s) by adding a random suffix at the end of download folder."
     },
     {
       "name": "jmeterLogFolder",

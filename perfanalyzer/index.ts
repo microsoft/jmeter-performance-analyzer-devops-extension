@@ -46,6 +46,14 @@ async function PostResults(jmeterReportFolder: string, jmeterLogFolder: string, 
     if(publishResultsToBuildArtifact) {
         let artifactReport = replaceSpaceWithUnderscore(tl.getInput(InputVariables.ARTIFACT_NAME_REPORT,true));
         let artifactLOG = replaceSpaceWithUnderscore(tl.getInput(InputVariables.ARTIFACT_NAME_LOG,true));
+        let randomSuffix:string = "";
+        if(tl.getBoolInput(InputVariables.ADD_RANDOM_SUFFIX_TO_JMETER_ARTIFACTS,false)) {
+            randomSuffix = getMathRandom().toString();
+            logInformation('Random Suffix String to be appended at the end of JMeter artifacts ' +  randomSuffix, TraceLevel.Information);
+            artifactReport = artifactReport.concat("_").concat(randomSuffix);
+            artifactLOG = artifactLOG.concat("_").concat(randomSuffix);
+        }
+        
         LogEvent(TelemetryEvents.PUBLISH_DATA_TO_BUILD_ARTIFACT);
         logInformation(TelemetryEvents.PUBLISH_DATA_TO_BUILD_ARTIFACT, TraceLevel.Verbose);
 
@@ -102,8 +110,16 @@ async function main() {
         
         let JMETER_URL = tl.getInput(InputVariables.JMX_BINARY_URI,true);
         let JMETER_CUSTOM_UNZIPPED_FOLDER_NAME = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_CUSTOM_UNZIPPED_FOLDER_NAME,true));
-        JMETER_CUSTOM_UNZIPPED_FOLDER_NAME = JMETER_CUSTOM_UNZIPPED_FOLDER_NAME.concat("_").concat(getMathRandom().toString());
-        let JMETER_ORIGINAL_FILE_Folder = getJmeterFolderNameFromURL(JMETER_URL);
+        let randomSuffix:string = "";
+        
+        if(tl.getBoolInput(InputVariables.ADD_RANDOM_SUFFIX_TO_JMETER_FOLDER_NAME,false)) {
+            randomSuffix = getMathRandom().toString();
+            logInformation('Random Suffix String to be appended at the end of JMeter Folders ' +  randomSuffix, TraceLevel.Information);
+            JMETER_CUSTOM_UNZIPPED_FOLDER_NAME = JMETER_CUSTOM_UNZIPPED_FOLDER_NAME.concat("_").concat(randomSuffix);
+        }
+        
+        let JMETER_ORIGINAL_FILE_Folder = tl.getInput(InputVariables.EXTRACTED_FOLDER_NAME_FOR_JMETER_BINARY,true);
+        //getJmeterFolderNameFromURL(JMETER_URL);
         let JMETER_ORIGINAL_FILE_Folder_ABS_PATH = Path.join( process.cwd(),JMETER_ORIGINAL_FILE_Folder);
 
         let JMETER_FILE_Folder = Path.join(JMETER_CUSTOM_UNZIPPED_FOLDER_NAME,JMETER_ORIGINAL_FILE_Folder);
@@ -187,8 +203,8 @@ async function main() {
             logInformation('Completed Handle Input Files. FileCount: ' + ((null != jmeterInputFileNames) ? jmeterInputFileNames?.length : 0), TraceLevel.Information);
         }
 
-        let jmeterLogFolder = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_LOG_FOLDER,true));
-        let jmeterReportFolder = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_REPORT_FOLDER,true));
+        let jmeterLogFolder = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_LOG_FOLDER,true)).concat("_").concat(randomSuffix);
+        let jmeterReportFolder = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_REPORT_FOLDER,true)).concat("_").concat(randomSuffix);
 
         if(isEmpty(jmeterLogFolder)) {
             jmeterLogFolder = DEFAULT_JMETER_LOG_DIR_NAME;

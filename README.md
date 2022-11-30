@@ -168,9 +168,13 @@ These variables are available under the `advanced` section of the pipeline. Thes
 
 `JMeter Download URL`: This is the https link to JMeter binary. A TGZ binary file https URL is expected here. It is set to download 5.5 version of Apache JMeter by default.
 
-`JMeter Folder Name`: In case you modify the JMeter Download URL, to some other version then this variable also needs to change. This is the folder name of the JMeter binary file post extraction/unzip.
+`Extracted folder name for JMeter binary`: In case you modify the JMeter Download URL, to some other version then this variable also needs to change. This is the folder name of the JMeter binary file post extraction/unzip. Also update this if you modify the above jmeter url to the extracted folder name
 
 `JMeter Custom Unzipped Folder Name`: In case you wish to unzip the Jmeter binary to a custom folder, you can update the path name here. This is useful if you want to have seperate Jmeter instances task in same pipeline.
+
+`Add random suffix to JMeter Folders`: This would enable you to create a unique jmeter folder by adding a random suffix at the end of download folder. There are at time possibility that multiple task run in same pipeline and hence would overwrite each other by the end of the pipeline run. Enabling this will ensure each task in a pipeline run would execute smoothly.
+
+`Add random suffix to JMeter Artifacts`: This would enable you to create a unique published folder(s) by adding a random suffix at the end of artifacts(log and report). There are at time possibility that multiple task run in same pipeline and hence would overwrite the logs and result of each other by the end of the pipeline run. Enabling this will ensure each task in a pipeline run would execute smoothly and generate build artifacts with unique names.
 
 `JMeter Log Folder Name`: This is the name of Log folder that is created as a result of test run. This is defaulted to `CurrentLog_$(System.StageName)`. This is one of the artifacts that is later published as well.
 
