@@ -10,7 +10,7 @@
   "version": {
     "Major": 1,
     "Minor": 7,
-    "Patch": 47
+    "Patch": 48
   },
   "instanceNameFormat": "Run Perf Analyzer",
   "groups": [
@@ -328,7 +328,7 @@
       "required": true,
       "defaultValue": "apache-jmeter-5.5",
       "groupName": "advanced",
-      "helpMarkDown": "In case you wish to unzip the Jmeter binary to a custom folder, you can update the path name here. This is useful if you want to have seperate Jmeter instances task in same pipeline."
+      "helpMarkDown": "In case you wish to unzip the Jmeter binary to a custom folder, you can update the path name here. This is useful if you want to have seperate Jmeter instances task in same pipeline. If this value is same as the value provided for `Extracted folder name for JMeter binary` then a hierarchy won't be created and jmeter binary would be directly extracted into `Extracted folder name for JMeter binary`. If this value is different than the value provided for `Extracted folder name for JMeter binary`, then a hierarchy would be created for extracting binary `JMeter Custom Unzipped Folder Name`/`Extracted folder name for JMeter binary`"
     },
     {
       "name": "addRandomSuffixToJMeterFolder",
