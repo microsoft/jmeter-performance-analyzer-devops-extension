@@ -109,7 +109,7 @@ async function main() {
         LogEvent(TelemetryEvents.STARTED_PERFORMANCE_TEST);
         
         let JMETER_URL = tl.getInput(InputVariables.JMX_BINARY_URI,true);
-        let JMETER_CUSTOM_UNZIPPED_FOLDER_NAME = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_CUSTOM_UNZIPPED_FOLDER_NAME,true));
+        let JMETER_CUSTOM_UNZIPPED_FOLDER_NAME = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_CUSTOM_UNZIPPED_FOLDER_NAME,true)).trim();
         let randomSuffix:string = "";
         
         if(tl.getBoolInput(InputVariables.ADD_RANDOM_SUFFIX_TO_JMETER_FOLDER_NAME,false)) {
@@ -118,7 +118,7 @@ async function main() {
             JMETER_CUSTOM_UNZIPPED_FOLDER_NAME = JMETER_CUSTOM_UNZIPPED_FOLDER_NAME.concat("_").concat(randomSuffix);
         }
         
-        let JMETER_ORIGINAL_FILE_Folder = tl.getInput(InputVariables.EXTRACTED_FOLDER_NAME_FOR_JMETER_BINARY,true);
+        let JMETER_ORIGINAL_FILE_Folder:string = tl.getInput(InputVariables.EXTRACTED_FOLDER_NAME_FOR_JMETER_BINARY,true).trim();
         //getJmeterFolderNameFromURL(JMETER_URL);
         let JMETER_ORIGINAL_FILE_Folder_ABS_PATH = Path.join( process.cwd(),JMETER_ORIGINAL_FILE_Folder);
 
