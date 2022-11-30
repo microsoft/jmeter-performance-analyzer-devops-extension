@@ -10,7 +10,7 @@
   "version": {
     "Major": 1,
     "Minor": 7,
-    "Patch": 45
+    "Patch": 46
   },
   "instanceNameFormat": "Run Perf Analyzer",
   "groups": [
@@ -319,7 +319,7 @@
       "required": true,
       "defaultValue": "apache-jmeter-5.5",
       "groupName": "advanced",
-      "helpMarkDown": "This is the folder name to which jmeter binary would extract to. In case this is something other than default mentioned please update it."
+      "helpMarkDown": "This is the folder name to which jmeter binary would extract to. In case this is something other than default mentioned please update it. Also update this if you modify the above jmeter url to the extracted folder name."
     },
     {
       "name": "jmeterCustomUnzippedFolderName",
