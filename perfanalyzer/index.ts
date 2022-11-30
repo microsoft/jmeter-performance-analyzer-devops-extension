@@ -117,8 +117,9 @@ async function main() {
             logInformation('Random Suffix String to be appended at the end of JMeter Folders ' +  randomSuffix, TraceLevel.Information);
             JMETER_CUSTOM_UNZIPPED_FOLDER_NAME = JMETER_CUSTOM_UNZIPPED_FOLDER_NAME.concat("_").concat(randomSuffix);
         }
-
-        let JMETER_ORIGINAL_FILE_Folder = getJmeterFolderNameFromURL(JMETER_URL);
+        
+        let JMETER_ORIGINAL_FILE_Folder = tl.getInput(InputVariables.EXTRACTED_FOLDER_NAME_FOR_JMETER_BINARY,true);
+        //getJmeterFolderNameFromURL(JMETER_URL);
         let JMETER_ORIGINAL_FILE_Folder_ABS_PATH = Path.join( process.cwd(),JMETER_ORIGINAL_FILE_Folder);
 
         let JMETER_FILE_Folder = Path.join(JMETER_CUSTOM_UNZIPPED_FOLDER_NAME,JMETER_ORIGINAL_FILE_Folder);

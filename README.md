@@ -162,7 +162,7 @@ These variables are available under the `advanced` section of the pipeline. Thes
 
 `JMeter Download URL`: This is the https link to JMeter binary. A TGZ binary file https URL is expected here. It is set to download 5.5 version of Apache JMeter by default.
 
-`JMeter Folder Name`: In case you modify the JMeter Download URL, to some other version then this variable also needs to change. This is the folder name of the JMeter binary file post extraction/unzip.
+`Extracted folder name for JMeter binary`: In case you modify the JMeter Download URL, to some other version then this variable also needs to change. This is the folder name of the JMeter binary file post extraction/unzip. Also update this if you modify the above jmeter url to the extracted folder name
 
 `JMeter Custom Unzipped Folder Name`: In case you wish to unzip the Jmeter binary to a custom folder, you can update the path name here. This is useful if you want to have seperate Jmeter instances task in same pipeline.
 

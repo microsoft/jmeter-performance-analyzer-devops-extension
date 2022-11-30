@@ -27,6 +27,10 @@ You need to enable static hosting in the storage container in order to be able t
 - Added support for command line arguments
 - Bug fix for file download with parameters.
 
+#### V1.7.48
+- Support for custom binary folder name
+- Option to use custom suffix to add to jmeter folder name
+
 ## Demo
 
 ![project-screenshots/Steps.gif](project-screenshots/Steps.gif)
@@ -158,9 +162,11 @@ These variables are available under the `advanced` section of the pipeline. Thes
 
 `JMeter Download URL`: This is the https link to JMeter binary. A TGZ binary file https URL is expected here. It is set to download 5.5 version of Apache JMeter by default.
 
+`Extracted folder name for JMeter binary`: In case you modify the JMeter Download URL, to some other version then this variable also needs to change. This is the folder name of the JMeter binary file post extraction/unzip. Also update this if you modify the above jmeter url to the extracted folder name
+
 `JMeter Custom Unzipped Folder Name`: In case you wish to unzip the Jmeter binary to a custom folder, you can update the path name here. This is useful if you want to have seperate Jmeter instances task in same pipeline.
 
-`Add random suffix to JMeter Folders`: This would enable you to create a unique jmeter folder by adding a random suffix at the end of download folder. There are at time possibility that multiple task run in same pipeline and hence would overwrite each other by the end of the pipeline run. Enabling this will ensure each task in a pipeline run would execute smoothly.
+`Add random suffix to JMeter Folders`: This would enable you to create a unique jmeter folder by adding a random suffix at the end of download folder. There are at time possibility that multiple task run in same pipeline and hence would overwrite each other by the end of the pipeline run. Enabling this will ensure each task in a pipeline run would execute smoothly. 
 
 `Add random suffix to JMeter Artifacts`: This would enable you to create a unique published folder(s) by adding a random suffix at the end of artifacts(log and report). There are at time possibility that multiple task run in same pipeline and hence would overwrite the logs and result of each other by the end of the pipeline run. Enabling this will ensure each task in a pipeline run would execute smoothly and generate build artifacts with unique names.
 
