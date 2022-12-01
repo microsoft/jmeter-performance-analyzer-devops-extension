@@ -27,9 +27,10 @@ You need to enable static hosting in the storage container in order to be able t
 - Added support for command line arguments
 - Bug fix for file download with parameters.
 
-#### V1.7.48
+#### V1.7.51
 - Support for custom binary folder name
 - Option to use custom suffix to add to jmeter folder name
+- General Bug Fixes
 
 ## Demo
 
