@@ -109,7 +109,7 @@ async function main() {
         LogEvent(TelemetryEvents.STARTED_PERFORMANCE_TEST);
         
         let JMETER_URL = tl.getInput(InputVariables.JMX_BINARY_URI,true);
-        let JMETER_CUSTOM_UNZIPPED_FOLDER_NAME = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_CUSTOM_UNZIPPED_FOLDER_NAME,true));
+        let JMETER_CUSTOM_UNZIPPED_FOLDER_NAME = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_CUSTOM_UNZIPPED_FOLDER_NAME,true)).trim();
         let randomSuffix:string = "";
         
         if(tl.getBoolInput(InputVariables.ADD_RANDOM_SUFFIX_TO_JMETER_FOLDER_NAME,false)) {
@@ -118,11 +118,19 @@ async function main() {
             JMETER_CUSTOM_UNZIPPED_FOLDER_NAME = JMETER_CUSTOM_UNZIPPED_FOLDER_NAME.concat("_").concat(randomSuffix);
         }
         
-        let JMETER_ORIGINAL_FILE_Folder = tl.getInput(InputVariables.EXTRACTED_FOLDER_NAME_FOR_JMETER_BINARY,true);
+        let JMETER_ORIGINAL_FILE_Folder:string = tl.getInput(InputVariables.EXTRACTED_FOLDER_NAME_FOR_JMETER_BINARY,true).trim();
         //getJmeterFolderNameFromURL(JMETER_URL);
         let JMETER_ORIGINAL_FILE_Folder_ABS_PATH = Path.join( process.cwd(),JMETER_ORIGINAL_FILE_Folder);
 
         let JMETER_FILE_Folder = Path.join(JMETER_CUSTOM_UNZIPPED_FOLDER_NAME,JMETER_ORIGINAL_FILE_Folder);
+        if(JMETER_CUSTOM_UNZIPPED_FOLDER_NAME == JMETER_ORIGINAL_FILE_Folder) {
+            logInformation('Since jmeterCustomUnzippedFolderName and extractedfolderNameforJMeterBinary are same, Jmeter binary will directly be extracted to value provided in extractedfolderNameforJMeterBinary: ' + JMETER_ORIGINAL_FILE_Folder, TraceLevel.Information);
+            JMETER_FILE_Folder = JMETER_CUSTOM_UNZIPPED_FOLDER_NAME;
+        } else {
+            logInformation('Since jmeterCustomUnzippedFolderName and extractedfolderNameforJMeterBinary are different, a hierarchy will be created for nesting. Hence Jmeter binary will be extracted to value provided in jmeterCustomUnzippedFolderName: ' + JMETER_CUSTOM_UNZIPPED_FOLDER_NAME+ '/' + JMETER_ORIGINAL_FILE_Folder, TraceLevel.Information);
+            JMETER_FILE_Folder = Path.join(JMETER_CUSTOM_UNZIPPED_FOLDER_NAME,JMETER_ORIGINAL_FILE_Folder);
+        }
+        
         JMETER_FILE_Folder_ABS= Path.join( process.cwd(),JMETER_FILE_Folder);
 
         let JMETER_BIN_Folder = Path.join(JMETER_FILE_Folder, JMETER_BIN_Folder_NAME);
@@ -146,7 +154,7 @@ async function main() {
         LogEvent(TelemetryEvents.DOWNLOADED_JMETER_BINARY);
         
         logInformation('Start Unzipping JMeter Binary', TraceLevel.Verbose)
-        await unzipBinary(JMETER_FILE_NAME, JMETER_CUSTOM_UNZIPPED_FOLDER_NAME);
+        await unzipBinary(JMETER_FILE_NAME, (JMETER_CUSTOM_UNZIPPED_FOLDER_NAME == JMETER_ORIGINAL_FILE_Folder)? null : JMETER_CUSTOM_UNZIPPED_FOLDER_NAME);
         logInformation('Completed Unzipping JMeter Binary', TraceLevel.Information); 
 
         let addCustomPluginsToLib = tl.getBoolInput(InputVariables.ADD_CUSTOM_PLUGIN_TO_JMETER_LIB,true);
@@ -203,8 +211,14 @@ async function main() {
             logInformation('Completed Handle Input Files. FileCount: ' + ((null != jmeterInputFileNames) ? jmeterInputFileNames?.length : 0), TraceLevel.Information);
         }
 
-        let jmeterLogFolder = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_LOG_FOLDER,true)).concat("_").concat(randomSuffix);
-        let jmeterReportFolder = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_REPORT_FOLDER,true)).concat("_").concat(randomSuffix);
+        let jmeterLogFolder = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_LOG_FOLDER,true));
+        let jmeterReportFolder = replaceSpaceWithUnderscore(tl.getInput(InputVariables.JMETER_REPORT_FOLDER,true));
+
+        if(tl.getBoolInput(InputVariables.ADD_RANDOM_SUFFIX_TO_JMETER_ARTIFACTS,false)) {
+            jmeterLogFolder = jmeterLogFolder.concat("_").concat(randomSuffix);
+            jmeterReportFolder = jmeterReportFolder.concat("_").concat(randomSuffix);
+        }
+        
 
         if(isEmpty(jmeterLogFolder)) {
             jmeterLogFolder = DEFAULT_JMETER_LOG_DIR_NAME;

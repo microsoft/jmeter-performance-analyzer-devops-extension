@@ -170,7 +170,7 @@ These variables are available under the `advanced` section of the pipeline. Thes
 
 `Extracted folder name for JMeter binary`: In case you modify the JMeter Download URL, to some other version then this variable also needs to change. This is the folder name of the JMeter binary file post extraction/unzip. Also update this if you modify the above jmeter url to the extracted folder name
 
-`JMeter Custom Unzipped Folder Name`: In case you wish to unzip the Jmeter binary to a custom folder, you can update the path name here. This is useful if you want to have seperate Jmeter instances task in same pipeline.
+`JMeter Custom Unzipped Folder Name`: In case you wish to unzip the Jmeter binary to a custom folder, you can update the path name here. This is useful if you want to have seperate Jmeter instances task in same pipeline. If this value is same as the value provided for `Extracted folder name for JMeter binary` then a hierarchy won't be created and jmeter binary would be directly extracted into `Extracted folder name for JMeter binary`. If this value is different than the value provided for `Extracted folder name for JMeter binary`, then a hierarchy would be created for extracting binary `JMeter Custom Unzipped Folder Name`/`Extracted folder name for JMeter binary`
 
 `Add random suffix to JMeter Folders`: This would enable you to create a unique jmeter folder by adding a random suffix at the end of download folder. There are at time possibility that multiple task run in same pipeline and hence would overwrite each other by the end of the pipeline run. Enabling this will ensure each task in a pipeline run would execute smoothly.
 

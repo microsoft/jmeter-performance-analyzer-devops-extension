@@ -48,7 +48,7 @@ export function deleteFolderRecursive(dir: string) {
 }
 
 export function replaceSpaceWithUnderscore(input: string): string {
-    return input.split(" ").join("");
+    return input.split(" ").join("_");
 }
 
 export function logInformation(data: any, traceLevel: TraceLevel, printDate: boolean = true, logInTelemetry: boolean = true) {
@@ -85,9 +85,14 @@ export async function downloadFile(fileSource: string, destinationFilePath: stri
     });
 }
 
-export async function unzipBinary(fileName: string, path:string) {
-    await makeDirectory(path);
-    await tar.x({file: fileName ,C: path});
+export async function unzipBinary(fileName: string, path:string|null) {
+    if(path && path.trim().length > 0) {
+        await makeDirectory(path);
+        await tar.x({file: fileName ,C: path});
+    } else {
+        await tar.x({file: fileName});
+    }
+    
 }
 
 export async function makeDirectory(filePath: string) {
