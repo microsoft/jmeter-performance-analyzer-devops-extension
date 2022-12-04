@@ -39,7 +39,7 @@ export async function handleJMeterJMXFile(JMETER_BIN_Folder: string): Promise<st
             return '';
         }
         
-        let copyJMXFileToJmeterBin = tl.getInput(InputVariables.COPY_JMX_TO_JMETER_BIN,true);
+        let copyJMXFileToJmeterBin = tl.getInput(InputVariables.COPY_JEMETER_FILES_TO_JMETER_BIN,true);
         if(copyJMXFileToJmeterBin) {
             let fileName=getFileName(jmxSourceRunFilePath);
             let destinationFilePath = Path.join(JMETER_BIN_Folder,fileName);
@@ -77,7 +77,7 @@ export async function handleJMeterPropertyFile(JMETER_BIN_Folder: string): Promi
         return '';
     } else if(jmxPropertySource== InputVariableType.SourceCode) {
         let jmxPropertyFilePath = tl.getInput(InputVariables.JMX_PROPERTY_FILE_SOURCE_PATH,true);
-        let copyPropertyFileToJmeterBin = tl.getInput(InputVariables.COPY_PROPERTY_TO_JMETER_BIN,true);
+        let copyPropertyFileToJmeterBin = tl.getInput(InputVariables.COPY_JEMETER_FILES_TO_JMETER_BIN,true);
 
         if(isEmpty(jmxPropertyFilePath)) {
             let msg = "You have set jmxPropertySource to sourceCode, but provided no file path for the property file input (jmxPropertySourcePath). Missing Property File Path"
@@ -186,7 +186,7 @@ export async function handleJMeterInputFile(JMETER_BIN_Folder: string): Promise<
             tl.setResult(tl.TaskResult.Failed, msg);
             return [];
        }
-       let copyInputFileToJmeterBin = tl.getInput(InputVariables.COPY_INPUT_FILE_TO_JMETER_BIN,true);
+       let copyInputFileToJmeterBin = tl.getInput(InputVariables.COPY_JEMETER_FILES_TO_JMETER_BIN,true);
        if(copyInputFileToJmeterBin) {
         logInformation('Downloading Input File(s) from source ' + jmxInputFolderSourcePath +  ' to destination' + JMETER_BIN_Folder, TraceLevel.Information);
         LogEvent(TelemetryEvents.DOWNLOADED_JMETER_INPUT_FILES_SRC);

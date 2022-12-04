@@ -179,8 +179,17 @@ async function main() {
             logInformation('Custom Plugins not enabled', TraceLevel.Information);
         }
 
-        await process.chdir(JMETER_ABS_BIN_Folder);
-        logInformation('Change Directory to JMeter Bin Path ' + JMETER_ABS_BIN_Folder + ' completed. Current Working Directory: ' + process.cwd(), TraceLevel.Verbose);
+        let copyInputFileToJmeterBin = tl.getInput(InputVariables.COPY_JEMETER_FILES_TO_JMETER_BIN,true);
+        if(copyInputFileToJmeterBin) {
+            await process.chdir(JMETER_ABS_BIN_Folder);
+            logInformation('Change Directory to JMeter Bin Path ' + JMETER_ABS_BIN_Folder + ' completed. Current Working Directory: ' + process.cwd(), TraceLevel.Verbose);
+        } else { 
+            logInformation('Running JMeter from root folder. Current Working Directory: ' + process.cwd(), TraceLevel.Verbose);
+        }
+        
+        let jmeterSetHomeCommandScript: string = getCommands(CommandTypes.SET_JMETER_BIN_HOME, JMETER_ABS_BIN_Folder);        
+        logInformation('Setting JMeter Home using command ' + jmeterSetHomeCommandScript, TraceLevel.Information);
+        var setJmeterHomeChildProcess = exec(jmeterSetHomeCommandScript);
 
         allowCompleteReadWriteAccess(process.cwd());
         logInformation('Start handleJMeterJMXFile. Current Working directory' + process.cwd(), TraceLevel.Verbose);
