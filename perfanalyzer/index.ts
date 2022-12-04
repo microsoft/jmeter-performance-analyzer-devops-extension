@@ -179,8 +179,17 @@ async function main() {
             logInformation('Custom Plugins not enabled', TraceLevel.Information);
         }
 
-        await process.chdir(JMETER_ABS_BIN_Folder);
-        logInformation('Change Directory to JMeter Bin Path ' + JMETER_ABS_BIN_Folder + ' completed. Current Working Directory: ' + process.cwd(), TraceLevel.Verbose);
+        let copyInputFileToJmeterBin = tl.getInput(InputVariables.COPY_JEMETER_FILES_TO_JMETER_BIN,true);
+        if(copyInputFileToJmeterBin) {
+            await process.chdir(JMETER_ABS_BIN_Folder);
+            logInformation('Change Directory to JMeter Bin Path ' + JMETER_ABS_BIN_Folder + ' completed. Current Working Directory: ' + process.cwd(), TraceLevel.Verbose);
+        } else { 
+            logInformation('Running JMeter from root folder. Current Working Directory: ' + process.cwd(), TraceLevel.Verbose);
+        }
+        
+        let jmeterSetHomeCommandScript: string = getCommands(CommandTypes.SET_JMETER_BIN_HOME, JMETER_ABS_BIN_Folder);        
+        logInformation('Setting JMeter Home using command ' + jmeterSetHomeCommandScript, TraceLevel.Information);
+        var setJmeterHomeChildProcess = exec(jmeterSetHomeCommandScript);
 
         allowCompleteReadWriteAccess(process.cwd());
         logInformation('Start handleJMeterJMXFile. Current Working directory' + process.cwd(), TraceLevel.Verbose);
@@ -190,7 +199,6 @@ async function main() {
         let jmxPropertySource = tl.getInput(InputVariables.JMX_PROPERTY_FILE_SOURCE,true);
         let jmxInputFilesSource = tl.getInput(InputVariables.JMX_INPUT_FILE_SOURCE,true);
         let jmeterPropertyFileName:string = '';
-
         if(jmxPropertySource == InputVariableType.None) {
             logInformation('No Property File Configuration Enabled. Skipping Property Configuration Step.', TraceLevel.Information)
         } else {
@@ -303,6 +311,10 @@ async function main() {
         //delete_jmeter_folder(ROOT_DIR, JMETER_FILE_Folder_ABS);
     }
     
+}
+
+function runProcess(command:string) {
+
 }
 
 function allowCompleteReadWriteAccess(path: string) {

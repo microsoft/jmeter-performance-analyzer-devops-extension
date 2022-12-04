@@ -30,8 +30,8 @@ export enum InputVariables {
     ARTIFACT_NAME_LOG = 'artifactNameLog',
     FAIL_PIPELINE_IF_JMETER_FAILS = 'failPipelineIfJMeterFails',
     MAX_FAILURE_COUNT_FOR_JMETER = 'maxFailureCountForJMeter',
-    LOG_TELEMETRY = 'telemetryDataCollection',
-
+    LOG_TELEMETRY = 'telemetryDataCollection', 
+    COPY_JEMETER_FILES_TO_JMETER_BIN= 'copyJMeterFilesToJMeterBin',
     ADD_CUSTOM_PLUGIN_TO_JMETER_LIB = 'addCustomPluginsToJMeterLib',
     CUSTOM_PLUGIN_SOURCE = 'customPluginSource',
     CUSTOM_PLUGIN_SOURCE_CODE_PATH = 'customPluginSourceCodeFolderPath',
@@ -42,6 +42,7 @@ export enum InputVariables {
 export enum CommandTypes {
     JMETER_RUN_WITH_PROPERTY = 'JMETER_RUN_WITH_PROPERTY',
     JMETER_RUN_WITHOUT_PROPERTY = 'JMETER_RUN_WITHOUT_PROPERTY',
+    SET_JMETER_BIN_HOME = 'SET_JMETER_BIN_HOME',
 }
 
 export enum OSTypes {
@@ -59,7 +60,11 @@ export const Commands = {
     
     JMETER_RUN_WITHOUT_PROPERTY_WINDOWS : '.\\jmeter -n -t {0} -l {1} -j {2} -f -e -o  {3} {4}',
     JMETER_RUN_WITHOUT_PROPERTY_LINUX : './jmeter.sh -n -t {0} -l {1} -j {2} -f -e -o  {3} {4}',
-    JMETER_RUN_WITHOUT_PROPERTY_MACOS : './jmeter.sh -n -t {0} -l {1} -j {2} -f -e -o  {3} {4}'
+    JMETER_RUN_WITHOUT_PROPERTY_MACOS : './jmeter.sh -n -t {0} -l {1} -j {2} -f -e -o  {3} {4}',
+
+    SET_JMETER_BIN_HOME_WINDOWS:'set PATH=%PATH%;{0}',
+    SET_JMETER_BIN_HOME_LINUX:'export PATH=$PATH:{0}',    
+    SET_JMETER_BIN_HOME_MACOS:'export PATH=$PATH:{0}'
 }
 
 export enum InputVariableType {

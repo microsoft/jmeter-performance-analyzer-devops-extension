@@ -14,6 +14,15 @@ You need to enable static hosting in the storage container in order to be able t
 
 ## Latest Updates
 
+#### V1.7.42
+- Support for custom Jmeter bin folder
+- Support for random variable addition to make jmeter bin unique folder
+- Support for disabling the copy of jmeter run files to bin
+
+#### V1.6.55
+- Added support for command line arguments
+- Bug fix for file download with parameters.
+
 #### V1.3.68
 - Fixed Issue for Storage Account Binding Name
 
@@ -23,9 +32,7 @@ You need to enable static hosting in the storage container in order to be able t
 #### V1.1.55
 - Stable Version.
 
-#### V1.6.55
-- Added support for command line arguments
-- Bug fix for file download with parameters.
+
 
 #### V1.7.51
 - Support for custom binary folder name
@@ -102,6 +109,7 @@ Follow this Link: [CLASSIC PIPELINE GUI BASED TASK BASED INPUT](https://github.c
 
 The following variables are used in the pipeline. Some have default values which can be updated.
 
+
 `JMX Run File Source` : This provides you the option to provide your JMX Source. It can be either from the source code of the pipeline or it can be a direct external URL. This is set to default to SourceCode
 
 `JMX Run File Source Path`: This is the path of the JMX source code file. You can select the file path and update the input here. This is visible in case you select 'SourceCode' in the `JMX RUN File Source` step.
@@ -154,7 +162,7 @@ The following variables are used in the pipeline. Some have default values which
 
 `Container Name`: This is the container name inside the storage account where your results and logs will be copied. This is defaulted to $web. Note that in case you want continuous reporting available on html webpage, keep it to $web only. Files in $web will be available to view as html files.
 
-`Blob Prefix`: This is the prefix inside container name where each run's report will be copied. It is essential to note that for continuous integration and testing it's best to prefix it will build number. This way all continuous build's result will be made available at all times as a http exposed UTL. If used in Build pipeline, it can be `Releases/Release_$(Build.BuildNumber)`, if in release then it can be `Releases/Release_$(Release.ReleaseId)`.
+`Blob Prefix`: This is the prefix inside container name where each run's report will be copied. It is essential to note that for continuous integration and testing it's best to prefix it will build number. This way all continuous build's result will be made available at all times as a http exposed UTL. If used in Build pipeline, it can be `Releases/Release_DEV_$(Build.BuildNumber)`, if in release then it can be `Release_DEV_$(Release.ReleaseName)_$(Release.AttemptNumber)`
 
 `Storage Container URI`: This is the Primary endpoint URI for your container. On Enabling static web hosting, this URL is made available. If not specified, the task will not be able to create a direct html link to the test results.
 
@@ -166,6 +174,8 @@ These variables are available under the `advanced` section of the pipeline. Thes
 `Extracted folder name for JMeter binary`: In case you modify the JMeter Download URL, to some other version then this variable also needs to change. This is the folder name of the JMeter binary file post extraction/unzip. Also update this if you modify the above jmeter url to the extracted folder name
 
 `JMeter Custom Unzipped Folder Name`: In case you wish to unzip the Jmeter binary to a custom folder, you can update the path name here. This is useful if you want to have seperate Jmeter instances task in same pipeline. If this value is same as the value provided for `Extracted folder name for JMeter binary` then a hierarchy won't be created and jmeter binary would be directly extracted into `Extracted folder name for JMeter binary`. If this value is different than the value provided for `Extracted folder name for JMeter binary`, then a hierarchy would be created for extracting binary `JMeter Custom Unzipped Folder Name`/`Extracted folder name for JMeter binary`
+
+`Copy Jmeter File(s) to bin folder (recommended:true)` : This setting copies your jmeter file(s) {JMX, Property , Input Files} to bin folder. This is by default set to true. Set it to false in case you want the absolute path to run. This is useful when you have relative paths set in the jmx for properties and input files and you might have a hierarchy of different projects with same jmx file name.
 
 `Add random suffix to JMeter Folders`: This would enable you to create a unique jmeter folder by adding a random suffix at the end of download folder. There are at time possibility that multiple task run in same pipeline and hence would overwrite each other by the end of the pipeline run. Enabling this will ensure each task in a pipeline run would execute smoothly. 
 

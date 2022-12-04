@@ -46,6 +46,22 @@ export function getCommands(commandName: CommandTypes, ...props: string[]) {
                 case OSTypes.UNKNOWN:
                     return formatString(Commands.JMETER_RUN_WITHOUT_PROPERTY_LINUX, props);
             }
+        
+        case CommandTypes.SET_JMETER_BIN_HOME: 
+            switch(osType) {
+                case OSTypes.Windows:
+                    return formatString(Commands.SET_JMETER_BIN_HOME_WINDOWS, props);
+
+                case OSTypes.LINUX:
+                    return formatString(Commands.SET_JMETER_BIN_HOME_LINUX, props);
+
+                case OSTypes.MAC:
+                    return formatString(Commands.SET_JMETER_BIN_HOME_MACOS, props);
+
+                case OSTypes.UNKNOWN:
+                    return formatString(Commands.SET_JMETER_BIN_HOME_LINUX, props);
+            }
+    
     }
 }
 

@@ -10,7 +10,7 @@
   "version": {
     "Major": 1,
     "Minor": 7,
-    "Patch": 50
+    "Patch": 53
   },
   "instanceNameFormat": "Run Perf Analyzer",
   "groups": [
@@ -329,6 +329,15 @@
       "defaultValue": "apache-jmeter-5.5",
       "groupName": "advanced",
       "helpMarkDown": "In case you wish to unzip the Jmeter binary to a custom folder, you can update the path name here. This is useful if you want to have seperate Jmeter instances task in same pipeline. If this value is same as the value provided for `Extracted folder name for JMeter binary` then a hierarchy won't be created and jmeter binary would be directly extracted into `Extracted folder name for JMeter binary`. If this value is different than the value provided for `Extracted folder name for JMeter binary`, then a hierarchy would be created for extracting binary `JMeter Custom Unzipped Folder Name`/`Extracted folder name for JMeter binary`"
+    },
+    {
+      "name": "copyJMeterFilesToJMeterBin",
+      "type": "boolean",
+      "label": "Copy Jmeter File(s) to bin folder (recommended:true)",
+      "defaultValue": "true",
+      "required": true,
+      "groupName": "advanced",
+      "helpMarkDown": "This setting copies your jmeter file(s) {JMX, Property , Input Files} to bin folder. This is by default set to true. Set it to false in case you want the absolute path to run. This is useful when you have relative paths set in the jmx for properties and input files and you might have a hierarchy of different projects with same jmx file name."
     },
     {
       "name": "addRandomSuffixToJMeterFolder",

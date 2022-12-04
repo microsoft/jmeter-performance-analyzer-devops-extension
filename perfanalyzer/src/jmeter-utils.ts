@@ -38,12 +38,18 @@ export async function handleJMeterJMXFile(JMETER_BIN_Folder: string): Promise<st
             tl.setResult(tl.TaskResult.Failed, msg);
             return '';
         }
-        let fileName=getFileName(jmxSourceRunFilePath);
-        let destinationFilePath = Path.join(JMETER_BIN_Folder,fileName);
-        logInformation('Copying JMX Source File from Source: ' + jmxSourceRunFilePath + " to destination: " + destinationFilePath, TraceLevel.Information);
-        LogEvent(TelemetryEvents.DOWNLOADED_JMETER_JMX_SRC);
-        await copyFileToDirectory(jmxSourceRunFilePath,destinationFilePath);
-        return fileName;
+        
+        let copyJMXFileToJmeterBin = tl.getInput(InputVariables.COPY_JEMETER_FILES_TO_JMETER_BIN,true);
+        if(copyJMXFileToJmeterBin) {
+            let fileName=getFileName(jmxSourceRunFilePath);
+            let destinationFilePath = Path.join(JMETER_BIN_Folder,fileName);
+            logInformation('Copying JMX Source File from Source: ' + jmxSourceRunFilePath + " to destination: " + destinationFilePath, TraceLevel.Information);
+            LogEvent(TelemetryEvents.DOWNLOADED_JMETER_JMX_SRC);
+            await copyFileToDirectory(jmxSourceRunFilePath,destinationFilePath);
+            return fileName;
+        } else {
+            return jmxSourceRunFilePath;
+        }
     } else {
         let jmxSourceRunFileURL = tl.getInput(InputVariables.JMX_SOURCE_RUN_FILE_URL,true);
         if(isEmpty(jmxSourceRunFileURL)) {
@@ -52,6 +58,7 @@ export async function handleJMeterJMXFile(JMETER_BIN_Folder: string): Promise<st
             tl.setResult(tl.TaskResult.Failed, msg);
             return '';
         }
+        
         jmxSourceRunFileURL= jmxSourceRunFileURL.trim();
         let fileName=getFileName(jmxSourceRunFileURL);
         logInformation('Downloading File from source ' + jmxSourceRunFileURL +  ' to destination' + fileName + ' at location preloaded: ' + JMETER_BIN_Folder, TraceLevel.Information);
@@ -70,18 +77,27 @@ export async function handleJMeterPropertyFile(JMETER_BIN_Folder: string): Promi
         return '';
     } else if(jmxPropertySource== InputVariableType.SourceCode) {
         let jmxPropertyFilePath = tl.getInput(InputVariables.JMX_PROPERTY_FILE_SOURCE_PATH,true);
+        let copyPropertyFileToJmeterBin = tl.getInput(InputVariables.COPY_JEMETER_FILES_TO_JMETER_BIN,true);
+
         if(isEmpty(jmxPropertyFilePath)) {
             let msg = "You have set jmxPropertySource to sourceCode, but provided no file path for the property file input (jmxPropertySourcePath). Missing Property File Path"
             logInformation(msg, TraceLevel.Error);
             tl.setResult(tl.TaskResult.Failed, msg);
             return '';
         }
-        let fileName=getFileName(jmxPropertyFilePath);
-        let destinationFilePath = Path.join(JMETER_BIN_Folder,fileName);
-        logInformation('Copying JMX Property File from Source: ' + jmxPropertyFilePath + " to destination: " + destinationFilePath, TraceLevel.Information);
-        await copyFileToDirectory(jmxPropertyFilePath,destinationFilePath);
-        LogEvent(TelemetryEvents.DOWNLOADED_JMETER_INPUT_FILES_SRC);
-        return fileName;
+
+        if(copyPropertyFileToJmeterBin) {
+            let fileName=getFileName(jmxPropertyFilePath);
+            let destinationFilePath = Path.join(JMETER_BIN_Folder,fileName);
+            logInformation('Copying JMX Property File from Source: ' + jmxPropertyFilePath + " to destination: " + destinationFilePath, TraceLevel.Information);
+            await copyFileToDirectory(jmxPropertyFilePath,destinationFilePath);
+            LogEvent(TelemetryEvents.DOWNLOADED_JMETER_INPUT_FILES_SRC);
+            return fileName;
+        } else {
+            logInformation('Not copying property files to bin folder', TraceLevel.Information);
+            return jmxPropertyFilePath;
+        }
+        
     } else {
        let jmxPropertyFileURL = tl.getInput(InputVariables.JMX_PROPERTY_FILE_URL,true);
 
@@ -128,7 +144,6 @@ export async function handleJMeterCustomPlugin(JMETER_ABS_LIB_EXT_Folder: string
          
          let fileNames: string[] = [];
          let count = 0;
- 
          for(let file of customPluginSourceUrls) {
             if(isEmpty(file)) {
                 logInformation('Skipping Empty File name', TraceLevel.Warning);
@@ -171,9 +186,15 @@ export async function handleJMeterInputFile(JMETER_BIN_Folder: string): Promise<
             tl.setResult(tl.TaskResult.Failed, msg);
             return [];
        }
+       let copyInputFileToJmeterBin = tl.getInput(InputVariables.COPY_JEMETER_FILES_TO_JMETER_BIN,true);
+       if(copyInputFileToJmeterBin) {
         logInformation('Downloading Input File(s) from source ' + jmxInputFolderSourcePath +  ' to destination' + JMETER_BIN_Folder, TraceLevel.Information);
         LogEvent(TelemetryEvents.DOWNLOADED_JMETER_INPUT_FILES_SRC);
         return copyDirectoryRecursiveSync(jmxInputFolderSourcePath, JMETER_BIN_Folder, false, true);
+       } else {
+            logInformation('Not copying input files to bin folder', TraceLevel.Information);
+            return [];
+       }
     } else {
         let jmxInputFolderSourceUrls= tl.getDelimitedInput(InputVariables.JMX_INPUT_FILES_URL,',',true);
         if(isEmpty(jmxInputFolderSourceUrls)) {
