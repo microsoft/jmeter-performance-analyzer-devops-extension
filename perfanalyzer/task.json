@@ -10,7 +10,7 @@
   "version": {
     "Major": 1,
     "Minor": 7,
-    "Patch": 52
+    "Patch": 53
   },
   "instanceNameFormat": "Run Perf Analyzer",
   "groups": [
@@ -336,8 +336,8 @@
       "label": "Copy Jmeter File(s) to bin folder (recommended:true)",
       "defaultValue": "true",
       "required": true,
-      "helpMarkDown": "This setting copies your jmeter file(s) {JMX, Property , Input Files} to bin folder. This is by default set to true. Set it to false in case you want the absolute path to run. This is useful when you have relative paths set in the jmx for properties and input files and you might have a hierarchy of different projects with same jmx file name.",
-      "visibleRule": "jmxSource=sourceCode"
+      "groupName": "advanced",
+      "helpMarkDown": "This setting copies your jmeter file(s) {JMX, Property , Input Files} to bin folder. This is by default set to true. Set it to false in case you want the absolute path to run. This is useful when you have relative paths set in the jmx for properties and input files and you might have a hierarchy of different projects with same jmx file name."
     },
     {
       "name": "addRandomSuffixToJMeterFolder",

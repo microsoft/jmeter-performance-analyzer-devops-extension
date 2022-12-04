@@ -313,6 +313,10 @@ async function main() {
     
 }
 
+function runProcess(command:string) {
+
+}
+
 function allowCompleteReadWriteAccess(path: string) {
     try {
         fs.chmodSync(path, '755');
