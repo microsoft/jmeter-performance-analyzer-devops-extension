@@ -298,7 +298,7 @@ async function main() {
             
         let endTimeInSeconds = Math.round(Date.now() / 1000)
         let timeToRunInSeconds: number = endTimeInSeconds - startTimeInSeconds;
-        trackTrace(`Time to run JMeter Task in seconds = '${timeToRunInSeconds}'`, TraceLevel.Information);
+        trackTrace(`Time to run JMeter Task in second(s) = '${timeToRunInSeconds}'`, TraceLevel.Information);
         LogEvent(TelemetryEvents.COMPLETED_PERFORMANCE_TEST);        
         //delete_jmeter_folder(ROOT_DIR, JMETER_FILE_Folder_ABS);
     }
