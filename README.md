@@ -12,7 +12,7 @@ The pipeline task downloads your JMX, Property File, Input files and then runs t
 You can additionally host the data on a web URL by using the Static Website hosting capacity of Azure storage account. The task publishes the results to your $web container of your storage container.
 You need to enable static hosting in the storage container in order to be able to view html results. These results are published and ready for view immediately after test result. The link of hosted website is available in the logs.
 
-## Market Place
+## Market Place 
 
 You can get the task [HERE](https://marketplace.visualstudio.com/items?itemName=id-az-pipeline.jmeter-perf-analyzer)
 
