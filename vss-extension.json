@@ -2,8 +2,9 @@
   "manifestVersion": 1,
   "id": "jmeter-perf-analyzer",
   "name": "JMeter Performance Analyzer",
-  "version": "1.7.50",
+  "version": "1.8.53",
   "publisher": "id-az-pipeline",
+  "author": "Prateek Mishra",
   "public": true,
   "targets": [
     {
