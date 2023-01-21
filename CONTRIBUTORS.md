@@ -1,3 +1,3 @@
 # Contributors
 
-@5-k Prateek Mishra 
+@5-k Prateek Mishra (prateek15mishra@gmail.com)

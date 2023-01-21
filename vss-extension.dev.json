@@ -1,9 +1,10 @@
 {
   "manifestVersion": 1,
-  "id": "perf-analyzer-dev",
+  "id": "perf-analyzer-uat",
   "name": "JMeter Performance Analyzer UAT",
-  "version": "1.7.50",
-  "publisher": "MishraPrateek",
+  "version": "1.8.50",
+  "author": "Prateek Mishra",
+  "publisher": "uat-id-az-pipeline",
   "targets": [
     {
       "id": "Microsoft.VisualStudio.Services"

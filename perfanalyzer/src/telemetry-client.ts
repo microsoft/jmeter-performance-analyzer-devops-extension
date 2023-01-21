@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 import { APPINSIGHTS_CONNECTION_STRING } from "./appInsightsConnectionString";
-import { APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING, APPINSIGHTS_CONNECTION_MS_STRING } from "./appInsightsConnectionString-ms";
+import { APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING } from "./appInsightsConnectionString-ms";
 import { InputVariables } from './constant';
 import { SeverityLevel, TelemetryEvents, TraceLevel } from './telemetry.constants';
 import { getSystemProps, getUniqueId, isObjectEmpty } from "./utility";
@@ -11,7 +11,6 @@ const globalAny:any = global;
 let appInsights = require('applicationinsights');
 
 let appInsightsMSClient = null;
-let appInsightsMSClassicClient = null;
 let appInsightsClient = null;
 
 let telemetryProps:{} = null;
@@ -19,16 +18,14 @@ let logTelemetry: boolean = true;
 
 function logTelemetryTurnedOff() {
   try {
-    appInsights.setup(APPINSIGHTS_CONNECTION_MS_STRING)
+    appInsights.setup(APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING)
       .start();
 
       appInsightsMSClient = appInsights.defaultClient;         
-      appInsightsMSClassicClient = new appInsights.TelemetryClient(APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING);         
       appInsightsClient = new appInsights.TelemetryClient(APPINSIGHTS_CONNECTION_STRING);
 
       appInsightsMSClient.trackEvent({name: TelemetryEvents.TELEMETRY_TURNED_OFF});
       appInsightsClient.trackEvent({name: TelemetryEvents.TELEMETRY_TURNED_OFF});
-      appInsightsMSClassicClient.trackEvent({name: TelemetryEvents.TELEMETRY_TURNED_OFF});
   } catch(exception) {
     console.log('Telemetry Logs turned off. No Updates on telemetry further.')
   }
@@ -37,7 +34,6 @@ function logTelemetryTurnedOff() {
 function addDefaultProps() {
   try {
     appInsightsMSClient.commonProperties = GetDefaultProps();
-    appInsightsMSClassicClient.commonProperties = GetDefaultProps();
     appInsightsClient.commonProperties = GetDefaultProps();
     console.log('Enabled Default props')
   } catch(e) {
@@ -54,7 +50,7 @@ export function enableAppInsights() {
     }
 
     try {
-        appInsights.setup(APPINSIGHTS_CONNECTION_MS_STRING)
+        appInsights.setup(APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING)
         .setAutoDependencyCorrelation(true)
         .setAutoCollectRequests(true)
         .setAutoCollectPerformance(true, true)
@@ -67,7 +63,6 @@ export function enableAppInsights() {
         .start();
 
         appInsightsMSClient = appInsights.defaultClient;         
-        appInsightsMSClassicClient = new appInsights.TelemetryClient(APPINSIGHTS_CONNECTION_MS_CLASSIC_STRING);         
         appInsightsClient = new appInsights.TelemetryClient(APPINSIGHTS_CONNECTION_STRING);
         console.log('Successfuly Initialized Telemetry.');
         
@@ -124,7 +119,6 @@ export async function LogEvent(eventName: string, props: {} = null) {
     try {
         appInsightsMSClient.trackEvent({name: eventName, properties: loggedProps});
         appInsightsClient.trackEvent({name: eventName, properties: loggedProps});
-        appInsightsMSClassicClient.trackEvent({name: eventName, properties: loggedProps});
     } catch(e) {
        console.warn('[Ignore] MS Telemetry LogEvent Error: ' + e?.message )
     }
@@ -138,7 +132,6 @@ export async function trackTrace(message: string, traceSeverity: TraceLevel) {
     try {
         appInsightsMSClient.trackTrace({message: message, severityLevel: getSeverity(traceSeverity)}, props);
         appInsightsClient.trackTrace({message: message, severityLevel: getSeverity(traceSeverity)}, props);
-        appInsightsMSClassicClient.trackTrace({message: message, severityLevel: getSeverity(traceSeverity)}, props);
     } catch(e) {
        console.warn('[Ignore] MS Telemetry trackTrace Error: ' + e?.message )
     }
@@ -155,7 +148,6 @@ export async function trackException(message: any, stack: any=null) {
         trackTrace(msgTrack, TraceLevel.Error);
         appInsightsMSClient.trackException({id: globalAny.UNIQUE_RUN_ID, error: {name: globalAny.UNIQUE_RUN_ID, message: error}, exception:stack, severityLevel: SeverityLevel.Error });
         appInsightsClient.trackException({id: globalAny.UNIQUE_RUN_ID, error: {name: globalAny.UNIQUE_RUN_ID, message: error}, exception:stack, severityLevel: SeverityLevel.Error });
-        appInsightsMSClassicClient.trackException({id: globalAny.UNIQUE_RUN_ID, error: {name: globalAny.UNIQUE_RUN_ID, message: error}, exception:stack, severityLevel: SeverityLevel.Error });
     } catch(e) {
        console.warn('[Ignore] MS Telemetry trackTrace Error: ' + e?.message )
     }

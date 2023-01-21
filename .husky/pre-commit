@@ -22,7 +22,6 @@ elif (($FILE_CHANGE_COUNT > 100 )); then
 else
     VERSION_CHANGE_TYPE=2
 fi
-
 echo 'VERSION_CHANGE_TYPE (2=patch, 1=minor, 0=major) : ' $VERSION_CHANGE_TYPE
 
 # Reading current version.

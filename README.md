@@ -231,10 +231,10 @@ any blank space from this. Hence rename this file to OpenSSL_License.txt and rer
 
 ```bash
   === Completed operation: create extension ===
- - VSIX: C:\R\personal_projects\PerfAnalyzer\MishraPrateek.********-****-****-****-************-*.*.**.vsix
+ - VSIX: C:\R\personal_projects\PerfAnalyzer\uat-id-az-pipeline.********-****-****-****-************-*.*.**.vsix
  - Extension ID: ********-****-****-****-************-*.*.**.vsix
  - Extension Version: 0.1.33
- - Publisher: MishraPrateek
+ - Publisher: uat-id-az-pipeline
 ```
 You can now publish this extension to your own organization and share it with them.
 
