@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "perf-analyzer-uat",
   "name": "JMeter Performance Analyzer UAT",
-  "version": "1.8.50",
+  "version": "1.8.51",
   "author": "Prateek Mishra",
   "publisher": "uat-id-az-pipeline",
   "targets": [

@@ -4,7 +4,9 @@ on:
     branches:    
       - main
       - RELEASES/**
+      - RELEASE/**
       - users/**
+      - user/**
 jobs:
   build:
     runs-on: ubuntu-latest    
